@@ -10,4 +10,9 @@ public class MainController {
     public String index() {
         return "layout";
     }
+
+    @RequestMapping("/visitReview")
+    public String visitReview() {
+        return "visitReview";
+    }
 }
