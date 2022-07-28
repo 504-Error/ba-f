@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Ba-f Community</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+</head>
+<body>
+<div  layout:fragment="content" class="container">
+  <nav class="sub-navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link-select" href="#">HOT 게시물</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">주간 인기글</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">HOME</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">즐겨찾는 게시판</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">추천 정보</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div>
+    <a th:href="@{/question/create}" class="btn btn-primary" style="float:right;">질문 등록하기</a>
+    <br>
+  </div>
+  <div> </div>
+
+  <!--    <table class="table">-->
+  <!--        <thead class="table-dark">-->
+  <!--    <tr class="text-center">-->
+  <!--        <th> </th>-->
+  <!--        <th style="width:50%">제목</th>-->
+  <!--        <th>작성자</th>-->
+  <!--        <th>작성일시</th>-->
+  <!--    </tr>-->
+  <!--    </thead>-->
+  <!--    <tbody>-->
+
+  <!--    <tr class="text-center" th:each="question : ${paging}">-->
+  <!--        <td> </td>-->
+  <!--        <td class="text-start">-->
+  <!--            <a href="#" th:href="@{/question/detail/} + ${question.id} + @{/}" th:text="${question.subject}"></a>-->
+  <!--            <span class="text-danger small ms-2"-->
+  <!--                  th:if="${#lists.size(question.answerList) > 0}"-->
+  <!--                  th:text="${#lists.size(question.answerList)}">-->
+  <!--                </span>-->
+  <!--        </td>-->
+  <!--        <td><span th:if="${question.author!=null}" th:text="${question.author.username}"></span></td>-->
+  <!--            <td th:text="${#temporals.format(question.createDate, 'MM-dd HH:mm')}"></td>-->
+  <!--        </tr>-->
+  <!--    </tbody>-->
+  <!--</table>-->
+  <div class="card my-3" th:each="question : ${paging}">
+    <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
+      <div class="card-body" >
+        <div class="card-text" style="white-space: pre-line;">
+          <h4 th:text="${question.subject}"></h4></div>
+        <div class="d-flex justify-content-end">
+          <div class="badge bg-light text-dark p-2 text-start">
+            <div class="mb-2">
+              <span th:if="${question.author != null}" th:text="${question.author.username}"></span>
+            </div>
+            <div th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+          </div>
+        </div>
+        <div class="my-3">
+          <a class="btn btn-sm">
+            ❤
+            <span class="badge rounded-pill bg-success" style="background-color:red;" th:text="${#lists.size(question.voter)}"></span>
+          </a>
+          <a class="btn btn-sm">
+            🗨
+            <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.answerList)}"></span>
+          </a>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- 페이징처리 시작 -->
+  <div th:if="${!paging.isEmpty()}">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+        <a class="page-link" th:href="@{|?page=${paging.number-1}|}">
+          <span>이전</span>
+        </a>
+      </li>
+      <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+          th:if="${page >= paging.number-5 and page <= paging.number+5}"
+          th:classappend="${page == paging.number} ? 'active'"
+          class="page-item">
+        <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}">
+        </a>
+      </li>
+      <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+        <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+          <span>다음</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- 페이징처리 끝 -->
+
+
+
+
+
+</div>
+</body>
+</html>

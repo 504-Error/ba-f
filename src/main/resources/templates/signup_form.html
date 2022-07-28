@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
+  <title>Hello, Ba-f</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand"  th:href="@{/visitReview}">
+      <img src="/static/image/ba-f_logo.png" alt="" width="90" height="40">
+    </a>
+
+    <div class="d-flex">
+      <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/login}">LOGIN</a>
+      <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">LOGOUT</a>
+    </div>
+  </div>
+</nav>
+
+<div layout:fragment="content" class="container my-3">
+
+  <div class="my-3 border-bottom">
+    <div>
+      <h4>회원가입</h4>
+    </div>
+  </div>
+  <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+    <div th:replace="form_errors :: formErrorsFragment">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">사용자ID</label>
+      <input type="text" th:field="*{username}" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">비밀번호</label>
+      <input type="password" th:field="*{password1}" class="form-control"></div>
+    <div class="mb-3">
+      <label  class="form-label">비밀번호 확인</label>
+      <input type="password" th:field="*{password2}" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">이메일</label>
+      <input type="email" th:field="*{email}" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">회원가입</button>
+  </form>
+</div>
+</html>
