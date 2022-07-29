@@ -1,8 +1,10 @@
 package com.error504.baf.service;
 
 import com.error504.baf.exception.DataNotFoundException;
+import com.error504.baf.model.Board;
 import com.error504.baf.model.Question;
 import com.error504.baf.model.SiteUser;
+import com.error504.baf.repository.BoardRepository;
 import com.error504.baf.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,17 +21,20 @@ import java.util.Optional;
 @Service
 public class QuestionService {
     private QuestionRepository questionRepository;
+    private BoardRepository boardRepository;
 
 
     @Autowired
-    public QuestionService(QuestionRepository questionRepository){
+    public QuestionService(QuestionRepository questionRepository, BoardRepository boardRepository){
         this.questionRepository = questionRepository;
     }
+
+
 
     public Page<Question> getList(int page){
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return questionRepository.findAll(pageable);
     }
 

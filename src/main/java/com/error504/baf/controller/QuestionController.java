@@ -1,9 +1,7 @@
 package com.error504.baf.controller;
 
-import com.error504.baf.model.AnswerForm;
-import com.error504.baf.model.Question;
-import com.error504.baf.model.QuestionForm;
-import com.error504.baf.model.SiteUser;
+import com.error504.baf.model.*;
+import com.error504.baf.service.BoardService;
 import com.error504.baf.service.QuestionService;
 import com.error504.baf.service.UserService;
 import org.slf4j.Logger;
@@ -88,5 +86,10 @@ public class QuestionController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         } this.questionService.delete(question);
         return "redirect:/question/list"; }
+
+    @RequestMapping("/eventInfo")
+    public String index() {
+        return "eventInfo";
+    }
 
 }
