@@ -1,38 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰 내용</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
 </head>
 <body>
-<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="/image/ba-f_logo.png" alt="" width="30" height="24">
-        </a>
-
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link" href="#">커뮤니티</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Ba-f 맵</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link-select" aria-current="page" href="#">방문 후기</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">My Page</a>
-            </li>
-        </ul>
-
-        <div class="d-flex">
-            <a class="nav-logout" href="#">LOGOUT</a>
-        </div>
-    </div>
-</nav>
-
 <div layout:fragment="content" class="container">
     <nav class="sub-navbar navbar-expand-lg">
         <div class="container-fluid">
