@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Ba-f Community</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+</head>
+<body>
+<div  layout:fragment="content" class="container">
+  <nav class="sub-navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <ul class="nav justify-content-center" style="padding-bottom: 20px;">
+        <li class="nav-item">
+          <a class="nav-link" href="#">HOT 게시물</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">주간 인기글</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/question/list}">HOME</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/board/board_list}">즐겨찾는 게시판</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link-select" th:href="@{/eventInfo}">추천 정보</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div class="card my-5" style="float:left;">
+    <img src="/static/image/summer.png" height="390" >
+    <div class="card-body" >
+      7월의 전시 추천
+    </div>
+  </div>
+  <div class="card my-5" style="float:left;">
+    <img src="/static/image/art_logo.png" height="390" >
+    <div class="card-body" >
+      K 현대 미술관 오즈의 미술관 초대 이벤트
+    </div>
+  </div>
+  <div class="card my-5" style="float:left;">
+    <img src="/static/image/sogadingtv.png" height="390" >
+    <div class="card-body" >
+      소개딩 해커톤 시즌4 대회 일정 소개 설명회 개최
+    </div>
+  </div>
+
+  <div class="card my-5" style="width:400px; float:left;">
+    <img src="/static/image/movie_poster.png" alt="" width="400" height="600">
+    <div class="card-body" >
+      영화 < 헤어질 결심 > 8월 초대 이벤트
+    </div>
+  </div>
+  <div class="card my-5" style="width:400px; float:left;">
+    <img src="/static/image/movie_logo2.png" alt="" width="400" height="600">
+    <div class="card-body" >
+      영화 < 탑건2 > 시사회 신청 바로가기
+    </div>
+  </div>
+
+
+  <div class="card my-5" style="width:400px; float:left;">
+    <img src="/static/image/sogading.png" alt="" width="400" height="600">
+    <div class="card-body" >
+      소개딩 주관, 장애인 일자리 제공 서비스 신청 모집
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

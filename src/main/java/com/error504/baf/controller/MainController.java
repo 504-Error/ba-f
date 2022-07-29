@@ -17,8 +17,17 @@ public class MainController {
 //        return "layout";
 //    }
 
-    @RequestMapping("/visitReview")
-    public String visitReview() {
-        return "visitReview";
+    @RequestMapping("/review/main")
+    public String reviewMain() {
+        return "review_main";
+    }
+
+    @RequestMapping("/review/form")
+    public String reviewForm() {
+        return "review_form";
+    }
+    @RequestMapping("/review/content")
+    public String reviewContent() {
+        return "review_content";
     }
 }

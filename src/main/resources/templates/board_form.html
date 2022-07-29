@@ -1,0 +1,19 @@
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+  <h5 class="my-3 border-bottom pb-2">게시판 추가</h5>
+  <form th:action="@{/board/create}" th:object="${boardForm}" method="post">
+    <div th:replace="form_errors :: formErrorsFragment"></div>
+    <div class="mb-3">
+      <label id="boardName" class="form-label">게시판 이름</label>
+      <input type="text" name="boardName" class="form-control"> </div>
+    <div class="mb-3">
+      <label id="boardIntro" class="form-label">내용</label>
+      <textarea name="boardIntro" class="form-control" rows="2"></textarea>
+    </div>
+    <input type="submit" value="저장하기" class="btn btn-primary my-2"> </form>
+</div>
+</html>
+
