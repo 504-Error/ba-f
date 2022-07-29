@@ -6,10 +6,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MainController {
-    @RequestMapping("/layout")
-    public String index() {
-        return "layout";
-    }
+
+//    @RequestMapping("/sbb")
+//    public void main(){
+//        System.out.println("gg");
+//    }
+//
+//    @RequestMapping("/layout")
+//    public String index() {
+//        return "layout";
+//    }
 
     @RequestMapping("/review/main")
     public String reviewMain() {
