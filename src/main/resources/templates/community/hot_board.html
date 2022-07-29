@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ba-f Community</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
 </head>
 <body>
 <div  layout:fragment="content" class="container">
@@ -15,7 +15,7 @@
         <div class="container-fluid">
             <ul class="nav justify-content-center" style="padding-bottom: 20px;">
                 <li class="nav-item">
-                    <a class="nav-link-select" th:href="@{/board/hot_board}">HOT 게시물</a>
+                    <a class="nav-link-select" th:href="@{/board/community/hot_board}">HOT 게시물</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link">주간 인기글</a>
@@ -24,7 +24,7 @@
                     <a class="nav-link" th:href="@{/question/list}">HOME</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/board/board_list}">즐겨찾는 게시판</a>
+                    <a class="nav-link" th:href="@{/board/community/board_list}">즐겨찾는 게시판</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/eventInfo}">추천 정보</a>
