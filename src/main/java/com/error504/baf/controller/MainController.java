@@ -20,4 +20,8 @@ public class MainController {
     public String reviewForm() {
         return "review_form";
     }
+    @RequestMapping("/review/content")
+    public String reviewContent() {
+        return "review_content";
+    }
 }

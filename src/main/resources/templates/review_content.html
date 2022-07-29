@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Ba-f : 방문 리뷰 내용</title>
+</head>
+<body>
+<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="/image/ba-f_logo.png" alt="" width="30" height="24">
+        </a>
+
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" href="#">커뮤니티</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Ba-f 맵</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link-select" aria-current="page" href="#">방문 후기</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">My Page</a>
+            </li>
+        </ul>
+
+        <div class="d-flex">
+            <a class="nav-logout" href="#">LOGOUT</a>
+        </div>
+    </div>
+</nav>
+
+<div layout:fragment="content" class="container">
+    <nav class="sub-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link-select" href="#">전체</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">음식점</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">카페</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">공연</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">기타</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div layout:fragment="content" class="container">
+    <h5 class="my-3 border-bottom pb-2">리뷰 내용</h5>
+    <table class="review-content-table">
+        <tbody>
+        <tr>
+            <th scope="row">장르</th>
+            <td>뮤지컬</td>
+        </tr>
+        <tr>
+            <th scope="row">리뷰명</th>
+            <td>아이다</td>
+        </tr>
+        <tr>
+            <th scope="row">일자</th>
+            <td>2022 - 06 - 21</td>
+        </tr>
+        <tr>
+            <th scope="row">장소</th>
+            <td>블루스퀘어 신한카드홀
+                <!--            추후 지도 추가할 것-->
+        </tr>
+        <tr>
+            <th scope="row">평점</th>
+            <td>
+                <div class="star-ratings-base space-x-2 text-lg">
+                    <div class="star-ratings-fill space-x-2 text-lg" style="{ width: 60% }">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="review-content-area">
+        <label class="review-content-label">편의 시설</label>
+        <div class="row">
+            <div class="card review-card" style="width: 5rem;">
+                <img src="/templates/image/amenities_elevator.png" class="card-img-top" alt="...">
+                <div class="review-card-body">
+                    <span>승강기</span>
+                </div>
+            </div>
+            <div class="card review-card" style="width: 5rem;">
+                <img src="/templates/image/amenities_incline.png" class="card-img-top" alt="...">
+                <div class="review-card-body">
+                    <span>경사로</span>
+                </div>
+            </div>
+            <div class="card review-card" style="width: 5rem;">
+                <img src="/templates/image/amenities_parking.png" class="card-img-top" alt="...">
+                <div class="review-card-body">
+                    <span>주차장</span>
+                </div>
+            </div>
+            <div class="card review-card" style="width: 5rem;">
+                <img src="/templates/image/amenities_table.png" class="card-img-top" alt="...">
+                <div class="review-card-body">
+                    <span>테이블석</span>
+                </div>
+            </div>
+            <div class="card review-card" style="width: 5rem;">
+                <img src="/templates/image/amenities_rest-room.png" class="card-img-top" alt="...">
+                <div class="review-card-body">
+                    <span>장애인 화장실</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="review-content-area">
+        <label class="review-content-label">장소 리뷰</label>
+        <div class="card text-dark bg-light mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="review-content-area">
+        <label class="review-content-label">추가 리뷰</label>
+        <div class="card text-dark bg-light mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>

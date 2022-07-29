@@ -6,10 +6,20 @@
         xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Ba-f Community</title>
+    <title>Ba-f : 방문 리뷰 작성</title>
     <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
+    <link rel="stylesheet" th:href="@{/ootstrap-datepicker.min.css}">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <script th:href="@{/bootstrap-datepicker.min.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js" integrity="sha512-L4qpL1ZotXZLLe8Oo0ZyHrj/SweV7CieswUODAAPN/tnqN3PA1P+4qPu5vIryNor6HQ5o22NujIcAZIfyVXwbQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
+
+
 <!--수빈이 코드 pull 한 뒤 지우기-->
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
@@ -39,20 +49,140 @@
 </nav>
 
 <div layout:fragment="content" class="container">
-    <h5 class="my-3 border-bottom pb-2">질문등록</h5>
+    <h5 class="my-3 border-bottom pb-2">리뷰등록</h5>
     <form th:action="@{/review/create}" th:object="${review}" method="post">
-<!--        <div th:replace="form_errors :: formErrorsFragment"></div>-->
-        <div class="mb-3">
-<!--            <label for="subject" class="form-label">제목</label>-->
-            <label class="form-label">제목</label>
-            <input type="text" name="subject" class="form-control">
+        <div class="row mb-3">
+            <label for="inputGenre" class="col-sm-2 col-form-label">장르</label>
+            <div class="col-sm-5">
+                <select class="form-select" id="inputGenre">
+                    <option selected>장르 선택</option>
+                    <option value="1">음식점</option>
+                    <option value="2">카페</option>
+                    <option value="3">뮤지컬</option>
+                    <option value="4">연극</option>
+                    <option value="5">전시관</option>
+                    <option value="6">기타</option>
+                </select>
+            </div>
         </div>
-        <div class="mb-3">
-<!--            <label for="content" class="form-label">내용</label>-->
-            <label class="form-label">내용</label>
-            <textarea name="content" class="form-control" rows="10"></textarea>
+        <div class="row mb-3">
+            <label for="inputTitle" class="col-sm-2 col-form-label">리뷰명</label>
+            <div class="col-sm-5">
+                <input type="email" class="form-control" id="inputTitle">
+            </div>
+            <div class="col-sm-5">
+                <button type="button" class="btn btn-secondary">검색하기</button>
+            </div>
         </div>
-        <input type="submit" value="저장하기" class="btn btn-primary my-2">
+        <div class="row mb-3">
+            <label for="inputDate" class="col-sm-2 col-form-label">일자</label>
+            <div class="col-sm-5">
+                <input type="text" id="inputDate" class="form-control" value="" />
+<!--                <input type="email" class="form-control" id="inputDate">-->
+                <script>
+                    $(function(){
+                        $('#inputDate').datepicker();
+                    })
+                </script>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="inputPlace" class="col-sm-2 col-form-label">장소</label>
+            <div class="col-sm-5">
+                <input type="email" class="form-control" id="inputPlace">
+            </div>
+            <div class="col-sm-5">
+                <button type="button" class="btn btn-secondary">검색하기</button>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">별점</label>
+            <div class="col-sm-2">
+<!--                참고 : https://codepen.io/chris22smith/pen/MJzLJN-->
+                <div class="star-rating">
+                    <input type="radio" id="5-stars" name="rating" value="5" />
+                    <label for="5-stars" class="star">&#9733;</label>
+                    <input type="radio" id="4-stars" name="rating" value="4" />
+                    <label for="4-stars" class="star">&#9733;</label>
+                    <input type="radio" id="3-stars" name="rating" value="3" />
+                    <label for="3-stars" class="star">&#9733;</label>
+                    <input type="radio" id="2-stars" name="rating" value="2" />
+                    <label for="2-stars" class="star">&#9733;</label>
+                    <input type="radio" id="1-star" name="rating" value="1" />
+                    <label for="1-star" class="star">&#9733;</label>
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <select class="form-select" id="inputScope">
+                    <option selected>별점 선택</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+        </div>
+        <div id="review-form-image-btn" class="row mb-3">
+            <label class="form-label">편의 시설</label>
+            <div class="col-12">
+                <button type="button" class="btn btn-outline-amenities" id="amenities-elevator">
+                    <div>
+                        <img src="/templates/image/amenities_elevator.png" height ="80" width="100" />
+                    </div>
+                    <span>승강기</span>
+                </button>
+                <button type="button" class="btn btn-outline-amenities" id="amenities-incline">
+                    <div>
+                        <img src="/templates/image/amenities_incline.png" height ="80" width="100" />
+                    </div>
+                    <span>경사로</span>
+                </button>
+                <button type="button" class="btn btn-outline-amenities" id="amenities-parking">
+                    <div>
+                        <img src="/templates/image/amenities_parking.png" height ="80" width="100" />
+                    </div>
+                    <span>주차장</span>
+                </button>
+                <button type="button" class="btn btn-outline-amenities" id="amenities-table">
+                    <div>
+                        <img src="/templates/image/amenities_table.png" height ="80" width="100" />
+                    </div>
+                    <span>테이블석</span>
+                </button>
+                <button type="button" class="btn btn-outline-amenities" id="amenities-rest-room">
+                    <div>
+                        <img src="/templates/image/amenities_rest-room.png" height ="80" width="100" />
+                    </div>
+                    <span>장애인 화장실</span>
+                </button>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="inputPlaceReview" class="col-sm-2 col-form-label">장소 리뷰</label>
+            <div class="col-12">
+                <textarea class="form-control" id="inputPlaceReview" rows="3"  placeholder="장소에 대한 후기를 남겨주세요."></textarea>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="inputAdditionalReview" class="col-sm-2 col-form-label">추가 리뷰</label>
+            <div class="col-12">
+                <textarea class="form-control" id="inputAdditionalReview" rows="3"  placeholder="장소 외에 대한 후기를 남겨주세요."></textarea>
+            </div>
+        </div>
+
+
+
+        <div class="row mb-3 float-end">
+            <div class="col-auto">
+                <input class="form-check-input" type="checkbox" id="check_anonymous">
+                <label class="form-check-label" for="check_anonymous">익명</label>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">리뷰 등록</button>
+            </div>
+        </div>
     </form>
 </div>
 
