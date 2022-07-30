@@ -22,7 +22,7 @@ public class ReviewController {
         return "review/review_main";
     }
 
-    @RequestMapping("/review/form")
+    @RequestMapping("/review/write")
     public String reviewForm() {
         return "review/review_form";
     }
