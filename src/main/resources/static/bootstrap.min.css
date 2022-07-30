@@ -4033,7 +4033,6 @@ textarea.form-control-lg {
 .nav {
     display       : flex;
     flex-wrap     : wrap;
-    padding-top   : 1rem;
     padding-left  : 0;
     margin-bottom : 0;
     list-style    : none
@@ -4191,6 +4190,7 @@ textarea.form-control-lg {
 .tab-content > .active {
     display : block
 }
+
 
 .navbar .sub-navbar {
     position        : relative;
@@ -4790,7 +4790,7 @@ textarea.form-control-lg {
 }
 
 .card-title {
-    margin-bottom : .5rem
+    margin-bottom : .5rem;
 }
 
 .card-subtitle {
@@ -11724,6 +11724,17 @@ textarea.form-control-lg {
 
 
 /*방문 리뷰 추가 css*/
+.navbar-fix {
+    position         : -webkit-sticky;
+    position         : sticky;
+    top              : 0;
+    z-index          : 100;
+    padding          : 0.5rem;
+    border-bottom    : 1px solid #d6d6d6;
+    background-color : white;
+}
+
+
 .review-main-container {
     width  : 60%;
     margin : 0 auto;
@@ -11733,28 +11744,33 @@ textarea.form-control-lg {
     width : 100%;
 }
 
-.review-content-entire {
-    margin-top : 2rem !important
+.review-content {
+    margin-top : 2rem;
+!important
+}
+
+.review-content > h4 {
+    margin-bottom  : 0;
+    vertical-align : middle;
+}
+
+.review-content > .card > .card-header > h4 {
+    margin-bottom  : 0;
+    vertical-align : middle;
 }
 
 .review-title {
-    padding         : .5rem 0;
     color           : #4472C4;
+    font-size       : 1.3rem;
     font-weight     : bold;
-    font-size       : 0.9rem;
     text-decoration : none;
 }
 
 .review-title > span {
-    float          : right;
-    color          : #a6a6a6;
-    font-size      : 0.7rem;
-    font-weight    : normal;
-    vertical-align : text-bottom; /*지금 아래로 안 내려가지는 상태*/
-}
-
-.review-card {
-    margin : 0 0.5rem;
+    float       : right;
+    color       : #a6a6a6;
+    font-size   : 0.7rem;
+    font-weight : normal;
 }
 
 #review-search-input-group {
@@ -11799,25 +11815,25 @@ textarea.form-control-lg {
 }
 
 .star-ratings-base {
-    color: #aaa9a9;
-    position: relative;
-    unicode-bidi: bidi-override;
-    width: max-content;
-    -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
-    -webkit-text-stroke-width: 1.3px;
-    -webkit-text-stroke-color: #2b2a29;
+    color                     : #aaa9a9;
+    position                  : relative;
+    unicode-bidi              : bidi-override;
+    width                     : max-content;
+    -webkit-text-fill-color   : transparent; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width : 1.3px;
+    -webkit-text-stroke-color : #2b2a29;
 }
 
 .star-ratings-fill {
-    color: #FF0000;
-    padding: 0;
-    position: absolute;
-    z-index: 1;
-    display: flex;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    -webkit-text-fill-color: gold;
+    color                   : #FF0000;
+    padding                 : 0;
+    position                : absolute;
+    z-index                 : 1;
+    display                 : flex;
+    top                     : 0;
+    left                    : 0;
+    overflow                : hidden;
+    -webkit-text-fill-color : gold;
 }
 
 .btn-outline-amenities {
@@ -11861,24 +11877,140 @@ textarea.form-control-lg {
 }
 
 .review-content-area {
-    margin-top: 2rem;
+    margin-top : 2rem;
 }
 
 .review-content-label {
-    font-weight: bold;
-    color: #212529;
+    font-weight : bold;
+    color       : #212529;
 }
 
 .review-card {
-    margin: 1rem 1rem;
-    border-width: 0;
+    margin : 1rem 1rem;
+}
+
+.review-card > .card-body {
+    font-size : 1px;
 }
 
 .review-card > .review-card-body {
-    margin-top: 0.5rem;
-    text-align: center;
-    font-size: 1px;
+    margin     : 0.5rem;
+    text-align : center;
+    font-size  : 1px;
 }
+
+.review-card > .card-body > .card-title {
+    color         : black;
+    margin-bottom : .5rem;
+    white-space   : nowrap;
+    overflow      : hidden;
+    text-overflow : ellipsis;
+}
+
+.review-card > .card-body > .card-status > div > p {
+    color         : #FF0000;
+    margin-bottom : .5rem;
+    font-size     : 1rem;
+}
+
+.review-card > .card-body > .card-status > .star-rating {
+    color               : #FF0000;
+    margin-bottom       : .5rem;
+    font-size           : 1rem;
+    background-image    : url(/static/image/content_star_single.png);
+    background-repeat   : no-repeat;
+    background-size     : 1.2rem 1.2rem;
+    background-position : left center;
+}
+
+.col > a {
+    text-decoration : none
+}
+
+.content-info {
+    float         : right;
+    list-style    : none;
+    font-size     : 1rem;
+    margin-bottom : 0;
+}
+
+.content-info > li {
+    float               : left;
+    margin-left         : 10px;
+    padding-left        : 1.4rem;
+    background-repeat   : no-repeat;
+    background-size     : 1.2rem 1.2rem;
+    background-position : left center;
+}
+
+.content-info > .recommend {
+    width            : auto;
+    color            : #F74811;
+    background-image : url(/static/image/content_recommend.png);
+}
+
+.content-info > .comment {
+    width            : auto;
+    color            : #4472C4;
+    background-image : url(/static/image/content_comment.png);
+}
+
+.review-rate > .star {
+    height            : 12px;
+    background-image  : url(/static/image/content_star_bg.png);
+    background-repeat : no-repeat;
+}
+
+.review-rate > .star > .star-on {
+    height            : 12px;
+    background-image  : url(/static/image/content_star.png);
+    background-repeat : no-repeat;
+}
+
+.list-group > .list-group-item > a {
+    text-decoration: none;
+}
+
+.list-group > .list-group-item > a > h4 {
+    color: black;
+    font-size: 1.25rem;
+}
+
+
+
+
+
+
+
+
+/*.review-card > .card-body > .card-status > .content-info {*/
+/*    float         : right;*/
+/*    list-style    : none;*/
+/*    font-size     : 1rem;*/
+/*    margin-bottom : 0;*/
+/*}*/
+
+/*.review-card > .card-body > .card-status > .content-info > li {*/
+/*    float               : left;*/
+/*    margin-left         : 10px;*/
+/*    padding-left        : 1.4rem;*/
+/*    background-repeat   : no-repeat;*/
+/*    background-size     : 1.2rem 1.2rem;*/
+/*    background-position : left center;*/
+/*}*/
+
+/*.review-card > .card-body > .card-status > .content-info > .recommend {*/
+/*    width            : auto;*/
+/*    color            : #F74811;*/
+/*    background-image : url(/static/image/content_recommend.png);*/
+/*}*/
+
+/*.review-card > .card-body > .card-status > .content-info > .comment {*/
+/*    width            : auto;*/
+/*    height           : 12px;*/
+/*    color            : #4472C4;*/
+/*    background-image : url(/static/image/content_comment.png);*/
+/*}*/
 
 
 

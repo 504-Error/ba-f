@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
-public class MainController {
+public class ReviewController {
 
 //    @RequestMapping("/sbb")
 //    public void main(){
@@ -17,17 +17,17 @@ public class MainController {
 //        return "layout";
 //    }
 
-    @RequestMapping("/review/main")
+    @RequestMapping("/review")
     public String reviewMain() {
-        return "review_main";
+        return "review/review_main";
     }
 
     @RequestMapping("/review/form")
     public String reviewForm() {
-        return "review_form";
+        return "review/review_form";
     }
     @RequestMapping("/review/content")
     public String reviewContent() {
-        return "review_content";
+        return "review/review_content";
     }
 }
