@@ -43,7 +43,7 @@ public class BusController {
         conn.disconnect();
         System.out.println(sb);
 
-        return "Bus";
+        return "bus";
     }
 
 }

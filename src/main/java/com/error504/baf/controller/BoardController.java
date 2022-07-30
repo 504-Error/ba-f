@@ -2,10 +2,8 @@ package com.error504.baf.controller;
 
 import com.error504.baf.model.Board;
 import com.error504.baf.model.BoardForm;
-import com.error504.baf.model.QuestionForm;
 import com.error504.baf.model.SiteUser;
 import com.error504.baf.service.BoardService;
-import com.error504.baf.service.QuestionService;
 import com.error504.baf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,17 +31,17 @@ public class BoardController {
         this.userService = userService;
     }
 
-    @RequestMapping("/board/board_list")
+    @RequestMapping("/board/community/board_list")
     public String bookmarked_list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
         Page<Board> paging = boardService.getList(page);
         model.addAttribute("paging", paging);
-        return "board_list";
+        return "community/board_list";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/board/create")
     public String boardCreate(BoardForm boardForm){
-        return "board_form";
+        return "community/board_form";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -52,11 +50,11 @@ public class BoardController {
                               Principal principal)
     {
         if(bindingResult.hasErrors()) {
-            return "board_form";
+            return "community/board_form";
         }
         SiteUser siteUser = userService.getUser(principal.getName());
         boardService.create(boardForm.getBoardName(), boardForm.getBoardIntro(), siteUser);
-        return "redirect:/board/board_list";
+        return "redirect:/board/community/board_list";
     }
 
 }

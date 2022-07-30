@@ -1,7 +1,6 @@
 package com.error504.baf.controller;
 
 import com.error504.baf.model.*;
-import com.error504.baf.service.BoardService;
 import com.error504.baf.service.QuestionService;
 import com.error504.baf.service.UserService;
 import org.slf4j.Logger;
@@ -35,7 +34,7 @@ public class QuestionController {
     public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
         Page<Question> paging = questionService.getList(page);
         model.addAttribute("paging", paging);
-        return "question_list";
+        return "community/question_list";
     }
 
     @GetMapping(value = "/question/detail/{id}")
@@ -44,13 +43,13 @@ public class QuestionController {
         Question question = questionService.getQuestion(id);
         model.addAttribute("question", question);
 
-        return "question_detail";
+        return "community/question_detail";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/create")
     public String questionCreate(QuestionForm questionForm){
-        return "question_form";
+        return "community/question_form";
 
     }
 
@@ -60,7 +59,7 @@ public class QuestionController {
                                  Principal principal)
     {
         if(bindingResult.hasErrors()) {
-            return "question_form";
+            return "community/question_form";
         }
         SiteUser siteUser = userService.getUser(principal.getName());
         logger.info(siteUser.toString());
@@ -89,7 +88,7 @@ public class QuestionController {
 
     @RequestMapping("/eventInfo")
     public String index() {
-        return "eventInfo";
+        return "community/event_info";
     }
 
 }

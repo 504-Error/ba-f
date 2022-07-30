@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TaxiController {
     @GetMapping("/taxi")
     public String test() {
-        return "Taxi";
+        return "taxi";
     }
 }
