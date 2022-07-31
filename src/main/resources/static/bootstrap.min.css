@@ -12060,24 +12060,32 @@ textarea.form-control-lg {
     height: 100px;
     margin-right: 1rem;
     margin-bottom: 1rem;
+    padding: 0;
     border: 1px solid;
     border-color: #dee2e6;
     border-radius: .2rem;
+    background-color: white;
     background-size: contain;
     background-repeat : no-repeat;
     background-position: center;
 }
 
-.preview-img:hover + .preview-img-del {
+.preview-img-background {
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
     opacity: 0.5;
-    color: white;
+    display: none;
+}
+
+.preview-img:hover .preview-img-background {
+    display: block;
 }
 
 .preview-img-del {
+    padding-top: 40px;
     font-size : 13px;
-    margin : auto;
-    background: black;
-    opacity: 0;
+    color: white;
 }
 
 /*.review-card > .card-body > .card-status > .content-info {*/

@@ -32,18 +32,21 @@
             const selectedFile = fileInput.files;
 
             for (let i = 0; i < selectedFile.length; i++){
-                // let img = document.createElement('img');
-                // img.className = 'preview-img';
-                // img.id = (selectedFile[i].name).replace('.png', '') + "_" + selectedFile[i].lastModified;
-
                 let div = document.createElement('div');
                 div.className = "btn preview-img"
                 div.id = (selectedFile[i].name).replace('.png', '') + "_" + selectedFile[i].lastModified;
+                div.onclick = function (){
+                    document.getElementById('board-preview-add-img').removeChild(div);
+                }
+
+                let child_div = document.createElement('div');
+                child_div.className = "preview-img-background";
+                div.appendChild(child_div);
 
                 let p = document.createElement('p');
                 p.className = "preview-img-del";
                 p.appendChild(document.createTextNode("이미지 삭제"));
-                div.appendChild(p);
+                child_div.appendChild(p);
 
                 const fileReader = new FileReader();
                 fileReader.onload = e => {
