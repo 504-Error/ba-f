@@ -12062,19 +12062,6 @@ textarea.form-control-lg {
     margin-bottom: 1rem;
     padding: 0;
     border: 1px solid;
-}
-
-.preview-img-loading {
-    border-color: #dee2e6;
-    border-radius: .2rem;
-    background: transparent url("/static/image/spin-loading-img.svg");
-    background-color: white;
-    background-size: cover;
-    background-repeat : no-repeat;
-    background-position: top center;
-}
-
-.preview-img-upload {
     border-color: #dee2e6;
     border-radius: .2rem;
     background-color: white;
@@ -12082,6 +12069,34 @@ textarea.form-control-lg {
     background-repeat : no-repeat;
     background-position: top center;
 }
+
+.new-img {
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid;
+    border-color: #dee2e6;
+    border-radius: .2rem;
+    background-color: #F9F9F9;
+}
+
+.new-img > img {
+    width: 30px;
+    height: 30px;
+    margin-top: 1.6rem;
+}
+
+/*.preview-img-loading {*/
+/*    border-color: #dee2e6;*/
+/*    border-radius: .2rem;*/
+/*    background: transparent url("/static/image/spin-loading-img.svg");*/
+/*    background-color: white;*/
+/*    background-size: cover;*/
+/*    background-repeat : no-repeat;*/
+/*    background-position: top center;*/
+/*}*/
 
 .preview-img-background {
     width: 100%;

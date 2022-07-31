@@ -8,32 +8,28 @@
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰 작성</title>
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-
     <script type="text/javascript">
         function isChecked(category) {
             const imgId = "img_amenities_" + category
             const checkbox_id = "amenities-" + category;
             const checkbox = document.getElementById(checkbox_id)
             const isChecked = checkbox.checked;
-
             var changeImgName;
             if (!isChecked){
                 changeImgName = "/static/image/amenities_" + category + "_select.png";
             } else {
                 changeImgName = "/static/image/amenities_" + category + ".png";
             }
-
             document.getElementById(imgId).src = changeImgName;
         }
-
         // 다중 이미지 미리보기 업로드
-        const addImg = (e) => {
+        function addImg() {
             const fileInput = document.getElementById("formFileMultiple");
             const selectedFile = fileInput.files;
 
             for (let i = 0; i < selectedFile.length; i++){
                 let div = document.createElement('div');
-                div.className = "btn preview-img preview-img-loading"
+                div.className = "btn preview-img"
                 div.id = (selectedFile[i].name).replace('.png', '') + "_" + selectedFile[i].lastModified;
                 div.onclick = function (){
                     document.getElementById('board-preview-add-img').removeChild(div);
@@ -53,25 +49,19 @@
                     div.style = "background-image:url(" + e.target.result + ");"
                     document.getElementById('board-preview-add-img').appendChild(div);
                 }
-
                 fileReader.readAsDataURL(selectedFile[i]);
             }
 
-            if((navigator.appName=='Netscape'&&navigator.userAgent.search('Trident')!=-1)||(agent.indexOf("msie")!=-1)){
-                $("#formFileMultiple").replaceWith($("#formFileMultiple").clone(true));
-            }else{
-                $("#formFileMultiple").val("");
-            }
+            fileInput.value = "";
         };
     </script>
-
 </head>
 <body>
 <div layout:fragment="content" class="container" style="overflow: hidden">
     <h5 class="my-3 border-bottom pb-2">리뷰등록</h5>
     <form th:action="@{/review/create}" th:object="${review}" method="post" style="overflow: hidden">
         <div class="row mb-3">
-            <label for="inputGenre" class="col-sm-2 col-form-label review-content-label">장르</label>
+            <label for="inputGenre" class="col-sm-2 col-form-label">장르</label>
             <div class="col-sm-5">
                 <select class="form-select" id="inputGenre">
                     <option selected>장르 선택</option>
@@ -85,7 +75,7 @@
             </div>
         </div>
         <div class="row mb-3">
-            <label for="inputTitle" class="col-sm-2 col-form-label review-content-label">리뷰명</label>
+            <label for="inputTitle" class="col-sm-2 col-form-label">리뷰명</label>
             <div class="col-sm-5">
                 <input type="email" class="form-control" id="inputTitle" placeholder="장르에 따른 리뷰 제목을 입력 혹은 검색해주세요.">
             </div>
@@ -94,14 +84,14 @@
             </div>
         </div>
         <div class="row mb-3">
-            <label for="inputDate" class="col-sm-2 col-form-label review-content-label">일자</label>
+            <label for="inputDate" class="col-sm-2 col-form-label">일자</label>
             <div class="col-sm-5">
-<!--                <input type="text" id="inputDate" class="form-control" value="" placeholder="방문한 날짜를 선택해주세요."/>-->
+                <!--                <input type="text" id="inputDate" class="form-control" value="" placeholder="방문한 날짜를 선택해주세요."/>-->
                 <input type="date" class="form-control" id="inputDate">
             </div>
         </div>
         <div class="row mb-3">
-            <label for="inputPlace" class="col-sm-2 col-form-label review-content-label">장소</label>
+            <label for="inputPlace" class="col-sm-2 col-form-label">장소</label>
             <div class="col-sm-5">
                 <input type="email" class="form-control" id="inputPlace" placeholder="방문 장소를 입력 혹은 검색해주세요.">
             </div>
@@ -110,9 +100,9 @@
             </div>
         </div>
         <div class="row mb-3">
-            <label class="col-sm-2 col-form-label review-content-label">별점</label>
+            <label class="col-sm-2 col-form-label">별점</label>
             <div class="col-sm-2">
-<!--                참고 : https://codepen.io/chris22smith/pen/MJzLJN-->
+                <!--                참고 : https://codepen.io/chris22smith/pen/MJzLJN-->
                 <div class="star-rating">
                     <input type="radio" id="5-stars" name="rating" value="5" />
                     <label for="5-stars" class="star">&#9733;</label>
@@ -126,24 +116,23 @@
                     <label for="1-stars" class="star">&#9733;</label>
                 </div>
             </div>
-
             <div class="col-sm-4">
                 <div class="star-rating-btn">
-                    <input type="radio" id="1-stars-btn" name="rating-btn" value="1" />
+                    <input type="radio" id="1-stars-btn" name="rating" value="1" />
                     <label for="1-stars-btn" class="star-btn">1점</label>
-                    <input type="radio" id="2-stars-btn" name="rating-btn" value="2" />
+                    <input type="radio" id="2-stars-btn" name="rating" value="2" />
                     <label for="2-stars-btn" class="star-btn">2점</label>
-                    <input type="radio" id="3-stars-btn" name="rating-btn" value="3" />
+                    <input type="radio" id="3-stars-btn" name="rating" value="3" />
                     <label for="3-stars-btn" class="star-btn">3점</label>
-                    <input type="radio" id="4-stars-btn" name="rating-btn" value="4" />
+                    <input type="radio" id="4-stars-btn" name="rating" value="4" />
                     <label for="4-stars-btn" class="star-btn">4점</label>
-                    <input type="radio" id="5-stars-btn" name="rating-btn" value="5" />
+                    <input type="radio" id="5-stars-btn" name="rating" value="5" />
                     <label for="5-stars-btn" class="star-btn">5점</label>
                 </div>
             </div>
         </div>
         <div id="review-form-image-btn" class="row mb-3">
-            <label class="form-label review-content-label">편의 시설</label>
+            <label class="form-label">편의 시설</label>
             <div class="col-12">
                 <div class="amenities-check">
                     <input type="checkbox" id="amenities-elevator" name="amenities" value="0" />
@@ -185,27 +174,27 @@
             </div>
         </div>
         <div class="row mb-3">
-            <label for="inputPlaceReview" class="col-sm-2 col-form-label review-content-label">장소 리뷰</label>
+            <label for="inputPlaceReview" class="col-sm-2 col-form-label">장소 리뷰</label>
             <div class="col-12">
                 <textarea class="form-control" id="inputPlaceReview" rows="3"  placeholder="장소에 대한 후기를 남겨주세요."></textarea>
             </div>
         </div>
         <div class="row mb-3">
-            <label for="inputAdditionalReview" class="col-sm-2 col-form-label review-content-label">추가 리뷰</label>
+            <label for="inputAdditionalReview" class="col-sm-2 col-form-label">추가 리뷰</label>
             <div class="col-12">
                 <textarea class="form-control" id="inputAdditionalReview" rows="3"  placeholder="장소 외에 대한 후기를 남겨주세요."></textarea>
             </div>
         </div>
         <div class="row mb-3">
-            <label for="formFileMultiple" class="form-label">이미지 추가</label>
+            <label class="form-label">이미지 추가</label>
             <div class="col-12">
-                <input class="form-control" type="file" accept="image/*" id="formFileMultiple" onclick="addImg()" multiple>
-            </div>
-            <div class="col-12 mt-3">
+                <input class="form-control d-none" type="file" accept="image/*" id="formFileMultiple" onchange="addImg()" multiple>
+                <label for="formFileMultiple" class="btn new-img">
+                    <img class="" src="/static/image/new_img.png">
+                </label>
                 <div id="board-preview-add-img"></div>
             </div>
         </div>
-
         <div class="row mb-3 float-end">
             <div class="w-auto text-sm-center" style="padding: 6px 6px">
                 <input class="form-check-input" type="checkbox" id="check_anonymous" style="margin-top: 0.4rem">
@@ -217,9 +206,5 @@
         </div>
     </form>
 </div>
-
-
-
-
 </body>
 </html>
