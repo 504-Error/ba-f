@@ -2418,7 +2418,7 @@ textarea.form-control-lg {
 
 .form-check .form-check-input {
     float       : left;
-    margin-left : -1.5em
+    margin-left : 1.5em
 }
 
 .form-check-input {
@@ -12003,21 +12003,33 @@ textarea.form-control-lg {
     float               : left;
     margin-left         : 10px;
     padding-left        : 1.4rem;
+}
+
+.recommend {
+    width            : auto;
+    color            : #F74811;
+    background-image : url(/static/image/content_recommend.png);
     background-repeat   : no-repeat;
     background-size     : 1.2rem 1.2rem;
     background-position : left center;
 }
 
-.content-info > .recommend {
+.recommend-disable {
     width            : auto;
     color            : #F74811;
-    background-image : url(/static/image/content_recommend.png);
+    background-image : url(/static/image/content_recommend_disable.png);
+    background-repeat   : no-repeat;
+    background-size     : 1.2rem 1.2rem;
+    background-position : left center;
 }
 
-.content-info > .comment {
+.comment {
     width            : auto;
     color            : #4472C4;
     background-image : url(/static/image/content_comment.png);
+    background-repeat   : no-repeat;
+    background-size     : 1.2rem 1.2rem;
+    background-position : left center;
 }
 
 .review-rate > .star {
@@ -12114,6 +12126,54 @@ textarea.form-control-lg {
     padding-top: 40px;
     font-size : 13px;
     color: white;
+}
+
+.btn-additional-review {
+    font-weight: normal;
+    margin-left: 2rem;
+    padding: .4em 1em;
+}
+
+#check-anonym {
+    width: 12px;
+    height: 12px;
+    border-radius: 0.15em;
+}
+
+#check-anonym-text {
+    margin-left : .25rem;
+    font-size: 13px;
+}
+
+.img-profile-content {
+    width: 40px;
+    height: 40px;
+    border-radius: .2rem;
+}
+
+.img-profile-comment {
+    width: 20px;
+    height: 20px;
+    border-radius: .2rem;
+}
+
+.child-comment {
+    color: #A6A6A6;
+    font-size: 14px;
+    margin-right: 0.3rem;
+}
+
+.comment-item {
+    padding: 1rem 1rem;
+}
+
+.content-nickname {
+    font-size: 13px;
+}
+
+.content-time {
+    font-size: 13px;
+    color: #A6A6A6;
 }
 
 /*.review-card > .card-body > .card-status > .content-info {*/
