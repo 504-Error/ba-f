@@ -1,18 +1,18 @@
 // 마커를 담을 배열입니다
 var markers = [];
 
+// 버스 정류장 마커 담을 배열입니다.
+var BSmarkers = [];
+
 // 장소 검색 객체를 생성합니다
 var ps = new kakao.maps.services.Places();
 
 // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
 var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
-// 키워드로 장소를 검색합니다
-//searchPlaces();
 
 // 키워드 검색을 요청하는 함수입니다
 function searchPlaces() {
-
     var keyword = document.getElementById('keyword').value;
 
     if (!keyword.replace(/^\s+|\s+$/g, '')) {
@@ -86,14 +86,6 @@ function displayPlaces(places) {
                 infowindow.close();
             });
 
-            // itemEl.onmouseover =  function () {
-            //     displayInfowindow(marker, title);
-            // };
-            //
-            // itemEl.onmouseout =  function () {
-            //     infowindow.close();
-            // };
-
             itemEl.onclick =  function () {
                 panToM(places_y, places_x);
             };
@@ -155,12 +147,42 @@ function addMarker(position, idx, title) {
     return marker;
 }
 
+// 버스 정류장 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+function addBSMarker(position, idx) {
+    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+        imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+        imgOptions =  {
+            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        },
+        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+        marker = new kakao.maps.Marker({
+            position: position, // 마커의 위치
+            image: markerImage
+        });
+
+    marker.setMap(map); // 지도 위에 마커를 표출합니다
+    BSmarkers.push(marker);  // 배열에 생성된 마커를 추가합니다
+
+    return marker;
+}
+
+
 // 지도 위에 표시되고 있는 마커를 모두 제거합니다
 function removeMarker() {
     for ( var i = 0; i < markers.length; i++ ) {
         markers[i].setMap(null);
     }
     markers = [];
+}
+
+// 지도 위에 표시되고 있는 버스 정류장 마커를 모두 제거합니다
+function removeBSMarker() {
+    for ( var i = 0; i < BSmarkers.length; i++ ) {
+        BSmarkers[i].setMap(null);
+    }
+    BSmarkers = [];
 }
 
 // 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
@@ -210,6 +232,7 @@ function removeAllChildNods(el) {
     }
 }
 
+// 지도 포커스 위치 변경
 function panToM(place_y, place_x) {
     // 이동할 위도 경도 위치를 생성합니다
     var moveLatLon = new kakao.maps.LatLng(place_y, place_x);
@@ -219,4 +242,135 @@ function panToM(place_y, place_x) {
     map.setLevel(3);
     map.panTo(moveLatLon);
 
+    var data = {};
+    data["LAT"] = place_y;
+    data["LNG"] = place_x;
+
+    $.ajax({
+        url: "/bus/search-station",
+        type: "POST",
+        data: JSON.stringify(data), // 요청 시 포함되어질 데이터
+        contentType: 'application/json', //요청 컨텐트 타입
+        dataType: "json", // 응답 데이터 형식
+        beforeSend: function (jqXHR, settings) {
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
+            jqXHR.setRequestHeader(header, token);
+        },
+        success: function (result) {
+            let arrStr = JSON.stringify(result);
+            let arrJson = JSON.parse(arrStr);
+            for (let i = 0; i < result.length; i++) {
+                var stationPosition = new kakao.maps.LatLng(arrJson[i].gpsY, arrJson[i].gpsX)
+
+                let BSmarker = addBSMarker(stationPosition, i);
+
+                (function (BSmarker, title, arsId) {
+                    kakao.maps.event.addListener(BSmarker, 'mouseover', function () {
+                        displayInfowindow(BSmarker, title);
+                    });
+
+                    kakao.maps.event.addListener(BSmarker, 'mouseout', function () {
+                        infowindow.close();
+                    });
+
+                    kakao.maps.event.addListener(BSmarker, 'click', function () {
+                        onClickBSMarker(arsId, title);
+                    });
+                })(BSmarker, arrJson[i].stationNm, arrJson[i].arsId);
+            }
+        },
+        error: function () {
+            alert("에러 발생");
+        }
+    });
+}
+
+// 버스 정류장 마커 클릭 -> 해당 정류장의 저상버스 정보 출력
+function onClickBSMarker(arsId, stationNm) {
+
+    var data = {};
+    data["arsId"] = arsId;
+
+    $.ajax({
+        url: "/bus/station-info",
+        type: "POST",
+        data: JSON.stringify(data), // 요청 시 포함되어질 데이터
+        contentType: 'application/json', //요청 컨텐트 타입
+        dataType: "json", // 응답 데이터 형식
+        beforeSend: function (jqXHR, settings) {
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
+            jqXHR.setRequestHeader(header, token);
+        },
+        success: function (result) {
+            alert("성공"+result);
+            stationSearchCB(stationNm, arsId, result);
+        }
+    });
+}
+
+function stationSearchCB(stationNm, arsId, lowBusData) {
+    // 검색 결과 없는 경우 메시지 출력 추가 필요
+
+
+    // 버스 목록 출력
+    displayLowBus(stationNm, arsId, lowBusData);
+
+    // 페이지 번호를 표출합니다
+    displayPagination(pagination);
+}
+
+function displayLowBus(stationNm, arsId, lowBus){
+
+    var listEl = document.getElementById('placesList'),
+        menuEl = document.getElementById('menu_wrap'),
+        fragment = document.createDocumentFragment(),
+        bounds = new kakao.maps.LatLngBounds(),
+        listStr = '';
+
+    // 목록에 추가된 항목들을 제거합니다
+    removeAllChildNods(listEl);
+
+    // 지도에 표시되고 있는 마커를 제거합니다
+    removeMarker()
+    removeBSMarker();
+
+
+    // 버스 정류장 이름, 고유번호 출력
+    var el = document.createElement('li'),
+        itemStr = '<div style="text-align : center;"><label style="font-size:20px;font-weight: bold;margin-top: 15px;">' + stationNm + '</label>' +
+            '<label style="font-size:15px;padding-left: 10px">' + arsId + '</label>' +
+            '<div><br/></div></div>';
+
+    el.innerHTML = itemStr;
+    fragment.appendChild(el);
+
+    // 버스 목록
+    for ( var i=0; i<lowBus.length; i++ ) {
+        let itemEl = getBusListItem(i, lowBus[i]); // 검색 결과 항목 Element를 생성합니다
+
+        fragment.appendChild(itemEl);
+    }
+
+    listEl.appendChild(fragment);
+    menuEl.scrollTop = 0;
+
+}
+
+function getBusListItem(index, lowBus) {
+
+    var el = document.createElement('li'),
+        itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+            '<div class="info">' +
+            '   <label style="font-size:18px;font-weight: bold;margin: 3px;">' + lowBus.rtNm + '</label>' + // 버스 번호
+            '   <div><label style="font-size:15px;padding-left: 10px;margin: 3px;">서울 | ' + lowBus.sectNm + '</label></div>' + // 버스 노선 구간
+            '   <div><label style="font-size:15px;padding-left: 10px;margin: 3px;">' + lowBus.arrmsg1 + '</label>' + // 버스 남은 시간 1
+            '   <label style="font-size:15px;padding-left: 10px;margin: 3px;">' + lowBus.arrmsg2 + '</label></div>' + // 버스 남은 시간 2
+            '</div>';
+
+    el.innerHTML = itemStr;
+    el.className = 'item';
+
+    return el;
 }

@@ -90,6 +90,9 @@
             <div id="pagination"></div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
     <script type="text/javascript" src="/static/script/load_map.js"></script>
     <script type="text/javascript" src="/static/script/search_keyword.js"></script>
