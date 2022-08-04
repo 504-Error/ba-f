@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .antMatchers("/user/signup").permitAll()
                 .antMatchers(staticResources).permitAll()
                 .antMatchers("/question/**").authenticated()
+                .antMatchers("/review/create").authenticated()
 
                 .and()
                 .formLogin()

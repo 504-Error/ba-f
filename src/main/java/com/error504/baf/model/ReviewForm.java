@@ -2,8 +2,10 @@ package com.error504.baf.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -19,14 +21,15 @@ public class ReviewForm {
     @Size(max=200)
     private String subject;
 
-//    @NotEmpty(message="일자 입력은 필수항목입니다.")
+    @NotNull(message="일자 입력은 필수항목입니다.")
     @Past
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
     @NotEmpty(message="장소명은 필수항목입니다.")
     private String place;
 
-//    @NotEmpty(message="평점은 필수항목입니다.")
+    @NotNull(message="평점은 필수항목입니다.")
     private Integer grade;
 
     private String[] amenities;
@@ -40,4 +43,6 @@ public class ReviewForm {
     private String placeReview;
 
     private String additionalReview;
+
+    private Boolean isAnonymous;
 }

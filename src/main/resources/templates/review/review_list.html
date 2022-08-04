@@ -1,10 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Ba-f : 방문 리뷰 목록</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
 </head>
 <body>
+<div layout:fragment="content" class="container">
+    <nav class="sub-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link-select" href="#">전체</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">음식점</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">카페</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">공연</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">기타</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div layout:fragment="content" class="container">
+    <table class="table">
+        <thead class="table-dark">
+        <tr class="text-center">
+            <th>번호</th>
+            <th style="width:50%">제목</th>
+            <th>글쓴이</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="text-center" th:each="review, loop : ${reviewPage}">
+            <td th:text="${reviewPage.getTotalElements - (reviewPage.number * reviewPage.size) - loop.index}"></td>
+            <td class="text-start">
+                <a th:href="@{|/review/content/${review.id}|}" th:text="${review.subject}"></a>
+<!--                <span class="text-danger small ms-2"-->
+<!--                      th:if="${#lists.size(review.answerList) > 0}"-->
+<!--                      th:text="${#lists.size(review.answerList)}">-->
+<!--                    </span>-->
+            </td>
+            <td><span th:if="${review.author != null}" th:text="${review.author.username}"></span></td>
+            <td th:text="${#temporals.format(review.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!reviewPage.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!reviewPage.hasPrevious} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${reviewPage.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, reviewPage.totalPages-1)}"
+                th:if="${page >= reviewPage.number-5 and page <= reviewPage.number+5}"
+                th:classappend="${page == reviewPage.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!reviewPage.hasNext} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${reviewPage.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+</div>
 
 </body>
 </html>

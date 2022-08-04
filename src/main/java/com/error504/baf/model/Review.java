@@ -16,6 +16,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String userName;
 
     @ManyToOne
@@ -55,6 +56,9 @@ public class Review {
 
     @Column(columnDefinition = "TEXT")
     private String additionalReview;
+
+    @Column(columnDefinition = "BOOLEAN")
+    private Boolean isAnonymous;
 
     private LocalDateTime createDate;
 

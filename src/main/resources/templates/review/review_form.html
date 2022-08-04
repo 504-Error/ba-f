@@ -54,17 +54,28 @@
 
             fileInput.value = "";
         };
+
+        $("#check_anonymous").change(function() {
+            if(this.checked) {
+                $(this).attr('value', true);
+            }
+            else
+            {
+                $(this).attr('value', false);
+            }
+        });
     </script>
 </head>
 <body>
 <div layout:fragment="content" class="container" style="overflow: hidden">
     <h5 class="my-3 border-bottom pb-2">리뷰등록</h5>
-    <form th:action="@{/review/create}" th:object="${review}" method="post" style="overflow: hidden">
+    <form th:action="@{/review/create}" th:object="${reviewForm}" method="post" style="overflow: hidden">
+        <div th:replace="form_errors :: formErrorsFragment"></div>
         <div class="row mb-3">
             <label for="inputGenre" class="col-sm-2 col-form-label">장르</label>
             <div class="col-sm-5">
-                <select class="form-select" id="inputGenre" name="genre">
-                    <option selected>장르 선택</option>
+                <select class="form-select" id="inputGenre" th:field="*{genre}">
+                    <option selected value="0">장르 선택</option>
                     <option value="1">음식점</option>
                     <option value="2">카페</option>
                     <option value="3">뮤지컬</option>
@@ -77,7 +88,7 @@
         <div class="row mb-3">
             <label for="inputTitle" class="col-sm-2 col-form-label">리뷰명</label>
             <div class="col-sm-5">
-                <input type="text" name="subject" class="form-control" id="inputTitle" placeholder="장르에 따른 리뷰 제목을 입력 혹은 검색해주세요.">
+                <input type="text" th:field="*{subject}" class="form-control" id="inputTitle" placeholder="장르에 따른 리뷰 제목을 입력 혹은 검색해주세요.">
             </div>
             <div class="col-sm-5">
                 <button type="button" class="btn btn-secondary">검색하기</button>
@@ -87,13 +98,13 @@
             <label for="inputDate" class="col-sm-2 col-form-label">일자</label>
             <div class="col-sm-5">
                 <!--                <input type="text" id="inputDate" class="form-control" value="" placeholder="방문한 날짜를 선택해주세요."/>-->
-                <input type="date" name="date" class="form-control" id="inputDate">
+                <input type="date" th:field="*{date}" class="form-control" id="inputDate" max="9999-12-31">
             </div>
         </div>
         <div class="row mb-3">
             <label for="inputPlace" class="col-sm-2 col-form-label">장소</label>
             <div class="col-sm-5">
-                <input type="text" name="place" class="form-control" id="inputPlace" placeholder="방문 장소를 입력 혹은 검색해주세요.">
+                <input type="text" th:field="*{place}" class="form-control" id="inputPlace" placeholder="방문 장소를 입력 혹은 검색해주세요.">
             </div>
             <div class="col-sm-5">
                 <button type="button" class="btn btn-secondary">검색하기</button>
@@ -104,29 +115,29 @@
             <div class="col-sm-2">
                 <!--                참고 : https://codepen.io/chris22smith/pen/MJzLJN-->
                 <div class="star-rating">
-                    <input type="radio" id="5-stars" name="grade" value=5 />
+                    <input type="radio" id="5-stars" th:field="*{grade}" value=5 />
                     <label for="5-stars" class="star">&#9733;</label>
-                    <input type="radio" id="4-stars" name="grade" value=4 />
+                    <input type="radio" id="4-stars" th:field="*{grade}" value=4 />
                     <label for="4-stars" class="star">&#9733;</label>
-                    <input type="radio" id="3-stars" name="grade" value=3 />
+                    <input type="radio" id="3-stars" th:field="*{grade}" value=3 />
                     <label for="3-stars" class="star">&#9733;</label>
-                    <input type="radio" id="2-stars" name="grade" value=2 />
+                    <input type="radio" id="2-stars" th:field="*{grade}" value=2 />
                     <label for="2-stars" class="star">&#9733;</label>
-                    <input type="radio" id="1-stars" name="grade" value=1 />
+                    <input type="radio" id="1-stars" th:field="*{grade}" value=1 />
                     <label for="1-stars" class="star">&#9733;</label>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="star-rating-btn">
-                    <input type="radio" id="1-stars-btn" name="grade" value=1 />
+                    <input type="radio" id="1-stars-btn" th:field="*{grade}" value=1 />
                     <label for="1-stars-btn" class="star-btn">1점</label>
-                    <input type="radio" id="2-stars-btn" name="grade" value=2 />
+                    <input type="radio" id="2-stars-btn" th:field="*{grade}" value=2 />
                     <label for="2-stars-btn" class="star-btn">2점</label>
-                    <input type="radio" id="3-stars-btn" name="grade" value=3 />
+                    <input type="radio" id="3-stars-btn" th:field="*{grade}" value=3 />
                     <label for="3-stars-btn" class="star-btn">3점</label>
-                    <input type="radio" id="4-stars-btn" name="grade" value=4 />
+                    <input type="radio" id="4-stars-btn" th:field="*{grade}" value=4 />
                     <label for="4-stars-btn" class="star-btn">4점</label>
-                    <input type="radio" id="5-stars-btn" name="grade" value=5 />
+                    <input type="radio" id="5-stars-btn" th:field="*{grade}" value=5 />
                     <label for="5-stars-btn" class="star-btn">5점</label>
                 </div>
             </div>
@@ -135,35 +146,35 @@
             <label class="form-label">편의 시설</label>
             <div class="col-12">
                 <div class="amenities-check">
-                    <input type="checkbox" id="amenities-elevator" name="amenities" value="0" />
+                    <input type="checkbox" id="amenities-elevator" th:field="*{amenities}" value="0" />
                     <label for="amenities-elevator" class="btn-outline-amenities" onclick="isChecked('elevator')">
                         <span class="amenities-img">
                             <img id="img_amenities_elevator" src="/static/image/amenities_elevator.png" height ="50" width="50" />
                         </span>
                         승강기
                     </label>
-                    <input type="checkbox" id="amenities-incline" name="amenities" value="1" />
+                    <input type="checkbox" id="amenities-incline" th:field="*{amenities}" value="1" />
                     <label for="amenities-incline" class="btn-outline-amenities" onclick="isChecked('incline')">
                         <span class="amenities-img">
                             <img id="img_amenities_incline" src="/static/image/amenities_incline.png" height ="50" width="50" />
                         </span>
                         경사로
                     </label>
-                    <input type="checkbox" id="amenities-parking" name="amenities" value="2" />
+                    <input type="checkbox" id="amenities-parking" th:field="*{amenities}" value="2" />
                     <label for="amenities-parking" class="btn-outline-amenities" onclick="isChecked('parking')">
                         <span class="amenities-img">
                             <img id="img_amenities_parking" src="/static/image/amenities_parking.png" height ="50" width="50" />
                         </span>
                         주차장
                     </label>
-                    <input type="checkbox" id="amenities-table" name="amenities" value="3" />
+                    <input type="checkbox" id="amenities-table" th:field="*{amenities}" value="3" />
                     <label for="amenities-table" class="btn-outline-amenities" onclick="isChecked('table')">
                         <span class="amenities-img">
                             <img id="img_amenities_table" src="/static/image/amenities_table.png" height ="50" width="50" />
                         </span>
                         테이블석
                     </label>
-                    <input type="checkbox" id="amenities-rest-room" name="amenities" value="4" />
+                    <input type="checkbox" id="amenities-rest-room" th:field="*{amenities}" value="4" />
                     <label for="amenities-rest-room" class="btn-outline-amenities" onclick="isChecked('rest-room')">
                         <span class="amenities-img">
                             <img id="img_amenities_rest-room" src="/static/image/amenities_rest-room.png" height ="50" width="50" />
@@ -176,13 +187,13 @@
         <div class="row mb-3">
             <label for="inputPlaceReview" class="col-sm-2 col-form-label">장소 리뷰</label>
             <div class="col-12">
-                <textarea class="form-control" id="inputPlaceReview" rows="3"  placeholder="장소에 대한 후기를 남겨주세요."></textarea>
+                <textarea class="form-control" id="inputPlaceReview" rows="3" th:field="*{placeReview}" placeholder="장소에 대한 후기를 남겨주세요."></textarea>
             </div>
         </div>
         <div class="row mb-3">
             <label for="inputAdditionalReview" class="col-sm-2 col-form-label">추가 리뷰</label>
             <div class="col-12">
-                <textarea class="form-control" id="inputAdditionalReview" rows="3"  placeholder="장소 외에 대한 후기를 남겨주세요."></textarea>
+                <textarea class="form-control" id="inputAdditionalReview" rows="3" th:field="*{additionalReview}" placeholder="장소 외에 대한 후기를 남겨주세요."></textarea>
             </div>
         </div>
         <div class="row mb-3">
@@ -197,7 +208,7 @@
         </div>
         <div class="row mb-3 float-end">
             <div class="w-auto text-sm-center" style="padding: 6px 6px">
-                <input class="form-check-input" type="checkbox" id="check_anonymous" style="margin-top: 0.4rem">
+                <input class="form-check-input" type="checkbox" th:field="*{isAnonymous}" id="check_anonymous" value=false style="margin-top: 0.4rem">
                 <label class="form-check-label" for="check_anonymous">익명</label>
             </div>
             <div class="w-auto">
