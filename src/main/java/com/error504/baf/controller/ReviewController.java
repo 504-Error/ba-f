@@ -3,10 +3,10 @@ package com.error504.baf.controller;
 import com.error504.baf.model.Review;
 import com.error504.baf.model.ReviewForm;
 import com.error504.baf.model.SiteUser;
-import com.error504.baf.repository.ReviewRepository;
 import com.error504.baf.service.ReviewService;
 import com.error504.baf.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,22 +15,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
+import java.text.SimpleDateFormat;
 
 @RequiredArgsConstructor
 @Controller
 public class ReviewController {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private UserService userService;
-    private ReviewService reviewService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final UserService userService;
+    private final ReviewService reviewService;
 
     @Autowired
     public ReviewController(ReviewService reviewService, UserService userService){
@@ -43,8 +40,10 @@ public class ReviewController {
         return "review/review_main";
     }
 
-    @RequestMapping("/review/content")
-    public String reviewContent() {
+    @RequestMapping(value = "/review/content/{id}")
+    public String reviewContent(Model model, @PathVariable("id") Long id) {
+        Review review = this.reviewService.getReview(id);
+        model.addAttribute("review", review);
         return "review/review_content";
     }
 
@@ -66,23 +65,19 @@ public class ReviewController {
 
         String amenitiesList = String.join(",", reviewForm.getAmenities());
 
-        reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), reviewForm.getDate(), reviewForm.getPlace(),
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateToString = transFormat.format(reviewForm.getDate());
+
+        reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(),
                 reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
 
         return "redirect:/review";
     }
 
     @RequestMapping("/review/list")
-    public String reviewList(Model model, @RequestParam(value="page", defaultValue = "0") int page) {
-        Page<Review> reviewPage = reviewService.getList(page);
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<Review> reviewPage = this.reviewService.getList(page);
         model.addAttribute("reviewPage", reviewPage);
         return "review/review_list";
     }
-
-//    @RequestMapping("/review/list")
-//    public String list(Model model) {
-//        List<Review> reviewList = this.reviewRepository.findAll();
-//        model.addAttribute("reviewList", reviewList);
-//        return "review/review_list";
-//    }
 }

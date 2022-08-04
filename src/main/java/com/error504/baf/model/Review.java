@@ -28,8 +28,8 @@ public class Review {
     @Column(length = 200)
     private String subject;
 
-    @Column(columnDefinition = "DATE")
-    private Date date;
+    @Column(columnDefinition = "TEXT")
+    private String date;
 
     @Column(columnDefinition = "TEXT")
     private String place;

@@ -35,35 +35,29 @@
 </div>
 
 <div layout:fragment="content" class="container">
-    <table class="table">
-        <thead class="table-dark">
-        <tr class="text-center">
-            <th>번호</th>
-            <th style="width:50%">제목</th>
-            <th>글쓴이</th>
+    <table>
+        <thead>
+        <tr>
+            <th>제목</th>
             <th>작성일시</th>
         </tr>
         </thead>
         <tbody>
-        <tr class="text-center" th:each="review, loop : ${reviewPage}">
-            <td th:text="${reviewPage.getTotalElements - (reviewPage.number * reviewPage.size) - loop.index}"></td>
-            <td class="text-start">
+        <tr th:each="review, loop : ${reviewPage}">
+            <td>
                 <a th:href="@{|/review/content/${review.id}|}" th:text="${review.subject}"></a>
-<!--                <span class="text-danger small ms-2"-->
-<!--                      th:if="${#lists.size(review.answerList) > 0}"-->
-<!--                      th:text="${#lists.size(review.answerList)}">-->
-<!--                    </span>-->
             </td>
-            <td><span th:if="${review.author != null}" th:text="${review.author.username}"></span></td>
-            <td th:text="${#temporals.format(review.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${review.createDate}"></td>
         </tr>
         </tbody>
     </table>
+
     <!-- 페이징처리 시작 -->
     <div th:if="${!reviewPage.isEmpty()}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${!reviewPage.hasPrevious} ? 'disabled'">
-                <a class="page-link" href="javascript:void(0)" th:data-page="${reviewPage.number-1}">
+                <a class="page-link"
+                   th:href="@{|?page=${reviewPage.number-1}|}">
                     <span>이전</span>
                 </a>
             </li>
@@ -71,10 +65,10 @@
                 th:if="${page >= reviewPage.number-5 and page <= reviewPage.number+5}"
                 th:classappend="${page == reviewPage.number} ? 'active'"
                 class="page-item">
-                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
             </li>
             <li class="page-item" th:classappend="${!reviewPage.hasNext} ? 'disabled'">
-                <a class="page-link" href="javascript:void(0)" th:data-page="${reviewPage.number+1}">
+                <a class="page-link" th:href="@{|?page=${reviewPage.number+1}|}">
                     <span>다음</span>
                 </a>
             </li>

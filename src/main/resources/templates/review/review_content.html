@@ -8,6 +8,13 @@
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰 내용</title>
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <script type="text/javascript">
+        function ratingToPercent(grade) {
+            const score = grade * 20;
+            return score;
+        }
+
+    </script>
 </head>
 <body>
 <div layout:fragment="content" class="container">
@@ -47,23 +54,21 @@
         <tbody>
         <tr>
             <th scope="row">장르</th>
-            <td>뮤지컬</td>
+            <td th:text="${review.genre}"></td>
         </tr>
         <tr>
             <th scope="row">리뷰명</th>
-            <td>
-                아이다
+            <td  th:text="${review.subject}">
                 <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 주제 리뷰 </span>
             </td>
         </tr>
         <tr>
             <th scope="row">일자</th>
-            <td>2022 - 06 - 21</td>
+            <td th:text="${review.date}"></td>
         </tr>
         <tr>
             <th scope="row">장소</th>
-            <td>
-                블루스퀘어 신한카드홀
+            <td th:text="${review.place}">
                 <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 장소 리뷰 </span>
             </td>
                 <!--            추후 지도 추가할 것-->
@@ -72,7 +77,7 @@
             <th scope="row">평점</th>
             <td>
                 <div class="star-ratings-base space-x-2 text-lg">
-                    <div class="star-ratings-fill space-x-2 text-lg" style="{ width: 60% }">
+                    <div class="star-ratings-fill space-x-2 text-lg" th:width="${review.grade} * 20 + '%'">
                         <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                     </div>
                 </div>
@@ -129,7 +134,7 @@
         <label class="review-content-label mb-3">장소 리뷰</label>
         <div class="card text-dark bg-light mb-4">
             <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <p class="card-text" th:text="${review.placeReview}"></p>
             </div>
         </div>
     </div>
@@ -137,7 +142,7 @@
         <label class="review-content-label mb-3">추가 리뷰</label>
         <div class="card text-dark bg-light mb-4">
             <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <p class="card-text" th:text="${review.additionalReview}"></p>
             </div>
         </div>
     </div>
