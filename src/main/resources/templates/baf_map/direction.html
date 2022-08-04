@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Taxi</title>
+</head>
+<body class="row justify-content-center">
+<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+<div  layout:fragment="content" class="container">
+    <nav class="sub-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">아이콘</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">길찾기</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">저상버스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">검색</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-select" href="#">장애인 콜택시</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="map" style="width:100%;height:350px;"></div>
+    <!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef"></script>-->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6f5ee4dc680406f1dbe36437ebafb94f"></script>
+    <script>
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+    </script>
+</div>
+</body>
+</html>
