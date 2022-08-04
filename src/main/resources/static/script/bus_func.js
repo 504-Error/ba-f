@@ -149,11 +149,12 @@ function addMarker(position, idx, title) {
 
 // 버스 정류장 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 function addBSMarker(position, idx) {
-    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-        imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+    console.log(position);
+    var imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+        imageSize = new kakao.maps.Size(40, 40),  // 마커 이미지의 크기
         imgOptions =  {
-            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+            spriteSize : new kakao.maps.Size(60, 710), // 스프라이트 이미지의 크기
+            spriteOrigin : new kakao.maps.Point(0, (9*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
             offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
         },
         markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
@@ -164,6 +165,8 @@ function addBSMarker(position, idx) {
 
     marker.setMap(map); // 지도 위에 마커를 표출합니다
     BSmarkers.push(marker);  // 배열에 생성된 마커를 추가합니다
+
+    console.log(marker.getPosition());
 
     return marker;
 }
@@ -239,7 +242,7 @@ function panToM(place_y, place_x) {
 
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-    map.setLevel(3);
+    map.setLevel(2);
     map.panTo(moveLatLon);
 
     var data = {};
@@ -304,7 +307,6 @@ function onClickBSMarker(arsId, stationNm) {
             jqXHR.setRequestHeader(header, token);
         },
         success: function (result) {
-            alert("성공"+result);
             stationSearchCB(stationNm, arsId, result);
         }
     });
@@ -335,6 +337,7 @@ function displayLowBus(stationNm, arsId, lowBus){
     // 지도에 표시되고 있는 마커를 제거합니다
     removeMarker()
     removeBSMarker();
+    infowindow.close();
 
 
     // 버스 정류장 이름, 고유번호 출력

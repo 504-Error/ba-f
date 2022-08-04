@@ -21,7 +21,7 @@ public class BusService {
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + "j1X7vFE5RUb9KZAjevsWKZlhE5D3j53C4nqmug7%2Fe8se2gMQgV4Nm6jYuAdHW29ey3Ucn%2FsBwkIScNFRG5jt1g%3D%3D"); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("tmX","UTF-8") + "=" + URLEncoder.encode(LNG, "UTF-8")); /*기준위치 X*/
         urlBuilder.append("&" + URLEncoder.encode("tmY","UTF-8") + "=" + URLEncoder.encode(LAT, "UTF-8")); /*기준위치 Y*/
-        urlBuilder.append("&" + URLEncoder.encode("radius","UTF-8") + "=" + URLEncoder.encode("200", "UTF-8")); /*검색 반경*/
+        urlBuilder.append("&" + URLEncoder.encode("radius","UTF-8") + "=" + URLEncoder.encode("450", "UTF-8")); /*검색 반경*/
         urlBuilder.append("&" + URLEncoder.encode("resultType","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*응답 유형*/
         URL url = new URL(urlBuilder.toString());
 
