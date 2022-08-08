@@ -12,29 +12,27 @@
 
 <body>
 <div  layout:fragment="content" class="container">
-    <div>
-        <nav class="sub-navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <ul class="nav justify-content-center" style="padding-bottom: 20px;">
-                    <li class="nav-item">
-                        <a class="nav-link-select" href="#">전체</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">음식점</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">카페</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">공연</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">기타</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+    <nav class="sub-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
+                <li class="nav-item">
+                    <a class="nav-link-select" href="#">전체</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/review/list">음식점</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">카페</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">공연</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">기타</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
     <div class="review-main-container mt-5">
         <!--        검색창 및 글쓰기 버튼 생성-->
@@ -57,7 +55,7 @@
 <!--    div 겹침 방지-->
     <div style="clear:both;"></div>
 
-    <div class="review-content-container">
+    <div class="review-content-container" style="clear: left">
 <!--        전체 리뷰 목록 최신 8개-->
         <div class="review-content">
             <h4>

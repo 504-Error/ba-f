@@ -15,10 +15,10 @@
         <div class="container-fluid">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link-select" href="#">전체</a>
+                    <a class="nav-link" href="/review">전체</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">음식점</a>
+                    <a class="nav-link-select" href="#">음식점</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">카페</a>
@@ -32,25 +32,83 @@
             </ul>
         </div>
     </nav>
-</div>
 
-<div layout:fragment="content" class="container">
-    <table>
-        <thead>
-        <tr>
-            <th>제목</th>
-            <th>작성일시</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="review, loop : ${reviewPage}">
-            <td>
-                <a th:href="@{|/review/content/${review.id}|}" th:text="${review.subject}"></a>
-            </td>
-            <td th:text="${review.createDate}"></td>
-        </tr>
-        </tbody>
-    </table>
+<!--    <div class="float-end mb-3">-->
+<!--        <a class="" href="#" style="text-decoration:none; color:inherit; font-size: 12px">목록형 </a>-->
+<!--        <div class="menu-bar-divider"></div>-->
+<!--        <a class="" href="#" style="text-decoration:none; color:inherit; font-size: 12px">카드형 </a>-->
+<!--    </div>-->
+
+    <div class="hstack gap-3">
+        <div class="ms-auto">목록형</div>
+        <div class="vr"></div>
+        <div class="">카드형</div>
+    </div>
+
+    <div class="card my-3" th:each="review : ${reviewPage}" style="clear:right">
+        <a th:href="@{/review/content/} + ${review.id} + @{/}" style="text-decoration:none; color:inherit">
+            <div class="image-box float-start me-3">
+                <img class="image-thumbnail" src="/static/image/test_image.jpeg">
+            </div>
+            <div class="card-body">
+                <div class="review-content-area mt-0 mb-3">
+                    <img class="img-profile-content float-start me-1" src="/static/image/anonymous_profile.png" style="width: 30px; height: 30px;">
+                    <div style="height: 30px;line-height:30px;">
+                        <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:if="${review.isAnonymous == true}" th:text="익명"></span>
+                        <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></span>
+                        <span class="fw-normal content-time" th:text="${#temporals.format(review.createDate, 'yy/MM/dd HH:mm')}"></span>
+                    </div>
+                </div>
+                <div class="card-text">
+                    <h6 th:text="'[' + ${review.genre} + '] ' + ${review.subject}"></h6>
+                    <table class="">
+                        <tbody>
+                        <tr>
+                            <td>
+                                <span class="float-start me-2">평점 : </span>
+                            </td>
+                            <td>
+                                <span class="star float-start">
+                                    <span class="star-on" th:style="'width: ' + ${review.grade} * 20 + '%'">
+                                        <span class="blind" th:text="'평점' + ${review.grade}"></span>
+                                    </span>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">
+                                <div class="ms-1">
+                                    <span th:if="${#strings.contains(review.amenities,'0')}" class="amenities-img float-start me-2">
+                                        <img id="img_amenities_elevator_select" src="/static/image/amenities_elevator_select.png" height="30" width="30" />
+                                    </span>
+                                    <span th:if="${#strings.contains(review.amenities,'1')}" class="amenities-img float-start me-2">
+                                        <img id="img_amenities_incline_select" src="/static/image/amenities_incline_select.png" height="30" width="30" />
+                                    </span>
+                                    <span th:if="${#strings.contains(review.amenities,'2')}" class="amenities-img float-start me-2">
+                                        <img id="img_amenities_parking_select" src="/static/image/amenities_parking_select.png" height="30" width="30" />
+                                    </span>
+                                    <span th:if="${#strings.contains(review.amenities,'3')}" class="amenities-img float-start me-2">
+                                        <img id="img_amenities_table_select" src="/static/image/amenities_table_select.png" height="30" width="30" />
+                                    </span>
+                                    <span th:if="${#strings.contains(review.amenities,'4')}" class="amenities-img float-start me-2">
+                                        <img id="img_amenities_rest-room_select" src="/static/image/amenities_rest-room_select.png" height="30" width="30" />
+                                    </span>
+                                </div>
+                            </th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mb-4">
+                    <ul class="content-info">
+                        <li class="recommend" th:text="${#lists.size(review.voter)}"></li>
+                        <li class="comment" th:text="${#lists.size(review.reviewCommentsList)}"></li>
+                    </ul>
+                </div>
+            </div>
+        </a>
+    </div>
 
     <!-- 페이징처리 시작 -->
     <div th:if="${!reviewPage.isEmpty()}">
@@ -61,7 +119,7 @@
                     <span>이전</span>
                 </a>
             </li>
-            <li th:each="page: ${#numbers.sequence(0, reviewPage.totalPages-1)}"
+            <li th:each="page: ${#numbers.sequence(1, reviewPage.totalPages)}"
                 th:if="${page >= reviewPage.number-5 and page <= reviewPage.number+5}"
                 th:classappend="${page == reviewPage.number} ? 'active'"
                 class="page-item">
@@ -76,6 +134,17 @@
     </div>
     <!-- 페이징처리 끝 -->
 </div>
-
 </body>
+
+<script layout:fragment="script" type='text/javascript'>
+    $("#check-anonym").change(function() {
+        if(this.checked) {
+            $(this).attr('value', true);
+        }
+        else
+        {
+            $(this).attr('value', false);
+        }
+    });
+</script>
 </html>

@@ -41,14 +41,14 @@ public class ReviewService {
         return this.reviewRepository.findAll(pageable);
     }
 
-    public void create(String genre, String subject, String date, String place, Integer grad,
+    public void create(String genre, String subject, String date, String place, Integer grade,
                        String amenities, String placeReview, String additionalReview, Boolean isAnonymous, SiteUser user) {
         Review review = new Review();
         review.setGenre(genre);
         review.setSubject(subject);
         review.setDate(date);
         review.setPlace(place);
-        review.setGrade(grad);
+        review.setGrade(grade);
         review.setAmenities(amenities);
         review.setPlaceReview(placeReview);
         review.setAdditionalReview(additionalReview);
@@ -60,10 +60,10 @@ public class ReviewService {
 
     public void vote(Review review, SiteUser siteUser){
         review.getVoter().add(siteUser);
-        reviewRepository.save(review);
+        this.reviewRepository.save(review);
     }
 
     public void delete(Review review) {
-        reviewRepository.delete(review);
+        this.reviewRepository.delete(review);
     }
 }

@@ -32,6 +32,9 @@ public class ReviewForm {
     @NotNull(message="평점은 필수항목입니다.")
     private Integer grade;
 
+    @NotNull(message="평점은 필수항목입니다.")
+    private Integer grade_btn;
+
     private String[] amenities;
 //    private Boolean amenities_elevator;
 //    private Boolean amenities_incline;

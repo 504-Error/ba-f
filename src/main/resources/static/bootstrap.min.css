@@ -11892,6 +11892,17 @@ textarea.form-control-lg {
     border-radius: .2rem;
 }
 
+.btn-outline-amenities-select {
+    width        : 122px;
+    height       : 100px;
+    font-size    : 15px;
+    color        : #FA9622;
+    text-align   : center;
+    border       : 1px solid;
+    border-color : #FA9622;
+    border-radius: .2rem;
+}
+
 /*.btn-outline-amenities:hover {*/
 /*    color        : #FA9622;*/
 /*    border       : 1px solid;*/
@@ -12032,7 +12043,7 @@ textarea.form-control-lg {
     background-position : left center;
 }
 
-.review-rate > .star {
+.review-rate > .star, td > .star{
     display           : block;
     width             : 74px;
     height            : 14px;
@@ -12042,7 +12053,7 @@ textarea.form-control-lg {
     background-repeat : no-repeat;
 }
 
-.review-rate > .star > .star-on {
+.review-rate > .star > .star-on, td > .star > .star-on {
     display           : block;
     width             : 74px;
     height            : 14px;
@@ -12157,10 +12168,19 @@ textarea.form-control-lg {
     border-radius: .2rem;
 }
 
-.child-comment {
+.btn-child-comment {
     color: #A6A6A6;
     font-size: 14px;
     margin-right: 0.3rem;
+}
+
+.child-comment {
+    background-color: #F9F9F9;
+}
+
+.child-comment-group {
+    margin-top: 1rem;
+    margin-left: 2rem;
 }
 
 .comment-item {
@@ -12174,6 +12194,19 @@ textarea.form-control-lg {
 .content-time {
     font-size: 13px;
     color: #A6A6A6;
+}
+
+.image-box {
+    width:215px;
+    height:215px;
+    overflow:hidden;
+    margin:0 auto;
+}
+
+.image-thumbnail {
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 
 /*.review-card > .card-body > .card-status > .content-info {*/

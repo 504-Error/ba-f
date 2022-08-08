@@ -8,13 +8,8 @@
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰 내용</title>
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-    <script type="text/javascript">
-        function ratingToPercent(grade) {
-            const score = grade * 20;
-            return score;
-        }
 
-    </script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 </head>
 <body>
 <div layout:fragment="content" class="container">
@@ -44,10 +39,15 @@
 <div layout:fragment="content" class="container">
     <h5 class="my-3 border-bottom pb-2">리뷰 내용</h5>
     <div class="review-content-area mt-0 mb-4">
+        <a href="javascript:void(0);" th:data-uri="@{|/review/delete/${review.id}|}"
+           class="delete btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"
+           th:if="${review.author != null and #authentication.getPrincipal().getUsername() == review.author.username}"
+           th:text="삭제"></a>
         <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
         <div class="ms-5">
-            <p class="fw-bolder mb-0 content-nickname">익명1</p>
-            <time class="fw-normal content-time">22/08/01 01:33</time>
+            <p class="fw-bolder mb-0 content-nickname" th:if="${review.isAnonymous == true}" th:text="익명"></p>
+            <p class="fw-bolder mb-0 content-nickname" th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></p>
+            <time class="fw-normal content-time" th:text="${#temporals.format(review.createDate, 'yy/MM/dd HH:mm')}"></time>
         </div>
     </div>
     <table class="review-content-table">
@@ -58,8 +58,11 @@
         </tr>
         <tr>
             <th scope="row">리뷰명</th>
-            <td  th:text="${review.subject}">
-                <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 주제 리뷰 </span>
+            <td>
+                [[${review.subject}]]
+                <a href="#">
+                    <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 주제 리뷰 </span>
+                </a>
             </td>
         </tr>
         <tr>
@@ -68,19 +71,22 @@
         </tr>
         <tr>
             <th scope="row">장소</th>
-            <td th:text="${review.place}">
-                <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 장소 리뷰 </span>
+            <td>
+                [[${review.place}]]
+                <a href="#">
+                    <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 장소 리뷰 </span>
+                </a>
             </td>
                 <!--            추후 지도 추가할 것-->
         </tr>
         <tr>
             <th scope="row">평점</th>
             <td>
-                <div class="star-ratings-base space-x-2 text-lg">
-                    <div class="star-ratings-fill space-x-2 text-lg" th:width="${review.grade} * 20 + '%'">
-                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                    </div>
-                </div>
+                <span class="star">
+                    <span class="star-on" th:style="'width: ' + ${review.grade} * 20 + '%'">
+                        <span class="blind" th:text="'평점' + ${review.grade}"></span>
+                    </span>
+                </span>
             </td>
         </tr>
         </tbody>
@@ -88,41 +94,85 @@
     <div class="review-content-area">
         <label class="review-content-label mb-3">편의 시설</label>
         <div class="row ms-1">
-            <div class="card btn-outline-amenities me-1">
+            <div th:if="${#strings.contains(review.amenities,'0')}" class="card btn-outline-amenities-select me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_elevator" src="/static/image/amenities_elevator.png" height ="50" width="50" />
+                    <img id="img_amenities_elevator_select" src="/static/image/amenities_elevator_select.png" height="50" width="50" />
                 </span>
                 <div class="review-card-body">
                     <span>승강기</span>
                 </div>
             </div>
-            <div class="card btn-outline-amenities me-1">
+            <div th:unless="${#strings.contains(review.amenities,'0')}" class="card btn-outline-amenities me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_incline" src="/static/image/amenities_incline.png" height ="50" width="50" />
+                    <img id="img_amenities_elevator" src="/static/image/amenities_elevator.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>승강기</span>
+                </div>
+            </div>
+
+            <div th:if="${#strings.contains(review.amenities,'1')}" class="card btn-outline-amenities-select me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_incline_select" src="/static/image/amenities_incline_select.png" height="50" width="50" />
                 </span>
                 <div class="review-card-body">
                     <span>경사로</span>
                 </div>
             </div>
-            <div class="card btn-outline-amenities me-1">
+            <div th:unless="${#strings.contains(review.amenities,'1')}" class="card btn-outline-amenities me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_parking" src="/static/image/amenities_parking.png" height ="50" width="50" />
+                    <img id="img_amenities_incline" src="/static/image/amenities_incline.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>경사로</span>
+                </div>
+            </div>
+
+            <div th:if="${#strings.contains(review.amenities,'2')}" class="card btn-outline-amenities-select me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_parking_select" src="/static/image/amenities_parking_select.png" height="50" width="50" />
                 </span>
                 <div class="review-card-body">
                     <span>주차장</span>
                 </div>
             </div>
-            <div class="card btn-outline-amenities me-1">
+            <div th:unless="${#strings.contains(review.amenities,'2')}" class="card btn-outline-amenities me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_table" src="/static/image/amenities_table.png" height ="50" width="50" />
+                    <img id="img_amenities_parking" src="/static/image/amenities_parking.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>주차장</span>
+                </div>
+            </div>
+
+            <div th:if="${#strings.contains(review.amenities,'3')}" class="card btn-outline-amenities-select me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_table_select" src="/static/image/amenities_table_select.png" height="50" width="50" />
                 </span>
                 <div class="review-card-body">
                     <span>테이블석</span>
                 </div>
             </div>
-            <div class="card btn-outline-amenities me-1">
+            <div th:unless="${#strings.contains(review.amenities,'3')}" class="card btn-outline-amenities me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_rest-room" src="/static/image/amenities_rest-room.png" height ="50" width="50" />
+                    <img id="img_amenities_table" src="/static/image/amenities_table.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>테이블석</span>
+                </div>
+            </div>
+
+            <div th:if="${#strings.contains(review.amenities,'4')}" class="card btn-outline-amenities-select me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_rest-room_select" src="/static/image/amenities_rest-room_select.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>장애인 화장실</span>
+                </div>
+            </div>
+            <div th:unless="${#strings.contains(review.amenities,'4')}" class="card btn-outline-amenities me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_rest-room" src="/static/image/amenities_rest-room.png" height="50" width="50" />
                 </span>
                 <div class="review-card-body">
                     <span>장애인 화장실</span>
@@ -154,13 +204,14 @@
     </div>
     <div class="review-content-area">
         <div class="float-start">
-            <button type="button" class="btn btn-light">
+            <a href="javascript:void(0)" class="btn btn-light recommend-btn"
+               th:data-uri="@{|/review/vote/${review.id}|}">
                 <span class="recommend-disable ps-4" style="color:#7F7F7F">좋아요</span>
-            </button>
+            </a>
         </div>
         <ul class="content-info">
-            <li class="recommend">0</li>
-            <li class="comment">0</li>
+            <li class="recommend" th:text="${#lists.size(review.voter)}"></li>
+            <li class="comment" th:text="${#lists.size(review.reviewCommentsList)}"></li>
         </ul>
     </div>
 
@@ -168,64 +219,124 @@
     <div style="clear:both;"></div>
     <h5 class="my-3 border-top border-bottom pt-4 pb-2">댓글</h5>
     <div class="review-content-area mb-5">
-        <div class="input-group mb-4">
-            <input type="text" class="form-control border-end-0" placeholder="댓글을 남겨주세요." aria-label="Recipient's username with two button addons">
-            <div class="input-group-text border-start-0" style="background-color: white">
-                <input class="form-check-input mt-0" id="check-anonym" type="checkbox" value="" aria-label="Checkbox for following text input">
-                <label class="form-check-label" id="check-anonym-text" for="check-anonym">익명</label>
+        <form th:action="@{|/review/comment/create/${review.id}|}" th:object="${reviewCommentForm}" method="post">
+            <div th:replace="form_errors :: formErrorsFragment"></div>
+            <div class="input-group mb-4">
+                <input type="text" th:field="*{content}" class="form-control border-end-0" placeholder="댓글을 남겨주세요." aria-label="Recipient's username with two button addons">
+                <div class="input-group-text border-start-0" style="background-color: white">
+                    <input class="form-check-input mt-0" id="check-anonym" type="checkbox" th:field="*{isAnonymous}" value=false aria-label="Checkbox for following text input">
+                    <label class="form-check-label" id="check-anonym-text" for="check-anonym">익명</label>
+                </div>
+                <button class="btn btn-outline-orange" type="submit">등록</button>
             </div>
-            <button class="btn btn-outline-orange" type="button">등록</button>
-        </div>
+        </form>
 
-        <div id="comments-list">
+        <div id="comments-list ">
             <ol class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-start comment-item">
-                    <div class="ms-2 me-auto">
-                        <div class="mb-2">
-                            <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
-                            <span class="fw-bolder content-nickname">익명1</span>
+                <li th:each="comment : ${review.reviewCommentsList}" class="list-group-item  justify-content-between align-items-start comment-item">
+                    <div class="d-flex">
+                        <div class="ms-2 me-auto">
+                            <div class="mb-2">
+                                <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
+                                <span class="fw-bolder content-nickname" th:if="${comment.isAnonymous == true}" th:text="익명"></span>
+                                <span class="fw-bolder content-nickname" th:unless="${comment.isAnonymous == true}" th:text="${comment.author.getUsername()}"></span>
+                            </div>
+                            [[${comment.content}]]
+                            <div class="mt-2">
+                                <time class="fw-normal me-3 content-time" th:text="${#temporals.format(comment.createDate, 'yy/MM/dd HH:mm')}"></time>
+                                <span class="recommend ps-4 content-nickname" th:text="${#lists.size(comment.voter)}"></span>
+                            </div>
                         </div>
-                        어쩌구 저쩌구의 댓글입니다.
-                        <div class="mt-2">
-                            <time class="fw-normal me-3 content-time">22/08/01 01:33</time>
-                            <span class="recommend ps-4 content-nickname">0</span>
-                        </div>
+                        <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-decoration:none;">
+                            <span class="btn-child-comment">대댓글</span>
+                        </a>
+<!--                        <form th:action="@{|/review/childCommend/create/${comment.id}|}" th:object="${reviewChildCommentForm}" method="post">-->
+<!--                            <div th:replace="form_errors :: formErrorsFragment"></div>-->
+<!--                            <div class="input-group mb-4">-->
+<!--                                <input type="text" th:field="*{content}" class="form-control border-end-0" placeholder="댓글을 남겨주세요." aria-label="Recipient's username with two button addons">-->
+<!--                                <div class="input-group-text border-start-0" style="background-color: white">-->
+<!--                                    <input class="form-check-input mt-0 check-anonym-text" type="checkbox" th:field="*{isAnonymous}" value=false aria-label="Checkbox for following text input">-->
+<!--                                    <label class="form-check-label" for="check-anonym-text">익명</label>-->
+<!--                                </div>-->
+<!--                                <button class="btn btn-outline-orange" type="submit">등록</button>-->
+<!--                            </div>-->
+<!--                        </form>-->
                     </div>
-                    <span class="child-comment">대댓글</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-start comment-item">
-                    <div class="ms-2 me-auto">
-                        <div class="mb-2">
-                            <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
-                            <span class="fw-bolder content-nickname">익명2</span>
-                        </div>
-                        어쩌구 저쩌구의 댓글입니다.
-                        <div class="mt-2">
-                            <time class="fw-normal me-3 content-time">22/08/01 01:33</time>
-                            <span class="recommend ps-4 content-nickname">0</span>
-                        </div>
+                    <div class="child-comment-group">
+<!--                        <form th:action="@{|/review/childCommend/create/${reviewComment.id}|}" th:object="${reviewChildCommentForm}" method="post">-->
+<!--                            <div th:replace="form_errors :: formErrorsFragment"></div>-->
+<!--                            <div class="input-group">-->
+<!--                                <input type="text" th:field="*{content}" class="form-control border-end-0" placeholder="댓글을 남겨주세요." aria-label="Recipient's username with two button addons">-->
+<!--                                <div class="input-group-text border-start-0" style="background-color: white">-->
+<!--                                    <input class="form-check-input mt-0" id="check-anonym" type="checkbox" th:field="*{isAnonymous}" value=false aria-label="Checkbox for following text input">-->
+<!--                                    <label class="form-check-label" id="check-anonym-text" for="check-anonym">익명</label>-->
+<!--                                </div>-->
+<!--                                <button class="btn btn-outline-orange" type="submit">등록</button>-->
+<!--                            </div>-->
+<!--                        </form>-->
+                        <ol class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start comment-item child-comment">
+                                <div class="ms-2 me-auto">
+                                    <div class="mb-2">
+                                        <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
+                                        <span class="fw-bolder content-nickname">익명1</span>
+                                    </div>
+                                    어쩌구 저쩌구
+                                    <div class="mt-2">
+                                        <time class="fw-normal me-3 content-time">22/08/01 01:33</time>
+                                        <span class="recommend ps-4 content-nickname">0</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start comment-item child-comment">
+                                <div class="ms-2 me-auto">
+                                    <div class="mb-2">
+                                        <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
+                                        <span class="fw-bolder content-nickname">익명1</span>
+                                    </div>
+                                    어쩌구 저쩌구
+                                    <div class="mt-2">
+                                        <time class="fw-normal me-3 content-time">22/08/01 01:33</time>
+                                        <span class="recommend ps-4 content-nickname">0</span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
                     </div>
-                    <span class="child-comment">대댓글</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-start comment-item">
-                    <div class="ms-2 me-auto">
-                        <div class="mb-2">
-                            <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
-                            <span class="fw-bolder content-nickname">익명3</span>
-                        </div>
-                        어쩌구 저쩌구의 댓글입니다.
-                        <div class="mt-2">
-                            <time class="fw-normal me-3 content-time">22/08/01 01:33</time>
-                            <span class="recommend ps-4 content-nickname">0</span>
-                        </div>
-                    </div>
-                    <span class="child-comment">대댓글</span>
                 </li>
             </ol>
         </div>
     </div>
 </div>
-
-
 </body>
+
+<script layout:fragment="script" type='text/javascript'>
+    $("#check-anonym").change(function() {
+        if(this.checked) {
+            $(this).attr('value', true);
+        }
+        else
+        {
+            $(this).attr('value', false);
+        }
+    });
+
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+
+    const recommend_elements = document.getElementsByClassName("recommend-btn");
+    Array.from(recommend_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 추천하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+</script>
 </html>
