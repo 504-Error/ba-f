@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,5 +81,30 @@ public class BusService {
         ArrayList resArr = res.get("itemList");
 
         return resArr;
+    }
+
+
+
+    public void SeoulBusMain() throws IOException {
+        URL url = new URL("http://ws.bus.go.kr/api/rest/arrive/getArrInfoByRouteAll?serviceKey=j1X7vFE5RUb9KZAjevsWKZlhE5D3j53C4nqmug7%2Fe8se2gMQgV4Nm6jYuAdHW29ey3Ucn%2FsBwkIScNFRG5jt1g%3D%3D&busRouteId=4341100");
+        URLConnection connection;
+        connection = url.openConnection();
+        HttpURLConnection httpconnection = (HttpURLConnection) connection;
+        int responseCode = httpconnection.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+
+            //내용 읽기 시작
+            InputStream in = httpconnection.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            br.close();
+            System.out.print(sb);
+            //내용 읽기 끝
+
+        }
     }
 }
