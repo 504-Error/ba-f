@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+
+    <title>검색하기</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/map/icon/icon-page.css">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-fix">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/question/list">
+            <img src="/static/image/ba-f_logo.png" alt="" width="90" height="40">
+        </a>
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" href="/question/list">커뮤니티</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/icon">Ba-f 맵</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/review">방문 후기</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">My Page</a>
+            </li>
+        </ul>
+        <div class="d-flex">
+            <a class="nav-link" href="/user/login">LOGIN</a>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container">
+    <nav class="sub-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
+                <li class="nav-item">
+                    <a class="nav-link" href="icon">아이콘</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="direction">길찾기</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="bus">저상버스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-select" href="#">검색</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="taxi">장애인 콜택시</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="map_wrap">
+        <div id="map" style="width:100%;height:500px;position:relative;overflow:hidden;"></div>
+
+        <div id="menu_wrap" class="bg_white">
+            <div class="option">
+                <div>
+                    <form onsubmit="searchPlaces(); return false;">
+                        키워드 : <input type="text" value="태릉입구 맛집" id="keyword" size="15">
+                        <button type="submit" style="background-color:#ffffff; border-color:#FA9622;color:#FA9622">검색하기</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <ul id="placesList"></ul>
+            <div id="pagination"></div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
+<script type="text/javascript" src="/static/script/icon_search.js"></script>
+
+</body>
+</html>
