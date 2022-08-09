@@ -1,47 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
         xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:sec="http://www.w3.org/1999/xhtml"
+        xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html"
         layout:decorate="~{layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Taxi</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <link rel="stylesheet" href="/static/css/map/icon/icon-page.css">
+    <title>Hello, Ba-f</title>
 </head>
-<body class="row justify-content-center">
-<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+<body>
 <div  layout:fragment="content" class="container">
     <nav class="sub-navbar navbar-expand-lg">
         <div class="container-fluid">
-            <ul class="nav justify-content-center">
+            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">아이콘</a>
+                    <a class="nav-link" href="icon">아이콘</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">길찾기</a>
+                    <a class="nav-link-select" href="#">길찾기</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">저상버스</a>
+                    <a class="nav-link" href="bus">저상버스</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">검색</a>
+                    <a class="nav-link" href="search">검색</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link-select" href="#">장애인 콜택시</a>
+                    <a class="nav-link" href="taxi">장애인 콜택시</a>
                 </li>
             </ul>
         </div>
     </nav>
-    <div id="map" style="width:100%;height:350px;"></div>
-    <!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef"></script>-->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6f5ee4dc680406f1dbe36437ebafb94f"></script>
-    <script>
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-            mapOption = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 3 // 지도의 확대 레벨
-            };
-    </script>
+
+    <div class="map_wrap">
+        <div id="map" style="width:100%;height:500px;position:relative;overflow:hidden;"></div>
+        <div id="menu_wrap" class="bg_white">
+            <ul id="placesList"></ul>
+            <div id="pagination"></div>
+        </div>
+    </div>
 </div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
 </body>
 </html>

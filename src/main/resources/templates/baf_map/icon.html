@@ -1,57 +1,103 @@
-<!DOCTYPE html>
-<html
-        lang="ko"
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:sec="http://www.w3.org/1999/xhtml"
-        layout:decorate="~{layout}">
+
+<!doctype html>
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
-    <title>카테고리별 장소 검색하기</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/map/icon/icon-page.css">
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+
+    <title>아이콘으로 찾기</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/map/icon/icon-page.css">
+
 </head>
 <body>
-<div layout:fragment="content">
+<nav class="navbar navbar-expand-lg navbar-fix">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/question/list">
+            <img src="/static/image/ba-f_logo.png" alt="" width="90" height="40">
+        </a>
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" href="/question/list">커뮤니티</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/icon">Ba-f 맵</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/review">방문 후기</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">My Page</a>
+            </li>
+        </ul>
+        <div class="d-flex">
+            <a class="nav-link" href="/user/login">LOGIN</a>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container">
     <nav class="sub-navbar navbar-expand-lg">
         <div class="container-fluid">
-            <ul class="nav justify-content-center">
+            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
                 <li class="nav-item">
                     <a class="nav-link-select" href="#">아이콘</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">길찾기</a>
+                    <a class="nav-link" href="direction">길찾기</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">저상버스</a>
+                    <a class="nav-link" href="bus">저상버스</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">검색</a>
+                    <a class="nav-link" href="search">검색</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">장애인 콜택시</a>
+                    <a class="nav-link" href="taxi">장애인 콜택시</a>
                 </li>
             </ul>
         </div>
     </nav>
-</div>
-<h3>아이콘을 클릭또는 검색어를 입력하면 근처 편의시설을 확인할 수 있습니다.</h3>
-<div>
-    <input type="text"> <button>검색</button>
-</div>
-<div class="map_wrap">
-    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-</div>
-    <div id="category">
-        <button id="PK6" data-order="1" type="button"><img src="/static/image/map/parking.png" width="30" height="30" alt="">주차장</button>
-        <button id="SW8" data-order="2" type="button"><img src="/static/image/map/subway.png" width="30" height="30" alt="">지하철</button>
-        <button id="HP8" data-order="3" type="button"><img src="/static/image/map/station.png" width="30" height="30" alt="">병원</button>
-        <button id="PM9" data-order="4" type="button"><img src="/static/image/map/pharmacy.png" width="30" height="30" alt="">약국</button>
-        <button id="CS2" data-order="5" type="button"><img src="/static/image/map/store.png" width="30" height="30" alt="">편의점</button>
-        <button id="FD6" data-order="6" type="button"><img src="/static/image/map/restaurant.png" width="30" height="30" alt="">식당</button>
+
+    <div class="map_wrap">
+        <div id="map" style="width:100%;height:500px;position:relative;overflow:hidden;"></div>
+        <ul id="category">
+            <li id="SW8" data-order="0">
+                <span class="category_bg bank"></span>
+                지하철역
+            </li>
+            <li id="HP8" data-order="1">
+                <span class="category_bg mart"></span>
+                병원
+            </li>
+            <li id="PM9" data-order="2">
+                <span class="category_bg pharmacy"></span>
+                약국
+            </li>
+            <li id="OL7" data-order="3">
+                <span class="category_bg oil"></span>
+                주유소
+            </li>
+            <li id="PK6" data-order="4">
+                <span class="category_bg cafe"></span>
+                주차장
+            </li>
+            <li id="CS2" data-order="5">
+                <span class="category_bg store"></span>
+                편의점
+            </li>
+        </ul>
     </div>
-<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef"></script>-->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6f5ee4dc680406f1dbe36437ebafb94f"></script>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
 <script type="text/javascript" src="/static/script/icon_map.js"></script>
+
 </body>
 </html>
