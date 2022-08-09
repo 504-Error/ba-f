@@ -31,7 +31,7 @@ public class BoardController {
         this.userService = userService;
     }
 
-    @RequestMapping("/board/community/board_list")
+    @RequestMapping("/board/board_list")
     public String bookmarked_list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
         Page<Board> paging = boardService.getList(page);
         model.addAttribute("paging", paging);
@@ -54,7 +54,7 @@ public class BoardController {
         }
         SiteUser siteUser = userService.getUser(principal.getName());
         boardService.create(boardForm.getBoardName(), boardForm.getBoardIntro(), siteUser);
-        return "redirect:/board/community/board_list";
+        return "redirect:/board/board_list";
     }
 
 }

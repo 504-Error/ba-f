@@ -1,5 +1,6 @@
 package com.error504.baf.model;
 
+import com.error504.baf.Time;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,4 +38,10 @@ public class Question {
     @ManyToOne
     private Board board;
 
+
+    private String date;
+    public String getDate( LocalDateTime time){
+        date = Time.convertLocaldatetimeToTime(time);
+        return date;
+    }
 }

@@ -22,7 +22,6 @@ import java.util.List;
 public class BoardService {
     private BoardRepository boardRepository;
 
-
     @Autowired
     public BoardService(BoardRepository boardRepository){
         this.boardRepository = boardRepository;
@@ -39,6 +38,9 @@ public class BoardService {
         q.setBoardName(boardName);
         q.setBoardIntro(boardIntro);
         boardRepository.save(q);
+    }
+    public Board getBoard(long id) {
+        return boardRepository.findBoardById(id);
     }
 
 }

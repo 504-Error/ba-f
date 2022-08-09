@@ -1,6 +1,7 @@
 package com.error504.baf.controller;
 
 import com.error504.baf.model.*;
+import com.error504.baf.service.BoardService;
 import com.error504.baf.service.QuestionService;
 import com.error504.baf.service.UserService;
 import org.slf4j.Logger;
@@ -17,25 +18,58 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class QuestionController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private QuestionService questionService;
+    private BoardService boardService;
     private UserService userService;
 
     @Autowired
-    public QuestionController(QuestionService questionService, UserService userService){
+    public QuestionController(QuestionService questionService, UserService userService, BoardService boardService){
         this.questionService = questionService;
         this.userService = userService;
+        this.boardService = boardService;
     }
 
     @RequestMapping("/question/list")
     public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
-        Page<Question> paging = questionService.getList(page);
-        model.addAttribute("paging", paging);
+        List<Question> weeklyList=questionService.getWeeklyHotList();
+        model.addAttribute("weeklyList", weeklyList);
+        List<Question> hotList=questionService.getHotList();
+        model.addAttribute("hotList", hotList);
+
         return "community/question_list";
     }
+
+    @PreAuthorize("isAuthenticated()")
+     @GetMapping("/question/hotList")
+    public String hotList(Model model) {
+         List<Question> hotList=questionService.getHotList();
+        model.addAttribute("hotList", hotList);
+        return "community/hot_board";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/question/weeklyHotList")
+    public String weeklyHotList(Model model) {
+        List<Question> weeklyList=questionService.getWeeklyHotList();
+        model.addAttribute("weeklyList", weeklyList);
+        return "community/weekly_board";
+    }
+
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping(value = "/board/question_list/{id}")
+//    public String viewQuestionList(@PathVariable Long id, Model model) {
+//        List<Question> questionList = questionService.getQuestionResult(id);
+//        Board board = boardService.getBoard(id);
+//        model.addAttribute("questionList", questionList);
+//        model.addAttribute("board", board);
+//        return "community/board_question";
+//    }
 
     @GetMapping(value = "/question/detail/{id}")
     public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm){
@@ -47,8 +81,9 @@ public class QuestionController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/question/create")
-    public String questionCreate(QuestionForm questionForm){
+    @GetMapping("/question/create/{id}")
+    public String questionCreate(QuestionForm questionForm,  @PathVariable("id") Long boardId, Model model){
+        model.addAttribute("boardId", boardId);
         return "community/question_form";
 
     }
@@ -62,8 +97,10 @@ public class QuestionController {
             return "community/question_form";
         }
         SiteUser siteUser = userService.getUser(principal.getName());
+        logger.info(questionForm.getBoardId().toString());
+        Board board = boardService.getBoard(questionForm.getBoardId());
         logger.info(siteUser.toString());
-        questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser);
+        questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board);
         return "redirect:/question/list";
     }
 
@@ -90,5 +127,18 @@ public class QuestionController {
     public String index() {
         return "community/event_info";
     }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/board/question_list/{id}")
+    public String viewQuestionList(@PathVariable Long id, Model model) {
+        List<Question> questionList = questionService.getQuestionResult(id);
+        Board board = boardService.getBoard(id);
+        model.addAttribute("questionList", questionList);
+        model.addAttribute("board", board);
+        return "community/board_question";
+    }
+
+
 
 }

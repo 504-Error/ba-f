@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ba-f Community</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
 </head>
 <body>
 <div  layout:fragment="content" class="container">
@@ -15,16 +15,16 @@
         <div class="container-fluid">
             <ul class="nav justify-content-center" style="padding-bottom: 20px;">
                 <li class="nav-item">
-                    <a class="nav-link-select" th:href="@{/board/community/hot_board}">HOT 게시물</a>
+                    <a class="nav-link-select" th:href="@{/question/hotList}">HOT 게시물</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">주간 인기글</a>
+                    <a class="nav-link"  th:href="@{/question/weeklyHotList}">주간 인기글</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/question/list}">HOME</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/board/community/board_list}">즐겨찾는 게시판</a>
+                    <a class="nav-link" th:href="@{/board/board_list}">즐겨찾는 게시판</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/eventInfo}">추천 정보</a>
@@ -33,5 +33,43 @@
         </div>
     </nav>
 
+    <h4>실시간 급상승 게시물</h4>
+
+    <div class="card my-3" th:each="question : ${hotList}">
+        <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
+            <div class="card-body" >
+                    <div class="card-text" style="white-space: pre-line;">
+                        <h5 th:text="${question.subject}"></h5>
+                        <span th:text="${question.content}"></span>
+                    </div>
+                <div class="d-flex justify-content-end">
+<!--                <div class="badge bg-light text-dark p-2 text-start">-->
+<!--                        <div th:text="${question.getDate(question.createDate)}"></div>-->
+<!--                </div>-->
+
+                <div class="my-3">
+                    <div class="badge bg-light text-dark p-2 text-start">
+                        <div th:text="${question.getDate(question.createDate)}"></div>
+                    </div>
+
+                    <a class="btn btn-sm">
+                        ❤
+                        <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
+                    </a>
+                    <a class="btn btn-sm">
+                        🗨
+                        <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.answerList)}"></span>
+                    </a>
+                </div>
+    </div>
+    </div>
+        </a>
+    </div>
+
+
+
+
+
+</div>
 </body>
 </html>
