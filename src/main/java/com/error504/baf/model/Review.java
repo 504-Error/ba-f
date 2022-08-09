@@ -52,6 +52,9 @@ public class Review {
     @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
     private List<ReviewComment> reviewCommentsList;
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
+    private List<ReviewImage> reviewImages;
+
     @ManyToMany
     Set<SiteUser> voter;
 }

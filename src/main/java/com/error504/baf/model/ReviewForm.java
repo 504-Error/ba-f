@@ -32,20 +32,17 @@ public class ReviewForm {
     @NotNull(message="평점은 필수항목입니다.")
     private Integer grade;
 
-    @NotNull(message="평점은 필수항목입니다.")
-    private Integer grade_btn;
+//    @NotNull(message="평점은 필수항목입니다.")
+//    private Integer grade_btn;
 
     private String[] amenities;
-//    private Boolean amenities_elevator;
-//    private Boolean amenities_incline;
-//    private Boolean amenities_parking;
-//    private Boolean amenities_table;
-//    private Boolean amenities_restRoom;
 
     @NotEmpty(message="장소 리뷰 내용은 필수항목입니다.")
     private String placeReview;
 
     private String additionalReview;
+
+    private String[] imageUrl;
 
     private Boolean isAnonymous;
 }

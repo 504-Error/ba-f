@@ -30,7 +30,7 @@
             for (let i = 0; i < selectedFile.length; i++){
                 let div = document.createElement('div');
                 div.className = "btn preview-img"
-                div.id = (selectedFile[i].name).replace('.png', '') + "_" + selectedFile[i].lastModified;
+                // div.id = (selectedFile[i].name).replace('.png', '') + "_" + selectedFile[i].lastModified;
                 div.onclick = function (){
                     document.getElementById('board-preview-add-img').removeChild(div);
                 }
@@ -64,6 +64,22 @@
                 $(this).attr('value', false);
             }
         });
+
+        function setImageArray() {
+            const imageDiv = document.getElementsByClassName("preview-img");
+            let imgArray = new Array();
+
+            for(let i = 0; i < imageDiv.length; i++){
+                let img_url = imageDiv[i].css('background-image').replace(/^url\(['"](.+)['"]\)/, '$1');
+                console.log("img_url[" + i + "] : " + img_url);
+                imgArray.push(img_url);
+            }
+
+            console.log("imgArray : " + imgArray);
+
+            let fileInput = document.getElementById("formFileMultiple");
+            fileInput.files = imgArray;
+        }
     </script>
 </head>
 <body>
@@ -199,7 +215,7 @@
         <div class="row mb-3">
             <label class="form-label">이미지 추가</label>
             <div class="col-12">
-                <input class="form-control d-none" type="file" accept="image/*" id="formFileMultiple" onchange="addImg()" multiple>
+                <input class="form-control d-none" type="file" th:field="*{imageUrl}" accept="image/*" id="formFileMultiple" onchange="addImg()" multiple>
                 <label for="formFileMultiple" class="btn new-img">
                     <img src="/static/image/new_img.png">
                 </label>
@@ -212,7 +228,7 @@
                 <label class="form-check-label" for="check_anonymous">익명</label>
             </div>
             <div class="w-auto">
-                <button type="submit" class="btn btn-primary">리뷰 등록</button>
+                <button type="submit" class="btn btn-primary" id="btn-submit">리뷰 등록</button>
             </div>
         </div>
     </form>
