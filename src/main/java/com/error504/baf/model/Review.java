@@ -38,17 +38,6 @@ public class Review {
     @Column(columnDefinition = "TEXT")
     private String amenities;
 
-//    @Column(columnDefinition = "BOOLEAN")
-//    private Boolean amenities_elevator;
-//    @Column(columnDefinition = "BOOLEAN")
-//    private Boolean amenities_incline;
-//    @Column(columnDefinition = "BOOLEAN")
-//    private Boolean amenities_parking;
-//    @Column(columnDefinition = "BOOLEAN")
-//    private Boolean amenities_table;
-//    @Column(columnDefinition = "BOOLEAN")
-//    private Boolean amenities_restRoom;
-
     @Column(columnDefinition = "TEXT")
     private String placeReview;
 
@@ -62,6 +51,9 @@ public class Review {
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
     private List<ReviewComment> reviewCommentsList;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
+    private List<ReviewImage> reviewImages;
 
     @ManyToMany
     Set<SiteUser> voter;

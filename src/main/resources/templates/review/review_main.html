@@ -2,7 +2,8 @@
 <html
         xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.w3.org/1999/html"
         layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
@@ -40,20 +41,17 @@
             <div id="review-search-input-group">
                 <form id="review-search-form" name="sReviewForm" action="" method="get" role="search">
                     <div class="input-group mb-3 me-sm-3">
-                        <input type="text" id="review-search-review-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <input type="text" id="review-search-review-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
                         <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
                     </div>
                 </form>
             </div>
 
             <a th:href="@{/review/create}">
-                <button id="review-btn-write" type="button" class="btn btn-outline-orange">리뷰 작성</button>
+                <button id="review-btn-write" type="button" class="btn btn-primary">리뷰 작성</button>
             </a>
         </div>
     </div>
-
-<!--    div 겹침 방지-->
-    <div style="clear:both;"></div>
 
     <div class="review-content-container" style="clear: left">
 <!--        전체 리뷰 목록 최신 8개-->

@@ -1,9 +1,6 @@
 package com.error504.baf.controller;
 
-import com.error504.baf.model.Review;
-import com.error504.baf.model.ReviewCommentForm;
-import com.error504.baf.model.ReviewForm;
-import com.error504.baf.model.SiteUser;
+import com.error504.baf.model.*;
 import com.error504.baf.service.ReviewService;
 import com.error504.baf.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +16,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+import static com.error504.baf.controller.ReviewSearchPerform.getPerformData;
 
 @RequestMapping("/review")
 @RequiredArgsConstructor
@@ -63,6 +65,8 @@ public class ReviewController {
         if (bindingResult.hasErrors()) {
             return "review/review_form";
         }
+
+        logger.info("imgUrl ArrayList : ", reviewForm.getImageUrl());
 
         SiteUser siteUser = userService.getUser(principal.getName());
         logger.info(siteUser.toString());
@@ -108,5 +112,14 @@ public class ReviewController {
     @GetMapping("/create/search/place")
     public String searchPlace() {
         return "review/review_search_place";
+    }
+
+    @GetMapping("/create/search/perform")
+    public String searchShow(Model model) {
+        ArrayList<ReviewPerformInfo> performInfoList = getPerformData();
+
+        model.addAttribute("performInfoList", performInfoList);
+
+        return "review/review_search_perform";
     }
 }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>ba-f : 리뷰 공연 검색</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
+</head>
+<body>
+<div  layout:fragment="content" class="container">
+    <div class="review-main-container mt-5">
+        <!--        검색창 및 글쓰기 버튼 생성-->
+        <div class="review-header-content">
+            <div id="review-search-input-group">
+                <form id="review-search-form" name="sReviewForm" action="" method="get" role="search">
+                    <div class="input-group mb-3 me-sm-3">
+                        <input type="text" id="review-search-review-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
+                    </div>
+                </form>
+            </div>
+
+            <a th:href="">
+                <button id="review-btn-write" type="button" class="btn btn-primary">선택</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="container" style="clear: left">
+        <div class="row row-cols-1 row-cols-md-4">
+            <div class="col" th:each="performInfo : ${performInfoList}">
+                <a href="#">
+                    <div class="card review-card">
+                        <img th:src="${performInfo.posterUrl}" class="card-img-top" alt="..." width="100px" height="200px">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${performInfo.title}"></h5>
+                            <div class="card-status">
+                                <p th:text="${performInfo.facility}"></p>
+                                <p th:text="${performInfo.startDate + ' - ' + performInfo.endDate}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>
