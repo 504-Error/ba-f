@@ -6,66 +6,73 @@
         layout:decorate="~{layout}">
 
 <div layout:fragment="content" class="container my-3">
-  <h2 class="border-bottom py-2" th:text="${question.subject}"></h2>
+  <h5 class="my-3 border-bottom pb-2" th:text="${question.subject}">리뷰 내용</h5>
+  <div class="review-content-area mt-0 mb-4">
+    <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+    <div class="ms-5">
+      <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></p>
+      <time class="fw-normal content-time" th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></time>
+    </div>
+  </div>
   <div class="card my-3">
     <div class="card-body">
       <div class="card-text" style="white-space: pre-line;" th:text="${question.content}"></div>
-      <div class="d-flex justify-content-end">
-        <div class="badge bg-light text-dark p-2 text-start">
-          <div class="mb-2">
-            <span th:if="${question.author != null}" th:text="${question.author.username}"></span>
-          </div>
-          <div th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
-        </div>
-      </div>
       <div class="my-3">
-        <a href="javascript:void(0)" class="recommend btn btn-sm btn-outline-secondary"
+        <div class="float-start">
+        <a href="javascript:void(0)" class="recommendPopup btn btn btn-light" type="button"
            th:data-uri="@{|/question/vote/${question.id}|}">
-          ❤
-          <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
+          <span class="recommend-disable ps-4" style="color:#7F7F7F">좋아요</span>
         </a>
-        <a href="javascript:void(0);" th:data-uri="@{|/question/delete/${question.id}|}"
-           class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
-           th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
-           th:text="삭제"></a>
+        </div>
+        <ul class="content-info">
+          <li class="recommend" th:text="${#lists.size(question.voter)}"></li>
+          <li class="comment" th:text="${#lists.size(question.answerList)}"></li>
+         </ul>
+<!-- <a href="javascript:void(0);" th:data-uri="@{|/question/delete/${question.id}|}"-->
+<!--           class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"-->
+<!--           th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"-->
+<!--           th:text="삭제"></a>-->
       </div>
     </div>
   </div>
-  <h5 class="border-bottom my-3 py-2"
-      th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
-  <div th:each="answer : ${question.answerList}">
-    <div class="card my-3">
-      <div class="card-body">
-        <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
-        <div class="d-flex justify-content-end">
-          <div class="badge bg-light text-dark p-2 text-start">
-            <div class="mb-2">
-              <span th:if="${answer.author != null}" th:text="${answer.author.username}"></span>
+
+
+  <div style="clear:both;"></div>
+  <h5 class="my-3 border-top border-bottom pt-4 pb-2">댓글</h5>
+  <div class="review-content-area mb-5">
+    <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post">
+      <div class="input-group mb-4">
+        <input type="text" th:field="*{content}" class="form-control border-end-0" placeholder="댓글을 남겨주세요." aria-label="Recipient's username with two button addons">
+        <div class="input-group-text border-start-0" style="background-color: white">
+          <input class="form-check-input mt-0" id="check-anonym" type="checkbox" value=false aria-label="Checkbox for following text input">
+          <label class="form-check-label" id="check-anonym-text" for="check-anonym">익명</label>0
+        </div>
+        <button class="btn btn-outline-orange" type="submit">등록</button>
+      </div>
+    </form>
+
+    <div id="comments-list ">
+      <ol class="list-group">
+        <li th:each="answer : ${question.answerList}" class="list-group-item  justify-content-between align-items-start comment-item">
+            <div class="ms-2 me-auto">
+              <div class="mb-2">
+                <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
+                <span class="fw-bolder content-nickname" th:if="${answer.author !=null}" th:text="${answer.author.username}"></span>
+                 </div>
+              [[${answer.content}]]
+              <div class="mt-2">
+                <time class="fw-normal me-3 content-time" th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></time>
+                <span class="recommend ps-4 content-nickname" th:text="${#lists.size(answer.voter)}"></span>
+              </div>
             </div>
-            <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
-          </div>
-        </div>
-        <div class="my-3">
-          <a href="javascript:void(0)" class="recommend btn btn-sm btn-outline-secondary"
-             th:data-uri="@{|/answer/vote/${answer.id}|}">
-            ❤
-            <span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voter)}"></span>
-          </a>
-          <a href="javascript:void(0);" th:data-uri="@{|/answer/delete/${answer.id}|}"
-             class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
-             th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
-             th:text="삭제"></a>
-        </div>
-      </div>
+             <span class="btn-child-comment">대댓글</span>
+        </li>
+      </ol>
     </div>
   </div>
-  <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
-    <div th:replace="form_errors :: formErrorsFragment"></div>
-    <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
-    <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
-    <input type="submit" value="답변등록" class="btn btn-primary my-2">
-  </form>
 </div>
+
+
 <script layout:fragment="script" type='text/javascript'>
   const delete_elements = document.getElementsByClassName("delete");
   Array.from(delete_elements).forEach(function(element) {
@@ -75,7 +82,7 @@
       };
     });
   });
-  const recommend_elements = document.getElementsByClassName("recommend");
+  const recommend_elements = document.getElementsByClassName("recommendPopup");
   Array.from(recommend_elements).forEach(function(element) {
     element.addEventListener('click', function() {
       if(confirm("정말로 추천하시겠습니까?")) {
