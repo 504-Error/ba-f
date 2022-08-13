@@ -30,6 +30,7 @@ import static com.error504.baf.controller.ReviewSearchPerform.getPerformData;
 @RequiredArgsConstructor
 @Controller
 public class ReviewController {
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UserService userService;
     private final ReviewService reviewService;
