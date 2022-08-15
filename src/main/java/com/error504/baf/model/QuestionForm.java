@@ -16,4 +16,6 @@ public class QuestionForm {
     private String content;
 
     private Long boardId;
+
+    private Boolean isAnonymous;
 }

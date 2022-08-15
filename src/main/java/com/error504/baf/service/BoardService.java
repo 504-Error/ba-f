@@ -33,6 +33,10 @@ public class BoardService {
         return boardRepository.findAll(pageable);
     }
 
+    public List<Board> findAll() {
+        return boardRepository.findAll();
+    }
+
     public void create(String boardName, String boardIntro, SiteUser user)
     { Board q = new Board();
         q.setBoardName(boardName);

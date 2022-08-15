@@ -23,9 +23,10 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void create(Question question, String content, SiteUser author){
+    public void create(Question question, String content, Boolean isAnonymous, SiteUser author){
         Answer answer = new Answer();
         answer.setContent(content);
+        answer.setIsAnonymous(isAnonymous);
         answer.setCreateDate(LocalDateTime.now());
         answer.setQuestion(question);
         answer.setAuthor(author);

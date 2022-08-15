@@ -49,7 +49,7 @@ public class AnswerController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("question", question);
             return "community/question_detail"; }
-        answerService.create(question, answerForm.getContent(), siteUser);
+        answerService.create(question, answerForm.getContent(), answerForm.getIsAnonymous(), siteUser);
         return String.format("redirect:/question/detail/" + id); }
 
 
