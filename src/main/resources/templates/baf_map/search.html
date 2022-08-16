@@ -41,51 +41,52 @@
     </div>
 </nav>
 
+<nav class="sub-navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <ul class="nav justify-content-center" style="padding-bottom: 20px;">
+            <li class="nav-item">
+                <a class="nav-link" href="icon">아이콘</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="bus">저상버스</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link-select" href="#">검색</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="taxi">장애인 콜택시</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-<div class="container">
-    <nav class="sub-navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
-                <li class="nav-item">
-                    <a class="nav-link" href="icon">아이콘</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="direction">길찾기</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="bus">저상버스</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link-select" href="#">검색</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="taxi">장애인 콜택시</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="map_wrap">
-        <div id="map" style="width:100%;height:500px;position:relative;overflow:hidden;"></div>
-
-        <div id="menu_wrap" class="bg_white">
-            <div class="option">
-                <div>
-                    <form onsubmit="searchPlaces(); return false;">
-                        키워드 : <input type="text" value="태릉입구 맛집" id="keyword" size="15">
-                        <button type="submit" style="background-color:#ffffff; border-color:#FA9622;color:#FA9622">검색하기</button>
-                    </form>
-                </div>
+<div class="map_wrap">
+    <div id="map" style="width:100%;height:500px;position:relative;overflow:hidden;"></div>
+    <div id="menu_wrap" class="bg_white">
+        <div class="option">
+            <div>
+                <form onsubmit="searchPlaces(); return false;">
+                    키워드 : <input type="text" value="태릉입구 맛집" id="keyword" size="15">
+                    <button type="submit" style="background-color:#ffffff; border-color:#FA9622;color:#FA9622">검색하기</button>
+                </form>
             </div>
-            <hr>
-            <ul id="placesList"></ul>
-            <div id="pagination"></div>
         </div>
-
+        <hr>
+        <ul id="placesList"></ul>
+        <div id="pagination"></div>
+    </div>
+    <div class="map_info_wrap">
+        <div id="menu_info_wrap" class="bg_white">
+            <!-- 이게 창 -->
+        </div>
     </div>
 </div>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
-<script type="text/javascript" src="/static/script/icon_search.js"></script>
+
+
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6f5ee4dc680406f1dbe36437ebafb94f&libraries=services"></script>
+<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>-->
+<script type="text/javascript" src="/static/script/search.js"></script>
 
 </body>
 </html>

@@ -28,4 +28,7 @@ public class Answer {
 
     @ManyToMany
     Set<SiteUser> voter;
+
+    @Column(columnDefinition = "BOOLEAN")
+    private Boolean isAnonymous;
 }

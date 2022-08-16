@@ -4,6 +4,7 @@ import com.error504.baf.Time;
 import com.error504.baf.exception.DataNotFoundException;
 import com.error504.baf.model.Board;
 import com.error504.baf.model.Question;
+import com.error504.baf.model.Review;
 import com.error504.baf.model.SiteUser;
 import com.error504.baf.repository.BoardRepository;
 import com.error504.baf.repository.QuestionRepository;
@@ -77,9 +78,19 @@ public class QuestionService {
     }
 
 
+    public Page<Question>  getQuestionList(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return questionRepository.findAll(pageable);
+    }
+
     @Transactional
-    public List<Question> getQuestionResult(Long id) {
-        return questionRepository.findQuestionByBoardId(id);
+    public List<Question> getQuestionResult(Long id, int page ) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return questionRepository.findQuestionByBoardId(id, pageable);
     }
 
     public Question getQuestion(Long id){
@@ -104,6 +115,10 @@ public class QuestionService {
 
     public void vote(Question question, SiteUser siteUser){
         question.getVoter().add(siteUser);
+        questionRepository.save(question);
+    }
+    public void accuse(Question question, SiteUser siteUser){
+        question.getAccuser().add(siteUser);
         questionRepository.save(question);
     }
 
