@@ -18,22 +18,41 @@
                     <a class="nav-link" href="/review">전체</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link-select" href="#">음식점</a>
+                    <a class="nav-link" id="restaurant" href="/review/restaurant">음식점</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">카페</a>
+                    <a class="nav-link" href="/review/cafe">카페</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">공연</a>
+                    <a class="nav-link" href="/review/perform">공연</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">기타</a>
+                    <a class="nav-link" href="/review/etc">기타</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <div class="hstack gap-3">
+    <div class="review-main-container mt-5">
+        <!--        검색창 및 글쓰기 버튼 생성-->
+        <div class="review-header-content">
+            <div id="review-search-input-group">
+                <form th:action="@{|/review/${category}|}" method="get" id="searchForm">
+                    <div class="input-group mb-3 me-sm-3">
+                        <input type="text" th:value="${keyword}" name="kw" id="review-search-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
+                        <input type="hidden" id="page" name="page" th:value="${reviewPage.number}">
+                        <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
+                    </div>
+                </form>
+            </div>
+
+            <a th:href="@{/review/create}">
+                <button id="review-btn-write" type="button" class="btn btn-primary">리뷰 작성</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="hstack gap-3" style="clear: left">
         <div class="ms-auto">목록형</div>
         <div class="vr"></div>
         <div class="">카드형</div>
@@ -108,19 +127,17 @@
     <div th:if="${!reviewPage.isEmpty()}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${!reviewPage.hasPrevious} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{|?page=${reviewPage.number-1}|}">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${reviewPage.number-1}">
                     <span>이전</span>
                 </a>
             </li>
-            <li th:each="page: ${#numbers.sequence(1, reviewPage.totalPages)}"
+            <li th:each="page: ${#numbers.sequence(0, reviewPage.totalPages-1)}"
                 th:if="${page >= reviewPage.number-5 and page <= reviewPage.number+5}"
-                th:classappend="${page == reviewPage.number} ? 'active'"
-                class="page-item">
-                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                th:classappend="${page == reviewPage.number} ? 'active'" class="page-item">
+                <a th:text="${page+1}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
             </li>
             <li class="page-item" th:classappend="${!reviewPage.hasNext} ? 'disabled'">
-                <a class="page-link" th:href="@{|?page=${reviewPage.number+1}|}">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${reviewPage.number+1}">
                     <span>다음</span>
                 </a>
             </li>
@@ -128,17 +145,29 @@
     </div>
     <!-- 페이징처리 끝 -->
 </div>
-</body>
 
 <script layout:fragment="script" type='text/javascript'>
-    $("#check-anonym").change(function() {
-        if(this.checked) {
-            $(this).attr('value', true);
-        }
-        else
-        {
-            $(this).attr('value', false);
-        }
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
     });
+    const btn_search = document.getElementById("review-button-search");
+    btn_search.addEventListener('click', function() {
+        document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+        document.getElementById('searchForm').submit();
+    });
+
+    // 나중에 수정해야 됨
+    const categoryStr = "${category}";
+    const category = document.getElementById(categoryStr);
+    console.log("category : ", category);
+    console.log("category str : ", categoryStr);
+    category.class="nav-item-select";
+
 </script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+</body>
 </html>

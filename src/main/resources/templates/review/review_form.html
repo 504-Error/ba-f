@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰 작성</title>
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-    <script type="text/javascript">
+    <script defer type="text/javascript">
         function isChecked(category) {
             const imgId = "img_amenities_" + category
             const checkbox_id = "amenities-" + category;
@@ -22,17 +22,37 @@
             }
             document.getElementById(imgId).src = changeImgName;
         }
+
         // 다중 이미지 미리보기 업로드
+        var inputFileList = new Array();
         function addImg() {
+            // 업로드 된 파일 유효성 체크
+            if (inputFileList.length >= 5) {
+                alert("이미지는 최대 5개까지 업로드 가능합니다.");
+                $('input[name=images]').val();
+                return;
+            }
+
             const fileInput = document.getElementById("formFileMultiple");
             const selectedFile = fileInput.files;
 
             for (let i = 0; i < selectedFile.length; i++){
                 let div = document.createElement('div');
                 div.className = "btn preview-img"
-                // div.id = (selectedFile[i].name).replace('.png', '') + "_" + selectedFile[i].lastModified;
+                div.id = (selectedFile[i].name).replace(/-/g, "_") + "-" + selectedFile[i].lastModified;
                 div.onclick = function (){
+                    for(let i = 0; i < inputFileList.length; i++) {
+                        var fileData = div.id.split('-');
+                        console.log("div.id.split : ", div.id);
+                        console.log("fileData : ", fileData);
+                        if(inputFileList[i].name.replace(/-/g, "_") === fileData[0] && inputFileList[i].lastModified == fileData[1]) {
+                            inputFileList.splice(i, 1);
+                            console.log("delete img num : ", i);
+                            break;
+                        }
+                    }
                     document.getElementById('board-preview-add-img').removeChild(div);
+                    console.log("delete after inputFileList : ", inputFileList);
                 }
 
                 let child_div = document.createElement('div');
@@ -49,11 +69,14 @@
                     div.style = "background-image:url(" + e.target.result + ");"
                     document.getElementById('board-preview-add-img').appendChild(div);
                 }
+
                 fileReader.readAsDataURL(selectedFile[i]);
+                inputFileList.push(selectedFile[i]);
+                console.log("add img : ", selectedFile[i]);
             }
 
             fileInput.value = "";
-        };
+        }
 
         $("#check_anonymous").change(function() {
             if(this.checked) {
@@ -65,27 +88,47 @@
             }
         });
 
-        function setImageArray() {
-            const imageDiv = document.getElementsByClassName("preview-img");
-            let imgArray = new Array();
+        function uploadReview() {
+            console.log("inputFileList: " + inputFileList);
+            let formData = new FormData($('#reviewForm')[0]);  // 폼 객체
 
-            for(let i = 0; i < imageDiv.length; i++){
-                let img_url = imageDiv[i].css('background-image').replace(/^url\(['"](.+)['"]\)/, '$1');
-                console.log("img_url[" + i + "] : " + img_url);
-                imgArray.push(img_url);
+            for (let i = 0; i < inputFileList.length; i++) {
+                formData.append("images", inputFileList[i]);  // 배열에서 이미지들을 꺼내 폼 객체에 담는다.
             }
 
-            console.log("imgArray : " + imgArray);
+            console.log("formData : ", formData);
 
-            let fileInput = document.getElementById("formFileMultiple");
-            fileInput.files = imgArray;
+            $.ajax({
+                url: '/review/create/upload',
+                type:'POST',
+                data: formData,
+                dataType: "text",
+                enctype:"multipart/form-data",  // 업로드를 위한 필수 파라미터
+                processData: false,   // 업로드를 위한 필수 파라미터
+                contentType: false,   // 업로드를 위한 필수 파라미터
+                cache: false,
+                beforeSend: function (jqXHR) {
+                    var header = $("meta[name='_csrf_header']").attr("content");
+                    var token = $("meta[name='_csrf']").attr("content");
+                    jqXHR.setRequestHeader(header, token);
+                },
+                success: function(data) {
+                    alert(data);
+                },
+                error : function(error) {
+                    alert("code : " + error.status + "\n" + "message : " + error.responseText + "\n" + "error : " + error);
+                }
+            });
         }
     </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 <body>
 <div layout:fragment="content" class="container" style="overflow: hidden">
     <h5 class="my-3 border-bottom pb-2">리뷰등록</h5>
-    <form th:action="@{/review/create}" th:object="${reviewForm}" method="post" style="overflow: hidden">
+    <form onsubmit="uploadReview()" th:object="${reviewForm}" id="reviewForm" style="overflow: hidden" method="post">
         <div th:replace="form_errors :: formErrorsFragment"></div>
         <div class="row mb-3">
             <label for="inputGenre" class="col-sm-2 col-form-label">장르</label>
@@ -215,7 +258,7 @@
         <div class="row mb-3">
             <label class="form-label">이미지 추가</label>
             <div class="col-12">
-                <input class="form-control d-none" type="file" th:field="*{imageUrl}" accept="image/*" id="formFileMultiple" onchange="addImg()" multiple>
+                <input class="form-control d-none" type="file" th:field="*{images}" accept="image/*" id="formFileMultiple" onchange="addImg()" multiple>
                 <label for="formFileMultiple" class="btn new-img">
                     <img src="/static/image/new_img.png">
                 </label>
