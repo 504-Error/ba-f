@@ -86,11 +86,11 @@ public class QuestionService {
     }
 
     @Transactional
-    public List<Question> getQuestionResult(Long id, int page ) {
+    public Page<Question> getQuestionResult(Long id, int page ) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return questionRepository.findQuestionByBoardId(id, pageable);
+        return questionRepository.findQuestionByBoardId(pageable, id);
     }
 
     public Question getQuestion(Long id){

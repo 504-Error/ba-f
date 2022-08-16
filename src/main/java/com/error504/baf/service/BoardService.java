@@ -1,5 +1,6 @@
 package com.error504.baf.service;
 
+import com.error504.baf.model.Answer;
 import com.error504.baf.model.Board;
 import com.error504.baf.model.Question;
 import com.error504.baf.model.SiteUser;
@@ -23,11 +24,11 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository){
+    public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
     }
 
-    public Page<Board> getList(int page){
+    public Page<Board> getList(int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return boardRepository.findAll(pageable);
@@ -37,14 +38,16 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-    public void create(String boardName, String boardIntro, SiteUser user)
-    { Board q = new Board();
+    public void create(String boardName, String boardIntro, SiteUser user) {
+        Board q = new Board();
         q.setBoardName(boardName);
         q.setBoardIntro(boardIntro);
         boardRepository.save(q);
     }
+
     public Board getBoard(long id) {
         return boardRepository.findBoardById(id);
     }
+
 
 }

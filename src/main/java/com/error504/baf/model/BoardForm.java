@@ -3,6 +3,7 @@ package com.error504.baf.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 @Getter
@@ -15,5 +16,5 @@ public class BoardForm {
     @NotEmpty(message="게시판 소개는 필수항목입니다.")
     private String boardIntro;
 
-
+    private Boolean isInterested;
 }
