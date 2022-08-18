@@ -27,6 +27,8 @@ public class UserCreateForm {
 
     private int type;
 
+    private int getWheel;
+
 }
 
 

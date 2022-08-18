@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Ba-f Community</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+</head>
+<body>
+
+<div  layout:fragment="content" class="container">
+    <nav class="sub-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
+                <li class="nav-item">
+                    <a class="nav-link"  th:href="@{/question/weeklyHotList}">작성한 글 조회</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/question/list}">반응한 글 조회</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/board/board_list}">회원 정보 변경 및 탈퇴</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/eventInfo}">공지사항</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="col-8">
+
+        <div class="container" style="padding-top: 5%">
+            <div class="row">
+                <!--768px 이상에서는 열 3개 병합-->
+                <!--576px 이하에서는 열 4개 병합-->
+                <div class="col-md-3 col-sm-4">
+                    <!--list-group : 수직 목록 생성-->
+                    <div class="list-group">
+                        <a th:href="@{/user/mypage/email}" class="list-group-item list-group-item-action">이메일 변경</a>
+                        <a th:href="@{/user/mypage/pwd}" class="list-group-item list-group-item-action">패스워드 변경</a>
+                        <a th:href="@{/user/mypage/delete}" class="list-group-item list-group-item-action">회원 탈퇴</a>
+                    </div>
+
+                </div>
+                <div class="col-9 col-sm-6" style="padding-left:10%">
+                    <h2 class="col-sm-12">패스워드 변경</h2>
+                    <div class="row mt-3">
+                        <form class="needs-validation col-12" action="#" th:action="@{/user/settings/password}"
+                              th:object="${passwordForm}" method="post"
+                              novalidate>
+                            <div class="form-group mt-3">
+                                <label for="newPassword">새 패스워드</label>
+                                <input id="newPassword" type="password" th:field="*{newPassword}" class="form-control"
+                                       aria-describedby="newPasswordHelp" required min="8" max="50">
+                                <small id="newPasswordHelp" class="form-text text-muted">
+                                    새 패스워드를 입력하세요.
+                                </small>
+                                <small class="invalid-feedback">패스워드를 입력하세요.</small>
+                                <br><small class="form-text text-danger" th:if="${#fields.hasErrors('newPassword')}"
+                                       th:errors="*{newPassword}">new password error</small>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="newPasswordConfirm">새 패스워드</label>
+                                <input id="newPasswordConfirm" type="password" th:field="*{newPasswordConfirm}"
+                                       class="form-control"
+                                       aria-describedby="newPasswordConfirmHelp" required min="8" max="50">
+                                <small id="newPasswordConfirmHelp" class="form-text text-muted">
+                                    새 패스워드를 다시 한번 입력하세요.
+                                </small>
+                                <small class="invalid-feedback">패스워드를 다시 입력하세요.</small>
+                                <br><small class="form-text text-danger" th:if="${#fields.hasErrors('newPasswordConfirm')}"
+                                       th:errors="*{newPasswordConfirm}">new password confirm error</small>
+                            </div>
+                            <div class="form-group mt-3">
+                                <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">패스워드 변경하기</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+<!--        <h2 class="col-sm-12">이메일 변경</h2>-->
+<!--        <div class="row mt-3">-->
+<!--            <form class="needs-validation col-12" action="#" th:action="@{/user/settings/email}"-->
+<!--                  th:object="${emailForm}" method="post"-->
+<!--                  novalidate>-->
+<!--                <div class="form-group mt-3">-->
+<!--                    <label class="form-label">이메일</label>-->
+<!--                    <input type="email" th:field="*{newEmail}" class="form-control">-->
+<!--                    <small id="newEmailHelp" class="form-text text-muted">-->
+<!--                                                새로운 이메일을 입력하세요.-->
+<!--                                            </small>-->
+<!--                </div>-->
+<!--                <div class="form-group mt-3">-->
+<!--                    <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">이메일 변경하기</button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+
+    </div>
+</div>
+</div>
+
+</body>
+</html>

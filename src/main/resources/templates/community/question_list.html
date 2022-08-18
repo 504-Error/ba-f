@@ -34,9 +34,17 @@
   </nav>
   <div>
 
+    <div class="review-main-container mt-5" style="padding-bottom: 5%">
+    <div class="review-header-content">
+    <div id="review-search-input-group">
+      <div class="input-group mb-3 me-sm-3">
+        <input type="text" th:value="${keyword}" id="review-search-review-input" class="form-control" placeholder="글 제목, 내용 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
+        <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
+      </div>
+    </div>
     <a th:href="@{/question/create/}" class="btn btn-primary" style="float:right;">질문 등록하기</a>
-
-    <br>
+    </div>
+    </div>
 
   </div>
 
@@ -125,32 +133,22 @@
 
 
 
-
-<!--  &lt;!&ndash; 페이징처리 시작 &ndash;&gt;-->
-<!--  <div th:if="${!paging.isEmpty()}">-->
-<!--    <ul class="pagination justify-content-center">-->
-<!--      <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">-->
-<!--        <a class="page-link" th:href="@{|?page=${paging.number-1}|}">-->
-<!--          <span>이전</span>-->
-<!--        </a>-->
-<!--      </li>-->
-<!--      <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"-->
-<!--          th:if="${page >= paging.number-5 and page <= paging.number+5}"-->
-<!--          th:classappend="${page == paging.number} ? 'active'"-->
-<!--          class="page-item">-->
-<!--        <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}">-->
-<!--        </a>-->
-<!--      </li>-->
-<!--      <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">-->
-<!--        <a class="page-link" th:href="@{|?page=${paging.number+1}|}">-->
-<!--          <span>다음</span>-->
-<!--        </a>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--  &lt;!&ndash; 페이징처리 끝 &ndash;&gt;-->
-
-
 </div>
+
+<script layout:fragment="script" type='text/javascript'>
+  const page_elements = document.getElementsByClassName("page-link");
+  Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+      document.getElementById('page').value = this.dataset.page;
+      document.getElementById('searchForm').submit();
+    });
+  });
+  const btn_search = document.getElementById("review-button-search");
+  btn_search.addEventListener('click', function() {
+    document.getElementById('kw').value = document.getElementById('review-search-review-input').value;
+    document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+    document.getElementById('searchForm').submit();
+  });
+</script>
 </body>
 </html>
