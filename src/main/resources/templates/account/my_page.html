@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Ba-f Community</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+</head>
+<body>
+
+<div  layout:fragment="content" class="container">
+
+
+    <div class="col-8">
+
+        <div class="container" style="padding-top: 5%">
+            <div class="row">
+                <div class="col-md-3 col-sm-4">
+                    <div class="list-group" style="padding-top:31%">
+                        <a th:href="@{/user/mypage}" class="list-group-item list-group-item-action">내 정보</a>
+                        <a th:href="@{/user/mypage/email}" class="list-group-item list-group-item-action">이메일 변경</a>
+                        <a th:href="@{/user/mypage/pwd}" class="list-group-item list-group-item-action">패스워드 변경</a>
+                        <a th:href="@{/user/mypage/delete}" class="list-group-item list-group-item-action">회원 탈퇴</a>
+                    </div>
+
+                </div>
+                <div class="col-9 col-sm-8" style="padding-left:10%" >
+                    <h2 class="col-sm-12">내 정보</h2>
+                    <div class="row mt-3">
+                        <form class="needs-validation col-12" action="#"
+                              th:object="${siteUser}">
+                            <div style="padding-bottom:20%; padding-top: 5%">
+                                <img class="img-profile-content float-start me-3" style="width: 50px; height: 50px" src="/static/image/anonymous_profile.png">
+                                <div class="ms-5">
+                                    <p class="fw-bolder mb-0" style="font-size: 18px;" th:text="${siteUser.username}"></p>
+                                    <small th:if="${siteUser.getAuth == 1}"> 본인 인증 완료</small>
+                                    <small th:unless="${siteUser.getAuth == 1}"> 본인 인증 미완료</small>
+                                </div>
+                            </div>
+                            <div  class="border-bottom py-2">
+                                <span style="font-size:16px"> 사용자 작성글</span>
+                                <a class="form-text text-muted" style="float:right"
+                                   th:href="@{/user/mypage/write}">더보기</a>
+                            </div>
+                            <br>
+                            <div  class="border-bottom py-2">
+                                 <span style="font-size:16px"> 좋아요 모아보기</span>
+                                <a class="form-text text-muted" style="float:right"
+                                   th:href="@{/user/mypage/like}">더보기</a>
+                            </div>
+                            <br>
+                            <div  class="border-bottom py-2">
+                                <span style="font-size:16px"> 댓글 모아보기 </span>
+                                <a class="form-text text-muted" style="float:right"
+                                   th:href="@{/answer/mypage/comment}">더보기</a>
+                            </div>
+                            <br>
+                            <div  class="border-bottom py-2">
+                                <span style="font-size:16px"> Ba-f 소개 </span>
+                                <a class="form-text text-muted" style="float:right"
+                                   th:href="@{/user/whatIsBaf}">더보기</a>
+                            </div>
+                            <br>
+                            <div  class="border-bottom py-2">
+                                <span style="font-size:16px"> 공지사항 </span>
+                                <a class="form-text text-muted" style="float:right"
+                                   th:href="@{/user/mypage/notice}">더보기</a>
+                            </div>
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Ba-f Community</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+</head>
+<body>
+
+<div  layout:fragment="content" class="container">
+
+
+    <div class="col-8">
+
+        <div class="container" style="padding-top: 5%">
+            <div class="row">
+                <div class="col-md-3 col-sm-4">
+                    <div class="list-group" style="padding-top:31%">
+                        <a th:href="@{/user/mypage}" class="list-group-item list-group-item-action">내 정보</a>
+                        <a th:href="@{/user/mypage/email}" class="list-group-item list-group-item-action">이메일 변경</a>
+                        <a th:href="@{/user/mypage/pwd}" class="list-group-item list-group-item-action">패스워드 변경</a>
+                        <a th:href="@{/user/mypage/delete}" class="list-group-item list-group-item-action">회원 탈퇴</a>
+                    </div>
+
+                </div>
+                <div class="col-9 col-sm-8" style="padding-left:10%" >
+                    <h2 class="col-sm-12">Ba-f 공지사항</h2>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

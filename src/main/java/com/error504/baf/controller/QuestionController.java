@@ -163,22 +163,36 @@ public class QuestionController {
         return "communuity/board_question";
     }
 
-//    @RequestMapping("/list")
-//    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
-//        Page<Review> reviewPage = this.reviewService.getList(page);
-//        model.addAttribute("reviewPage", reviewPage);
-//        return "review/review_list";
-//    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/user/mypage/write")
+    public String myPageWrite(Model model, Principal principal, @RequestParam(value="page", defaultValue="0") int page){
+        SiteUser siteUser = userService.getUser(principal.getName());
+        Page<Question> questionList = questionService.getQuestionResultByUser(siteUser.getId(), page);
+        model.addAttribute("siteUser", siteUser);
+        model.addAttribute("questionList", questionList);
+        return "account/my_page_write";
+    }
 
-//    @RequestMapping("/question/list")
-//    public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
-//        List<Question> weeklyList=questionService.getWeeklyHotList();
-//        model.addAttribute("weeklyList", weeklyList);
-//        List<Question> hotList=questionService.getHotList();
-//        model.addAttribute("hotList", hotList);
+
+
+
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/user/mypage/like")
+//    public String myPageLike(Model model, Principal principal, @RequestParam(value="page", defaultValue="0") int page){
+//        SiteUser siteUser = userService.getUser(principal.getName());
+//        Question <Question>
+//        if(question.getVoter().contains(siteUser))
 //
-//        return "community/question_list";
+//            this.reviewRepository.save(review);
+//        }
+//
+//        List <Long> questionId= new ArrayList<>();
+//        if(set)
+//        questionId.add
+//
+//        Page<Question> questionList = questionService.getQuestionResultByUser(siteUser.getId(), page);
+//        model.addAttribute("siteUser", siteUser);
+//        model.addAttribute("questionList", questionList);
+//        return "account/my_page_like";
 //    }
-
-
 }

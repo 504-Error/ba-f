@@ -12,24 +12,6 @@
 <body>
 
 <div  layout:fragment="content" class="container">
-    <nav class="sub-navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
-                <li class="nav-item">
-                    <a class="nav-link"  th:href="@{/question/weeklyHotList}">작성한 글 조회</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/question/list}">반응한 글 조회</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/board/board_list}">회원 정보 변경 및 탈퇴</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/eventInfo}">공지사항</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
 
     <div class="col-8">
 
@@ -38,8 +20,8 @@
                 <!--768px 이상에서는 열 3개 병합-->
                 <!--576px 이하에서는 열 4개 병합-->
                 <div class="col-md-3 col-sm-4">
-                    <!--list-group : 수직 목록 생성-->
-                    <div class="list-group">
+                    <div class="list-group" style="padding-top:31%">
+                        <a th:href="@{/user/mypage}" class="list-group-item list-group-item-action">내 정보</a>
                         <a th:href="@{/user/mypage/email}" class="list-group-item list-group-item-action">이메일 변경</a>
                         <a th:href="@{/user/mypage/pwd}" class="list-group-item list-group-item-action">패스워드 변경</a>
                         <a th:href="@{/user/mypage/delete}" class="list-group-item list-group-item-action">회원 탈퇴</a>

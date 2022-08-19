@@ -1,5 +1,6 @@
 package com.error504.baf.model;
 
+import com.error504.baf.Time;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,4 +32,9 @@ public class Answer {
 
     @Column(columnDefinition = "BOOLEAN")
     private Boolean isAnonymous;
+    private String date;
+    public String getDate( LocalDateTime time){
+        date = Time.convertLocaldatetimeToTime(time);
+        return date;
+    }
 }
