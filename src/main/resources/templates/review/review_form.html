@@ -8,138 +8,26 @@
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰 작성</title>
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-    <script defer type="text/javascript">
-        function isChecked(category) {
-            const imgId = "img_amenities_" + category
-            const checkbox_id = "amenities-" + category;
-            const checkbox = document.getElementById(checkbox_id)
-            const isChecked = checkbox.checked;
-            var changeImgName;
-            if (!isChecked){
-                changeImgName = "/static/image/amenities_" + category + "_select.png";
-            } else {
-                changeImgName = "/static/image/amenities_" + category + ".png";
-            }
-            document.getElementById(imgId).src = changeImgName;
-        }
-
-        // 다중 이미지 미리보기 업로드
-        var inputFileList = new Array();
-        function addImg() {
-            // 업로드 된 파일 유효성 체크
-            if (inputFileList.length >= 5) {
-                alert("이미지는 최대 5개까지 업로드 가능합니다.");
-                $('input[name=images]').val();
-                return;
-            }
-
-            const fileInput = document.getElementById("formFileMultiple");
-            const selectedFile = fileInput.files;
-
-            for (let i = 0; i < selectedFile.length; i++){
-                let div = document.createElement('div');
-                div.className = "btn preview-img"
-                div.id = (selectedFile[i].name).replace(/-/g, "_") + "-" + selectedFile[i].lastModified;
-                div.onclick = function (){
-                    for(let i = 0; i < inputFileList.length; i++) {
-                        var fileData = div.id.split('-');
-                        console.log("div.id.split : ", div.id);
-                        console.log("fileData : ", fileData);
-                        if(inputFileList[i].name.replace(/-/g, "_") === fileData[0] && inputFileList[i].lastModified == fileData[1]) {
-                            inputFileList.splice(i, 1);
-                            console.log("delete img num : ", i);
-                            break;
-                        }
-                    }
-                    document.getElementById('board-preview-add-img').removeChild(div);
-                    console.log("delete after inputFileList : ", inputFileList);
-                }
-
-                let child_div = document.createElement('div');
-                child_div.className = "preview-img-background";
-                div.appendChild(child_div);
-
-                let p = document.createElement('p');
-                p.className = "preview-img-del";
-                p.appendChild(document.createTextNode("이미지 삭제"));
-                child_div.appendChild(p);
-
-                const fileReader = new FileReader();
-                fileReader.onload = e => {
-                    div.style = "background-image:url(" + e.target.result + ");"
-                    document.getElementById('board-preview-add-img').appendChild(div);
-                }
-
-                fileReader.readAsDataURL(selectedFile[i]);
-                inputFileList.push(selectedFile[i]);
-                console.log("add img : ", selectedFile[i]);
-            }
-
-            fileInput.value = "";
-        }
-
-        $("#check_anonymous").change(function() {
-            if(this.checked) {
-                $(this).attr('value', true);
-            }
-            else
-            {
-                $(this).attr('value', false);
-            }
-        });
-
-        function uploadReview() {
-            console.log("inputFileList: " + inputFileList);
-            let formData = new FormData($('#reviewForm')[0]);  // 폼 객체
-
-            for (let i = 0; i < inputFileList.length; i++) {
-                formData.append("images", inputFileList[i]);  // 배열에서 이미지들을 꺼내 폼 객체에 담는다.
-            }
-
-            console.log("formData : ", formData);
-
-            $.ajax({
-                url: '/review/create/upload',
-                type:'POST',
-                data: formData,
-                dataType: "text",
-                enctype:"multipart/form-data",  // 업로드를 위한 필수 파라미터
-                processData: false,   // 업로드를 위한 필수 파라미터
-                contentType: false,   // 업로드를 위한 필수 파라미터
-                cache: false,
-                beforeSend: function (jqXHR) {
-                    var header = $("meta[name='_csrf_header']").attr("content");
-                    var token = $("meta[name='_csrf']").attr("content");
-                    jqXHR.setRequestHeader(header, token);
-                },
-                success: function(data) {
-                    alert(data);
-                },
-                error : function(error) {
-                    alert("code : " + error.status + "\n" + "message : " + error.responseText + "\n" + "error : " + error);
-                }
-            });
-        }
-    </script>
-    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-    <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>    <meta name="_csrf" th:content="${_csrf?.token}">
+    <meta name="_csrf_header" th:content="${_csrf?.headerName}">
 </head>
 <body>
 <div layout:fragment="content" class="container" style="overflow: hidden">
     <h5 class="my-3 border-bottom pb-2">리뷰등록</h5>
-    <form onsubmit="uploadReview()" th:object="${reviewForm}" id="reviewForm" style="overflow: hidden" method="post">
+    <form th:action="@{/review/create}" th:object="${reviewForm}" id="reviewForm" style="overflow: hidden" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div th:replace="form_errors :: formErrorsFragment"></div>
         <div class="row mb-3">
             <label for="inputGenre" class="col-sm-2 col-form-label">장르</label>
             <div class="col-sm-5">
-                <select class="form-select" id="inputGenre" th:field="*{genre}">
+                <select class="form-select" id="inputGenre" th:field="*{genre}" onchange="changeGenre(this)">
                     <option selected value="0">장르 선택</option>
                     <option value="음식점">음식점</option>
                     <option value="카페">카페</option>
                     <option value="뮤지컬">뮤지컬</option>
                     <option value="연극">연극</option>
-                    <option value="전시관">전시관</option>
+                    <option value="기타 공연">기타 공연</option>
                     <option value="기타">기타</option>
                 </select>
             </div>
@@ -150,13 +38,12 @@
                 <input type="text" th:field="*{subject}" class="form-control" id="inputTitle" placeholder="장르에 따른 리뷰 제목을 입력 혹은 검색해주세요.">
             </div>
             <div class="col-sm-5">
-                <button type="button" class="btn btn-secondary">검색하기</button>
+                <button id="btn-search" type="button" class="btn btn-secondary" onclick="clickSearch()">검색하기</button>
             </div>
         </div>
         <div class="row mb-3">
             <label for="inputDate" class="col-sm-2 col-form-label">일자</label>
             <div class="col-sm-5">
-                <!--                <input type="text" id="inputDate" class="form-control" value="" placeholder="방문한 날짜를 선택해주세요."/>-->
                 <input type="date" th:field="*{date}" class="form-control" id="inputDate" max="9999-12-31">
             </div>
         </div>
@@ -166,26 +53,11 @@
                 <input type="text" th:field="*{place}" class="form-control" id="inputPlace" placeholder="방문 장소를 입력 혹은 검색해주세요.">
             </div>
             <div class="col-sm-5">
-                <button type="button" class="btn btn-secondary">검색하기</button>
+                <button type="button" class="btn btn-secondary" onclick="clickSearchAddress()">검색하기</button>
             </div>
         </div>
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">별점</label>
-            <div class="col-sm-2">
-                <!--                참고 : https://codepen.io/chris22smith/pen/MJzLJN-->
-                <div class="star-rating">
-                    <input type="radio" id="5-stars" th:field="*{grade}" value=5 />
-                    <label for="5-stars" class="star">&#9733;</label>
-                    <input type="radio" id="4-stars" th:field="*{grade}" value=4 />
-                    <label for="4-stars" class="star">&#9733;</label>
-                    <input type="radio" id="3-stars" th:field="*{grade}" value=3 />
-                    <label for="3-stars" class="star">&#9733;</label>
-                    <input type="radio" id="2-stars" th:field="*{grade}" value=2 />
-                    <label for="2-stars" class="star">&#9733;</label>
-                    <input type="radio" id="1-stars" th:field="*{grade}" value=1 />
-                    <label for="1-stars" class="star">&#9733;</label>
-                </div>
-            </div>
             <div class="col-sm-4">
                 <div class="star-rating-btn">
                     <input type="radio" id="1-stars-btn" th:field="*{grade}" value=1 />
@@ -258,7 +130,7 @@
         <div class="row mb-3">
             <label class="form-label">이미지 추가</label>
             <div class="col-12">
-                <input class="form-control d-none" type="file" th:field="*{images}" accept="image/*" id="formFileMultiple" onchange="addImg()" multiple>
+                <input class="form-control d-none" type="file" accept="image/*" id="formFileMultiple" onchange="inputImgFile()" multiple>
                 <label for="formFileMultiple" class="btn new-img">
                     <img src="/static/image/new_img.png">
                 </label>
@@ -271,10 +143,13 @@
                 <label class="form-check-label" for="check_anonymous">익명</label>
             </div>
             <div class="w-auto">
-                <button type="submit" class="btn btn-primary" id="btn-submit">리뷰 등록</button>
+                <button type="button" class="btn btn-primary" id="btn-submit" onclick="uploadReview()">리뷰 등록</button>
             </div>
         </div>
     </form>
+
+    <script type="text/javascript" src="/static/script/review_form.js"></script>
 </div>
+
 </body>
 </html>

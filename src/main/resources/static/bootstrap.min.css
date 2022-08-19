@@ -11802,20 +11802,6 @@ textarea.form-control-lg {
     border-color : #FA9622
 }
 
-#review-btn-write {
-    float : right;
-}
-
-.star-rating {
-    display         : flex;
-    flex-direction  : row-reverse;
-    font-size       : 1.5em;
-    justify-content : space-around;
-    padding         : 0 .2em;
-    text-align      : center;
-    width           : 5em;
-}
-
 .star-rating-btn {
     display         : block;
     font-size       : 1.5em;
@@ -11823,24 +11809,9 @@ textarea.form-control-lg {
     width           : auto;
 }
 
-.star-rating input, .star-rating-btn input, .amenities-check input {
+.star-rating-btn input, .amenities-check input {
     display : none;
 }
-
-.star-rating label {
-    color  : #ccc;
-    cursor : pointer;
-}
-
-.star-rating :checked ~ label {
-    color : #f90;
-}
-
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-    color : #fc0;
-}
-
 
 .star-ratings-base {
     color: #aaa9a9;
@@ -11983,14 +11954,22 @@ textarea.form-control-lg {
     text-overflow : ellipsis;
 }
 
-.review-card > .card-body > .card-status > div > p {
-    color         : #FF0000;
-    margin-bottom : .5rem;
+.review-card > .card-body > .card-status > .perform-place {
+    white-space   : nowrap;
+    overflow      : hidden;
+    text-overflow : ellipsis;
+}
+
+.review-card > .card-body > .card-status > p {
+    color         : #7F7F7F;
+    margin-bottom : 0;
     font-size     : 1rem;
 }
 
 .review-card > .card-body > .card-status > .star-rating {
     color               : #FF0000;
+    float               : left;
+    padding-left        : 1.4rem;
     margin-bottom       : .5rem;
     font-size           : 1rem;
     background-image    : url(/static/image/content_star_single.png);
@@ -12208,6 +12187,13 @@ textarea.form-control-lg {
     height:100%;
     object-fit:cover;
 }
+
+.review-content-place {
+    color: gray;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+}
+
 
 /*.review-card > .card-body > .card-status > .content-info {*/
 /*    float         : right;*/

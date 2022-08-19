@@ -1,27 +1,27 @@
 package com.error504.baf.controller;
 
 import com.error504.baf.model.ReviewPerformInfo;
+import com.error504.baf.service.ReviewService;
+import com.error504.baf.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 @RequiredArgsConstructor
 @Controller
 public class ReviewSearchPerform {
-
-
-    public static ArrayList<ReviewPerformInfo> getPerformData() {
+    public static ArrayList<ReviewPerformInfo> getPerformData(int genreNum, String keyword) {
         ArrayList<ReviewPerformInfo> performInfo = new ArrayList<ReviewPerformInfo>();
 
         try {
@@ -31,8 +31,36 @@ public class ReviewSearchPerform {
             urlstr.append("&eddate=" + 20231231);
             urlstr.append("&cpage=" + 1);
             urlstr.append("&rows=" + 50);
-            urlstr.append("&shcate=" + "AAAB");
             urlstr.append("&prfstate=" + "02");
+            String encodeData = URLEncoder.encode(keyword, "UTF-8");
+            urlstr.append("&shprfnm=" + encodeData);
+
+            if (genreNum != 0){
+                switch (genreNum) {
+                    case 1:
+                        urlstr.append("&shcate=" + "AAAA");
+                        break;
+                    case 2:
+                        urlstr.append("&shcate=" + "AAAB");
+                        break;
+                    case 3:
+                        urlstr.append("&shcate=" + "CCCA");
+                        break;
+                    case 4:
+                        urlstr.append("&shcate=" + "CCCB");
+                        break;
+                    case 5:
+                        urlstr.append("&shcate=" + "BBBA");
+                        break;
+                    case 6:
+                        urlstr.append("&shcate=" + "CCCC");
+                        break;
+                    case 7:
+                        urlstr.append("&shcate=" + "EEEA");
+                        break;
+                    default:
+                }
+            }
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dbBuilder = dbFactory.newDocumentBuilder();
@@ -61,7 +89,6 @@ public class ReviewSearchPerform {
                     performInfo.add(performInfoTemp);
                 }
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();

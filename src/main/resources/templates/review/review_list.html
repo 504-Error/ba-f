@@ -46,7 +46,7 @@
                 </form>
             </div>
 
-            <a th:href="@{/review/create}">
+            <a th:href="@{|/review/create|}">
                 <button id="review-btn-write" type="button" class="btn btn-primary">리뷰 작성</button>
             </a>
         </div>
@@ -59,7 +59,7 @@
     </div>
 
     <div class="card my-3" th:each="review : ${reviewPage}" style="clear:right">
-        <a th:href="@{/review/content/} + ${review.id} + @{/}" style="text-decoration:none; color:inherit">
+        <a th:href="@{|/review/content/${review.id}|}" style="text-decoration:none; color:inherit">
             <div class="image-box float-start me-3">
                 <img class="image-thumbnail" src="/static/image/test_image.jpeg">
             </div>
@@ -73,8 +73,11 @@
                     </div>
                 </div>
                 <div class="card-text">
-                    <h6 th:text="'[' + ${review.genre} + '] ' + ${review.subject}"></h6>
-                    <table class="">
+                    <div>
+                        <span class="strong" th:text="'[' + ${review.genre} + '] ' + ${review.subject}"></span>
+                        <span class="review-content-place" th:text="'(' + ${review.place} + ')'"></span>
+                    </div>
+                    <table>
                         <tbody>
                         <tr>
                             <td>

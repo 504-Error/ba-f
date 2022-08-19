@@ -32,6 +32,9 @@ public class Review {
     @Column(columnDefinition = "TEXT")
     private String place;
 
+    @Column(columnDefinition = "TEXT")
+    private String placeAddress;
+
     @Column(columnDefinition = "INT")
     private Integer grade;
 

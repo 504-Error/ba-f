@@ -32,6 +32,9 @@ public class ReviewForm {
     @NotEmpty(message="장소명은 필수항목입니다.")
     private String place;
 
+    private String placeAddress;
+
+
     @NotNull(message="평점은 필수항목입니다.")
     private Integer grade;
 
@@ -42,7 +45,7 @@ public class ReviewForm {
 
     private String additionalReview;
 
-    private List<MultipartFile> images = new ArrayList<>();
+//    private List<MultipartFile> images = new ArrayList<>();
 
     private Boolean isAnonymous;
 }
