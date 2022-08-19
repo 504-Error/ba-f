@@ -121,6 +121,14 @@ public class QuestionService {
         return questionRepository.findQuestionByBoardId(pageable, id);
     }
 
+    @Transactional
+    public Page<Question> getQuestionResultByUser(Long id, int page){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return questionRepository.findQuestionByAuthorId(pageable, id);
+    }
+
     public Question getQuestion(Long id){
         Optional<Question> question = questionRepository.findById(id);
         if (question.isPresent()){

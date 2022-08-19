@@ -80,6 +80,16 @@ public class UserController {
     }
 
 
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage")
+    public String myPage(Model model,  Principal principal){
+        SiteUser siteUser = userService.getUser(principal.getName());
+        model.addAttribute("siteUser", siteUser);
+        return "account/my_page";
+    }
+
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage/pwd")
     public String passwordFormCreateNull(PasswordForm passwordForm, Model model){
@@ -104,6 +114,15 @@ public class UserController {
 
     }
 
+
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/mypage/comment")
+//    public String myPageComment(Model model, Principal principal){
+//        SiteUser siteUser = userService.getUser(principal.getName());
+//        model.addAttribute("siteUser", siteUser);
+//        return "account/my_page_comment";
+//    }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/settings/email")
     public String emailUpdate( @Valid EmailForm emailForm, BindingResult bindingResult, Principal principal){
@@ -118,15 +137,21 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/settings/password")
     public String passwordUpdate( @Valid PasswordForm passwordForm, BindingResult bindingResult, Principal principal){
+
+            SiteUser siteUser = userService.getUser(principal.getName());
            if(bindingResult.hasErrors()) {
                return "account/my_page_pw";
            }
+           if (!passwordEncoder.matches(passwordForm.getExPassword(), siteUser.getPassword())){
+            bindingResult.rejectValue("exPassword", "passwordInCorrect",
+                    "잘못된 패스워드를 입력하셨습니다.");
+            return "account/my_page_pw";
+        }
          if (!passwordForm.getNewPassword().equals(passwordForm.getNewPasswordConfirm())){
             bindingResult.rejectValue("newPasswordConfirm", "passwordInCorrect",
                     "2개의 패스워드가 일치하지 않습니다!");
             return "account/my_page_pw";
         }
-        SiteUser siteUser = userService.getUser(principal.getName());
            userService.updatePassword(siteUser, passwordForm.getNewPassword());
 
            return  "redirect:/user/logout";
@@ -147,6 +172,24 @@ public class UserController {
             return "account/member_delete";
         }
         return   "redirect:/user/logout";
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/notice")
+    public String myPageNotice(Model model, Principal principal){
+        SiteUser siteUser = userService.getUser(principal.getName());
+        model.addAttribute("siteUser", siteUser);
+        return "account/my_page_notice";
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/whatIsBaf")
+    public String whatIsBaf(Model model, Principal principal){
+        SiteUser siteUser = userService.getUser(principal.getName());
+        model.addAttribute("siteUser", siteUser);
+        return "what_is_baf";
     }
 
 }

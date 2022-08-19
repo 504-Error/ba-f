@@ -8,9 +8,16 @@ import com.error504.baf.model.SiteUser;
 import com.error504.baf.repository.AnswerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -48,4 +55,15 @@ public class AnswerService {
     public void vote(Answer answer, SiteUser siteUser) {
         answer.getVoter().add(siteUser);
         answerRepository.save(answer); }
+
+
+
+    @Transactional
+    public Page<Answer> getAnswerResultByUser(Long id, int page){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return answerRepository.findAnswerByAuthorId(pageable, id);
+    }
+
 }

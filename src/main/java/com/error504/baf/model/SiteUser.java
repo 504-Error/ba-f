@@ -26,6 +26,8 @@ public class SiteUser {
 
     private int getWheel;
 
+    private int getAuth;
+
     public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
