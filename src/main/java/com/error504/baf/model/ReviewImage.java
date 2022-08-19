@@ -14,8 +14,11 @@ public class ReviewImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "BLOB")
-    private Byte[] image;
+    @Column(columnDefinition = "INT")
+    private Integer imageNUm;
+
+    @Column(columnDefinition = "TEXT")
+    private String image;
 
     @ManyToOne
     private Review review;

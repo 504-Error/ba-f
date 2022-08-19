@@ -2,27 +2,41 @@ package com.error504.baf.service;
 
 import com.error504.baf.exception.DataNotFoundException;
 import com.error504.baf.model.Review;
+import com.error504.baf.model.ReviewComment;
+import com.error504.baf.model.ReviewImage;
 import com.error504.baf.model.SiteUser;
+import com.error504.baf.repository.ReviewImageRepository;
 import com.error504.baf.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.criteria.Predicate;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ReviewRepository reviewRepository;
+    private final ReviewImageRepository reviewImageRepository;
 
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository){
+    public ReviewService(ReviewRepository reviewRepository, ReviewImageRepository reviewImageRepository){
         this.reviewRepository = reviewRepository;
+        this.reviewImageRepository = reviewImageRepository;
     }
 
     public Review getReview(Long id) {
@@ -34,20 +48,22 @@ public class ReviewService {
         }
     }
 
-    public Page<Review> getList(int page) {
+    public Page<Review> getList(int page, String keyword, String category) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.reviewRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
+        Specification<Review> spec = reviewSearch(keyword, category);
+        return this.reviewRepository.findAll(spec, pageable);
     }
 
-    public void create(String genre, String subject, String date, String place, Integer grade,
+    public Long create(String genre, String subject, String date, String place, String placeAddress, Integer grade,
                        String amenities, String placeReview, String additionalReview, Boolean isAnonymous, SiteUser user) {
         Review review = new Review();
         review.setGenre(genre);
         review.setSubject(subject);
         review.setDate(date);
         review.setPlace(place);
+        review.setPlaceAddress(placeAddress);
         review.setGrade(grade);
         review.setAmenities(amenities);
         review.setPlaceReview(placeReview);
@@ -56,7 +72,27 @@ public class ReviewService {
         review.setCreateDate(LocalDateTime.now());
         review.setAuthor(user);
         this.reviewRepository.save(review);
+        this.reviewRepository.flush();
+        long id = review.getId();
+
+        logger.info("service get id : " + id);
+        return id;
     }
+
+    public void uploadImage(Review review, String path) {
+        ReviewImage reviewImage = new ReviewImage();
+//        reviewImage.setImageNUm(num);
+        reviewImage.setImage(path);
+        reviewImage.setReview(review);
+
+        this.reviewRepository.save(review);
+    }
+
+//    public List<ReviewImage> loadImage() {
+//        List<ReviewImage> result = reviewImageRepository.findAll();
+//
+//        return result;
+//    }
 
     public void vote(Review review, SiteUser siteUser){
         review.getVoter().add(siteUser);
@@ -66,4 +102,57 @@ public class ReviewService {
     public void delete(Review review) {
         this.reviewRepository.delete(review);
     }
+
+    private Specification reviewSearch(String keyword, String category){
+        return (review, query, criteriaBuilder) -> {
+            query.distinct(true);
+
+            List<String> categories = new ArrayList<>();
+
+            switch(category){
+                case "restaurant":
+                    categories.add("음식점");
+                    break;
+                case "cafe":
+                    categories.add("카페");
+                    break;
+                case "perform":
+                    categories.add("뮤지컬");
+                    categories.add("연극");
+                    categories.add("기타 공연");
+                    break;
+                case "etc":
+                    categories.add("기타");
+                    break;
+                default:
+                    categories.add("음식점");
+                    categories.add("카페");
+                    categories.add("뮤지컬");
+                    categories.add("연극");
+                    categories.add("기타 공연");
+                    categories.add("기타");
+            }
+
+            Predicate predicate1 = criteriaBuilder.or(
+                    criteriaBuilder.like(review.get("subject"), "%" + keyword + "%"),
+                    criteriaBuilder.like(review.get("place"),  "%" + keyword + "%")
+            );
+
+            Predicate predicate2 = criteriaBuilder.and(review.get("genre").in(categories));
+
+
+            return criteriaBuilder.and(predicate1, predicate2);
+        };
+    }
+
+//    public void uploadReview(Map<String, Object> param, List<MultipartFile> fileList) throws Exception {
+//        boardMapper.insertMypageQna(param);
+//        List<Map<String,Object>> list = fileutils.fileUpload(param, fileList);
+//
+//        if(list!=null){
+//            for(int i = 0; i < list.size(); i++){
+//                boardMapper.insertFile(list.get(i));
+//            }
+//        }
+//    }
 }

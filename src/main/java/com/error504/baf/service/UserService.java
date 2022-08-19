@@ -31,13 +31,29 @@ public class UserService {
     }
 
 
-    public SiteUser create(String username, String email, String password){
+    public SiteUser create(String username, String email, String password, int type, int getWheel){
         SiteUser user = new SiteUser();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
+        user.setType(type);
+        user.setGetWheel(getWheel);
         userRepository.save(user);
         return user;
     }
+
+    public void updatePassword(SiteUser siteUser, String newPassword) {
+        siteUser.updatePassword(passwordEncoder.encode(newPassword));
+        userRepository.save(siteUser);
+    }
+    public void updateEmail(SiteUser siteUser, String newEmail) {
+        siteUser.updateEmail(newEmail);
+        userRepository.save(siteUser);
+    }
+
+    public void deleteMember(SiteUser siteUser) {
+       userRepository.delete(siteUser);
+    }
+
 }
 

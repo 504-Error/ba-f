@@ -22,5 +22,18 @@ public class SiteUser {
     @Column(unique = true)
     private String email;
 
+    private int type;
+
+    private int getWheel;
+
+    private int getAuth;
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+    public void updateEmail(String newEmail) {
+        this.email = newEmail;
+    }
+
 
 }

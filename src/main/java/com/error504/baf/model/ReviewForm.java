@@ -3,12 +3,15 @@ package com.error504.baf.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Getter
@@ -29,11 +32,11 @@ public class ReviewForm {
     @NotEmpty(message="장소명은 필수항목입니다.")
     private String place;
 
+    private String placeAddress;
+
+
     @NotNull(message="평점은 필수항목입니다.")
     private Integer grade;
-
-//    @NotNull(message="평점은 필수항목입니다.")
-//    private Integer grade_btn;
 
     private String[] amenities;
 
@@ -42,7 +45,7 @@ public class ReviewForm {
 
     private String additionalReview;
 
-    private String[] imageUrl;
+//    private List<MultipartFile> images = new ArrayList<>();
 
     private Boolean isAnonymous;
 }

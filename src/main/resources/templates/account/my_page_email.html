@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Ba-f Community</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+</head>
+<body>
+
+<div  layout:fragment="content" class="container">
+
+    <div class="col-8">
+
+        <div class="container" style="padding-top: 5%">
+            <div class="row">
+                <!--768px 이상에서는 열 3개 병합-->
+                <!--576px 이하에서는 열 4개 병합-->
+                <div class="col-md-3 col-sm-4">
+                    <div class="list-group" style="padding-top:31%">
+                        <a th:href="@{/user/mypage}" class="list-group-item list-group-item-action">내 정보</a>
+                        <a th:href="@{/user/mypage/email}" class="list-group-item list-group-item-action">이메일 변경</a>
+                        <a th:href="@{/user/mypage/pwd}" class="list-group-item list-group-item-action">패스워드 변경</a>
+                        <a th:href="@{/user/mypage/delete}" class="list-group-item list-group-item-action">회원 탈퇴</a>
+                    </div>
+
+                </div>
+                <div class="col-9 col-sm-6" style="padding-left:10%">
+
+                            <h2 class="col-sm-12">이메일 변경</h2>
+                            <div class="row mt-3">
+                                <form class="needs-validation col-12" action="#" th:action="@{/user/settings/email}"
+                                      th:object="${emailForm}" method="post"
+                                      novalidate>
+                                    <div class="form-group mt-3">
+                                        <label class="form-label">이메일</label>
+                                        <input type="email" th:field="*{newEmail}" class="form-control">
+                                        <small id="newEmailHelp" class="form-text text-muted">
+                                                                    새로운 이메일을 입력하세요.
+                                        </small>
+                                        <br><small class="form-text text-danger" th:if="${#fields.hasErrors('newEmail')}"
+                                               th:errors="*{newEmail}">new Email error</small>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">이메일 변경하기</button>
+                                    </div>
+                                </form>
+                            </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

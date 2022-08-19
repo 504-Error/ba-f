@@ -60,7 +60,7 @@
             <th scope="row">리뷰명</th>
             <td>
                 [[${review.subject}]]
-                <a href="#">
+                <a th:href="@{|/review/${category}?kw=${review.subject}&page=0|}">
                     <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 주제 리뷰 </span>
                 </a>
             </td>
@@ -73,7 +73,7 @@
             <th scope="row">장소</th>
             <td>
                 [[${review.place}]]
-                <a href="#">
+                <a th:href="@{|/review/${category}?kw=${review.place}&page=0|}">
                     <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 장소 리뷰 </span>
                 </a>
             </td>

@@ -15,21 +15,21 @@
 <div  layout:fragment="content" class="container">
     <nav class="sub-navbar navbar-expand-lg">
         <div class="container-fluid">
-            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
+            <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link-select" href="#">전체</a>
+                    <a class="nav-link-select" href="/review">전체</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/list">음식점</a>
+                    <a class="nav-link" href="/review/restaurant">음식점</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">카페</a>
+                    <a class="nav-link" href="/review/cafe">카페</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">공연</a>
+                    <a class="nav-link" href="/review/perform">공연</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">기타</a>
+                    <a class="nav-link" href="/review/etc">기타</a>
                 </li>
             </ul>
         </div>
@@ -39,183 +39,29 @@
         <!--        검색창 및 글쓰기 버튼 생성-->
         <div class="review-header-content">
             <div id="review-search-input-group">
-                <form id="review-search-form" name="sReviewForm" action="" method="get" role="search">
-                    <div class="input-group mb-3 me-sm-3">
-                        <input type="text" id="review-search-review-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
-                    </div>
-                </form>
+                <div class="input-group mb-3 me-sm-3">
+                    <input type="text" th:value="${keyword}" id="review-search-review-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
+                </div>
             </div>
 
             <a th:href="@{/review/create}">
-                <button id="review-btn-write" type="button" class="btn btn-primary">리뷰 작성</button>
+                <button id="review-btn-write" type="button" class="btn btn-primary float-end">리뷰 작성</button>
             </a>
         </div>
     </div>
 
-    <div class="review-content-container" style="clear: left">
-<!--        전체 리뷰 목록 최신 8개-->
-        <div class="review-content">
-            <h4>
-                <a class="review-title" href="#">
-                    전체 리뷰
-                    <span>더 보기</span>
-                </a>
-            </h4>
-
-            <div class="container">
-                <div class="row row-cols-1 row-cols-md-4">
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 아이다</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_2.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[카페] A 카페</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_3.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[음식점] B 파스타</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_4.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 킹키부츠</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 아이다</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_2.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[카페] A 카페</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_3.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[음식점] B 파스타</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_4.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 킹키부츠</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<!--        실시간 인기 리뷰 상위 4개-->
+    <div class="review-content-container" style="clear: both">
+        <!--        실시간 인기 리뷰 상위 4개-->
         <div class="review-content">
             <div class="card" style="width: 100%;">
                 <div class="card-header">
                     <h4>
-                    <a class="review-title" href="#">
-                        실시간 인기 리뷰
-                        <span>더 보기</span>
-                    </a>
-                </h4>
+                        <a class="review-title" href="#">
+                            실시간 인기 리뷰
+                            <span>더 보기</span>
+                        </a>
+                    </h4>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
@@ -278,148 +124,28 @@
             </div>
         </div>
 
-<!--        음식점 리뷰 목록 최신 8개-->
+<!--        전체 리뷰 목록 최신순으로 -->
         <div class="review-content">
             <h4>
                 <a class="review-title" href="#">
-                    음식점 리뷰
+                    전체 리뷰
                     <span>더 보기</span>
                 </a>
             </h4>
 
-            <div class="container">
+            <div class="container mb-4">
                 <div class="row row-cols-1 row-cols-md-4">
-                    <div class="col">
+                    <div class="col" th:each="review : ${reviewPage}">
                         <a href="#">
                             <div class="card review-card">
                                 <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
                                 <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 아이다</h5>
+                                    <h5 class="card-title" th:text="'[' + ${review.genre} + '] ' + ${review.subject}"></h5>
                                     <div class="card-status">
-                                        <p class="star-rating">4.5</p>
+                                        <p class="star-rating" th:text="${review.grade}"></p>
                                         <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_2.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[카페] A 카페</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_3.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[음식점] B 파스타</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_4.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 킹키부츠</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 아이다</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_2.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[카페] A 카페</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_3.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[음식점] B 파스타</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_4.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 킹키부츠</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
+                                            <li class="recommend" th:text="${#lists.size(review.voter)}"></li>
+                                            <li class="comment" th:text="${#lists.size(review.reviewCommentsList)}"></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -430,468 +156,48 @@
             </div>
         </div>
 
-<!--        카페 리뷰 목록 최신 8개-->
-        <div class="review-content">
-            <h4>
-                <a class="review-title" href="#">
-                    카페 리뷰
-                    <span>더 보기</span>
-                </a>
-            </h4>
-
-            <div class="container">
-                <div class="row row-cols-1 row-cols-md-4">
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 아이다</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_2.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[카페] A 카페</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_3.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[음식점] B 파스타</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_4.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 킹키부츠</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 아이다</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_2.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[카페] A 카페</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_3.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[음식점] B 파스타</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_4.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 킹키부츠</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <!-- 페이징처리 시작 -->
+        <div th:if="${!reviewPage.isEmpty()}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!reviewPage.hasPrevious} ? 'disabled'">
+                    <a class="page-link" href="javascript:void(0)" th:data-page="${reviewPage.number-1}">
+                        <span>이전</span>
+                    </a>
+                </li>
+                <li th:each="page: ${#numbers.sequence(0, reviewPage.totalPages-1)}"
+                    th:if="${page >= reviewPage.number-5 and page <= reviewPage.number+5}"
+                    th:classappend="${page == reviewPage.number} ? 'active'" class="page-item">
+                    <a th:text="${page+1}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+                </li>
+                <li class="page-item" th:classappend="${!reviewPage.hasNext} ? 'disabled'">
+                    <a class="page-link" href="javascript:void(0)" th:data-page="${reviewPage.number+1}">
+                        <span>다음</span>
+                    </a>
+                </li>
+            </ul>
         </div>
-
-<!--        공연 리뷰 목록 최신 8개-->
-        <div class="review-content">
-            <h4>
-                <a class="review-title" href="#">
-                    공연 리뷰
-                    <span>더 보기</span>
-                </a>
-            </h4>
-
-            <div class="container">
-                <div class="row row-cols-1 row-cols-md-4">
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 아이다</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_2.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[카페] A 카페</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_3.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[음식점] B 파스타</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_4.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 킹키부츠</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 아이다</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_2.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[카페] A 카페</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_3.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[음식점] B 파스타</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_4.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 킹키부츠</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<!--        기타 리뷰 목록 최신 8개-->
-        <div class="review-content">
-            <h4>
-                <a class="review-title" href="#">
-                    기타 리뷰
-                    <span>더 보기</span>
-                </a>
-            </h4>
-
-            <div class="container">
-                <div class="row row-cols-1 row-cols-md-4">
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 아이다</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_2.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[카페] A 카페</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_3.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[음식점] B 파스타</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_4.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 킹키부츠</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 아이다</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_2.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[카페] A 카페</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_3.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[음식점] B 파스타</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_4.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">[뮤지컬] 킹키부츠</h5>
-                                    <div class="card-status">
-                                        <p class="star-rating">4.5</p>
-                                        <ul class="content-info">
-                                            <li class="recommend">0</li>
-                                            <li class="comment">0</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
+        <!-- 페이징처리 끝 -->
+        <form th:action="@{/review}" method="get" id="searchForm">
+            <input type="hidden" id="kw" name="kw" th:value="${keyword}">
+            <input type="hidden" id="page" name="page" th:value="${reviewPage.number}">
+        </form>
     </div>
-
 </div>
 
+<script layout:fragment="script" type='text/javascript'>
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+    const btn_search = document.getElementById("review-button-search");
+    btn_search.addEventListener('click', function() {
+        document.getElementById('kw').value = document.getElementById('review-search-review-input').value;
+        document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+        document.getElementById('searchForm').submit();
+    });
+</script>
 </body>
 </html>

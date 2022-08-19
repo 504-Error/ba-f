@@ -35,10 +35,14 @@ public class Question {
     @ManyToMany
     Set<SiteUser> voter;
 
+    @ManyToMany
+    Set<SiteUser> accuser;
+
     @ManyToOne
     private Board board;
 
-
+    @Column(columnDefinition = "BOOLEAN")
+    private Boolean isAnonymous;
     private String date;
     public String getDate( LocalDateTime time){
         date = Time.convertLocaldatetimeToTime(time);

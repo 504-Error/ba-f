@@ -5,8 +5,19 @@
 <div layout:fragment="content" class="container">
   <h5 class="my-3 border-bottom pb-2">질문등록</h5>
   <form th:action="@{/question/create}" th:object="${questionForm}" method="post">
-    <input type="hidden" id="boardId" name="boardId" th:value="${boardId}"/>
+    <input th:if="${boardId != null}" type="hidden" id="boardId" name="boardId" th:value="${boardId}"/>
     <div th:replace="form_errors :: formErrorsFragment"></div>
+      <div class="row mb-3">
+        <label for="inputBoard" th:if="${boardId == null}" class="col-sm-2 col-form-label">게시판 선택</label>
+        <div class="col-sm-5">
+          <select class="form-select" id="inputBoard" th:if="${boardId == null}" th:field="*{boardId}">
+            <option selected value="0">게시판 선택</option>
+            <option th:each="board : ${board}"
+                    th:value="${board.id}"
+                    th:text="${board.boardName}"></option>
+          </select>
+        </div>
+      </div>
     <div class="mb-3">
       <label id="subject" class="form-label">제목</label>
       <input type="text" name="subject" class="form-control"> </div>

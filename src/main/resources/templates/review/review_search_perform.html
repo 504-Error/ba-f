@@ -11,43 +11,127 @@
 </head>
 <body>
 <div  layout:fragment="content" class="container">
+    <h5 class="my-3 border-bottom pb-2">공연 정보 검색</h5>
+
     <div class="review-main-container mt-5">
         <!--        검색창 및 글쓰기 버튼 생성-->
         <div class="review-header-content">
-            <div id="review-search-input-group">
-                <form id="review-search-form" name="sReviewForm" action="" method="get" role="search">
-                    <div class="input-group mb-3 me-sm-3">
-                        <input type="text" id="review-search-review-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
-                    </div>
-                </form>
-            </div>
+            <form th:action="@{/review/create/search/perform}" method="get" id="searchForm">
+                <select class="form-select float-start me-3" th:value="${genre}" name="genre" id="inputGenre" style="width: 17%">
+                    <option selected value="0">전체</option>
+                    <option value="1">뮤지컬</option>
+                    <option value="2">연극</option>
+                    <option value="3">클래식</option>
+                    <option value="4">오페라</option>
+                    <option value="5">무용</option>
+                    <option value="6">국악</option>
+                    <option value="7">기타</option>
+                </select>
 
-            <a th:href="">
-                <button id="review-btn-write" type="button" class="btn btn-primary">선택</button>
-            </a>
+                <div id="review-search-input-group">
+                    <div class="input-group mb-3 me-sm-3">
+                        <input type="text" th:value="${keyword}" name="keyword" id="review-search-review-input" class="form-control" placeholder="공연을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
+                        <button class="btn btn-outline-orange" type="submit" id="review-button-search">검색</button>
+                    </div>
+                </div>
+            </form>
+
         </div>
     </div>
 
     <div class="container" style="clear: left">
         <div class="row row-cols-1 row-cols-md-4">
             <div class="col" th:each="performInfo : ${performInfoList}">
-                <a href="#">
-                    <div class="card review-card">
-                        <img th:src="${performInfo.posterUrl}" class="card-img-top" alt="..." width="100px" height="200px">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${performInfo.title}"></h5>
-                            <div class="card-status">
-                                <p th:text="${performInfo.facility}"></p>
-                                <p th:text="${performInfo.startDate + ' - ' + performInfo.endDate}"></p>
-                            </div>
+                <div class="card review-card">
+                    <img th:src="${performInfo.posterUrl}" class="card-img-top" alt="..." height="400px">
+                    <div class="card-body">
+                        <h6 class="card-title" th:text="${performInfo.title}"></h6>
+                        <div class="card-status">
+                            <p class="perform-place" th:text="${performInfo.facility}"></p>
+                            <p th:text="${performInfo.startDate + ' - ' + performInfo.endDate}"></p>
                         </div>
+                        <button type="button" class="btn btn-secondary btn-sm float-end" id="btn-select-perform" th:attr="onclick=|selectPerform(this, '${performInfo.title}', '${performInfo.facility}')|">선택</button>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
     </div>
 
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+        const genreNum = new URLSearchParams(window.location.search).get("genre");
+        console.log("genreNum", genreNum);
+
+        switch (Number(genreNum)) {
+            case 0:
+                $("#inputGenre").val("0").prop("selected",true);
+                break;
+            case 1:
+                $("#inputGenre").val("1").prop("selected",true);
+                break;
+            case 2:
+                $("#inputGenre").val("2").prop("selected",true);
+                break;
+            case 3:
+                $("#inputGenre").val("3").prop("selected",true);
+                break;
+            case 4:
+                $("#inputGenre").val("4").prop("selected",true);
+                break;
+            case 5:
+                $("#inputGenre").val("5").prop("selected",true);
+                break;
+            case 6:
+                $("#inputGenre").val("6").prop("selected",true);
+                break;
+            case 7:
+                $("#inputGenre").val("7").prop("selected",true);
+                break;
+            default:
+                $("#inputGenre").val("0").prop("selected",true);
+        }
+
+        function selectPerform(selectObject, performTitle, performFacility) {
+            console.log("performTitle : ", performTitle);
+            console.log("performFacility : ", performFacility);
+
+            // 장소 검색 객체를 생성합니다
+            var ps = new kakao.maps.services.Places();
+            ps.keywordSearch(performFacility, placesSearchCB);
+
+            let selectPerformInfo = {
+                "title" : performTitle,
+                "place" : performFacility
+            };
+
+            sessionStorage.setItem("selectPerformInfo", JSON.stringify(selectPerformInfo));
+        }
+
+        function placesSearchCB (data, status, pagination) {
+            let address = "";
+
+            if (!data[0].road_address_name) {
+                address = data[0].address_name.toString();
+            } else {
+                address = data[0].road_address_name.toString();
+            }
+
+            let selectPerformInfo = JSON.parse(sessionStorage.getItem("selectPerformInfo"));
+
+            let selectPerformData = {
+                "title" : selectPerformInfo["title"],
+                "place" : selectPerformInfo["place"],
+                "address" : address
+            };
+
+            sessionStorage.removeItem("selectPerformInfo");
+            sessionStorage.setItem("selectPerformData", JSON.stringify(selectPerformData));
+
+            location.href = "/review/create";
+        }
+
+    </script>
 
 </div>
 </body>

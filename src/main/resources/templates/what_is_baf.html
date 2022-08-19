@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Ba-f Community</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+</head>
+<body>
+
+<div  layout:fragment="content" class="container">
+    <div class="col-12">
+        <div class="container" style="padding-top: 5%">
+            <div class="row">
+                <div class="col-md-2 col-sm-4">
+                    <div class="list-group" style="padding-top:31%">
+                        <a th:href="@{/user/mypage}" class="list-group-item list-group-item-action">내 정보</a>
+                        <a th:href="@{/user/mypage/email}" class="list-group-item list-group-item-action">이메일 변경</a>
+                        <a th:href="@{/user/mypage/pwd}" class="list-group-item list-group-item-action">패스워드 변경</a>
+                        <a th:href="@{/user/mypage/delete}" class="list-group-item list-group-item-action">회원 탈퇴</a>
+                    </div>
+
+                </div>
+                <div class="col-9 col-sm-8" style="padding-left:10%" >
+                    <h2 class="col-sm-12">Ba-f 소개</h2>
+                    <br><br>
+                    <span>
+                        우리의 서비스의 이름인 ‘Ba-f’는 배리어 프리(Barrier-free)에서 따와 짓게 되었다. 배리어 프리(Barrier-free)는 장애인 및 고령자 등의 사회적 약자들의 사회 생활에 지장이 되는 물리적인 장애물이나 심리적인 장벽을 없애기 위해 실시하는 운동 및 시책이다. 또한 Ba-f의 발음은 Best Friend의 약자인 베프와 발음이 동일하다. Best Friend 즉, 장애인들 곁에서 제일 가까이 지내고 도움이 되는 베프가 되겠다는 의미도 함께 담고 있다.
+‘Ba-f’의 첫 번째 목표는 장애인들이 일상 생활 속에서 겪는 신체적, 정신적 어려움 그리고 불편함을 줄이는 것이다. 단편적인 시각에서 벗어나 장애를 가진 사람의 입장에서 세상을 바라보며 필요한 것이 무엇일까 고민하며 기능들을 고안했다.
+                    </span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

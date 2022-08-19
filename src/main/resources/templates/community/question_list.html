@@ -34,39 +34,47 @@
   </nav>
   <div>
 
-    <a th:href="@{/question/create}" class="btn btn-primary" style="float:right;">질문 등록하기</a>
-
-    <br>
+    <div class="review-main-container mt-5" style="padding-bottom: 5%">
+    <div class="review-header-content">
+    <div id="review-search-input-group">
+      <div class="input-group mb-3 me-sm-3">
+        <input type="text" th:value="${keyword}" id="review-search-review-input" class="form-control" placeholder="글 제목, 내용 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
+        <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
+      </div>
+    </div>
+    <a th:href="@{/question/create/}" class="btn btn-primary" style="float:right;">질문 등록하기</a>
+    </div>
+    </div>
 
   </div>
 
   <div></div>
 
   <a style="text-decoration:none; color:inherit" th:href="@{/question/weeklyHotList}">
-    <h4 th:unless="${weeklyList.size==0}">
-      주간 인기 게시물</h4>
+    <h5 class="border-bottom py-2" th:unless="${weeklyList.size==0}">
+      주간 인기 게시물</h5>
   </a>
-  <div class="card my-3" th:each="question : ${weeklyList}">
+  <div th:each="question : ${weeklyList}">
     <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
-      <div class="card-body" >
-        <div class="card-text" style="white-space: pre-line;">
-          <h5 th:text="${question.subject}"></h5>
-          <span th:text="${question.content}"></span>
-        </div>
-        <div class="d-flex justify-content-end">
-          <div class="my-3">
-            <div class="badge bg-light text-dark p-2 text-start">
-              <div th:text="${question.getDate(question.createDate)}"></div>
+      <div class="card my-3">
+        <div class="card-body" >
+          <div class="review-content-area mt-0 mb-4">
+            <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+            <div class="ms-5">
+              <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></p>
+              <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
             </div>
 
-            <a class="btn btn-sm">
-              ❤
-              <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
-            </a>
-            <a class="btn btn-sm">
-              🗨
-              <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.answerList)}"></span>
-            </a>
+            <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
+              <div th:text="${question.subject}"></div>
+            </div>
+
+            <div class="my-2">
+              <ul class="content-info">
+                <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
+                <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -76,33 +84,29 @@
 
 
   <a style="text-decoration:none; color:inherit" th:href="@{/question/hotList}">
-    <h4 th:unless="${hotList.size==0}">HOT 게시물</h4>
+    <h5 class="border-bottom py-2" th:unless="${hotList.size==0}">HOT 게시물</h5>
   </a>
-    <div class="card my-3" th:each="question : ${hotList}">
+    <div th:each="question : ${hotList}">
       <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
-        <div class="card-body" >
-          <div class="card-text" style="white-space: pre-line;">
-            <h5 th:text="${question.subject}"></h5>
-            <span th:text="${question.content}"></span>
-          </div>
-          <div class="d-flex justify-content-end">
-            <!--                <div class="badge bg-light text-dark p-2 text-start">-->
-            <!--                        <div th:text="${question.getDate(question.createDate)}"></div>-->
-            <!--                </div>-->
-
-            <div class="my-3">
-              <div class="badge bg-light text-dark p-2 text-start">
-                <div th:text="${question.getDate(question.createDate)}"></div>
+        <div class="card my-3">
+          <div class="card-body" >
+            <div class="review-content-area mt-0 mb-4">
+              <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+              <div class="ms-5">
+                <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></p>
+                <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
               </div>
 
-              <a class="btn btn-sm">
-                ❤
-                <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
-              </a>
-              <a class="btn btn-sm">
-                🗨
-                <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.answerList)}"></span>
-              </a>
+              <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
+                <div th:text="${question.subject}"></div>
+              </div>
+
+              <div class="my-2">
+                <ul class="content-info">
+                  <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
+                  <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -111,16 +115,16 @@
 
 
   <a style="text-decoration:none; color:inherit" th:href="@{/eventInfo}">
-    <h4>추천 정보</h4>
+    <h5 class="border-bottom py-2">추천 정보</h5>
   </a>
-        <div class="card my-5" style="float:left;width:625px; ">
-          <img src="/static/image/summer.png" height="390" >
+        <div class="card my-5" style="float:left;width:50%; ">
+          <img src="/static/image/summer.png" height="400" >
           <div class="card-body" >
             7월의 전시 추천
           </div>
         </div>
-        <div class="card my-5" style="float:left;width:625px; ">
-          <img src="/static/image/art_logo.png" height="390" >
+        <div class="card my-5" style="float:left;width:50%; ">
+          <img src="/static/image/art_logo.png" height="400" >
           <div class="card-body" >
             K 현대 미술관 오즈의 미술관 초대 이벤트
           </div>
@@ -129,32 +133,22 @@
 
 
 
-
-<!--  &lt;!&ndash; 페이징처리 시작 &ndash;&gt;-->
-<!--  <div th:if="${!paging.isEmpty()}">-->
-<!--    <ul class="pagination justify-content-center">-->
-<!--      <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">-->
-<!--        <a class="page-link" th:href="@{|?page=${paging.number-1}|}">-->
-<!--          <span>이전</span>-->
-<!--        </a>-->
-<!--      </li>-->
-<!--      <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"-->
-<!--          th:if="${page >= paging.number-5 and page <= paging.number+5}"-->
-<!--          th:classappend="${page == paging.number} ? 'active'"-->
-<!--          class="page-item">-->
-<!--        <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}">-->
-<!--        </a>-->
-<!--      </li>-->
-<!--      <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">-->
-<!--        <a class="page-link" th:href="@{|?page=${paging.number+1}|}">-->
-<!--          <span>다음</span>-->
-<!--        </a>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--  &lt;!&ndash; 페이징처리 끝 &ndash;&gt;-->
-
-
 </div>
+
+<script layout:fragment="script" type='text/javascript'>
+  const page_elements = document.getElementsByClassName("page-link");
+  Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+      document.getElementById('page').value = this.dataset.page;
+      document.getElementById('searchForm').submit();
+    });
+  });
+  const btn_search = document.getElementById("review-button-search");
+  btn_search.addEventListener('click', function() {
+    document.getElementById('kw').value = document.getElementById('review-search-review-input').value;
+    document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+    document.getElementById('searchForm').submit();
+  });
+</script>
 </body>
 </html>

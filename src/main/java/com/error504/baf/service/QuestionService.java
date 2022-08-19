@@ -2,9 +2,7 @@ package com.error504.baf.service;
 
 import com.error504.baf.Time;
 import com.error504.baf.exception.DataNotFoundException;
-import com.error504.baf.model.Board;
-import com.error504.baf.model.Question;
-import com.error504.baf.model.SiteUser;
+import com.error504.baf.model.*;
 import com.error504.baf.repository.BoardRepository;
 import com.error504.baf.repository.QuestionRepository;
 import net.bytebuddy.asm.Advice;
@@ -13,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 
 @Service
 public class QuestionService {
@@ -76,10 +82,51 @@ public class QuestionService {
         return weeklyList;
     }
 
+//
+//    private Specification<Question> search(String kw) {
+//        return (review, query, criteriaBuilder) -> {
+//            query.distinct(true);
+//
+//            Predicate predicate1 = criteriaBuilder.or(
+//                    criteriaBuilder.like(review.get("subject"), "%" + keyword + "%"),
+//                    criteriaBuilder.like(review.get("place"),  "%" + keyword + "%")
+//            );
+//                query.distinct(true);  // 중복을 제거
+//                Join<Question, SiteUser> u1 = q.join("author", JoinType.LEFT);
+//                Join<Question, Answer> a = q.join("answerList", JoinType.LEFT);
+//                Join<Answer, SiteUser> u2 = a.join("author", JoinType.LEFT);
+//                return cb.or(cb.like(q.get("subject"), "%" + kw + "%"),
+//                        cb.like(q.get("content"), "%" + kw + "%"),
+//                        cb.like(u1.get("username"), "%" + kw + "%"),
+//                        cb.like(a.get("content"), "%" + kw + "%"),
+//                        cb.like(u2.get("username"), "%" + kw + "%"));
+//            }
+//        };
+//    }
+    public Page<Question>  getList(int page, String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+//        Specification<Question> spec = search(kw);
+        return questionRepository.findAll(
+//                spec,
+                pageable);
+    }
 
     @Transactional
-    public List<Question> getQuestionResult(Long id) {
-        return questionRepository.findQuestionByBoardId(id);
+    public Page<Question> getQuestionResult(Long id, int page ) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return questionRepository.findQuestionByBoardId(pageable, id);
+    }
+
+    @Transactional
+    public Page<Question> getQuestionResultByUser(Long id, int page){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return questionRepository.findQuestionByAuthorId(pageable, id);
     }
 
     public Question getQuestion(Long id){
@@ -104,6 +151,10 @@ public class QuestionService {
 
     public void vote(Question question, SiteUser siteUser){
         question.getVoter().add(siteUser);
+        questionRepository.save(question);
+    }
+    public void accuse(Question question, SiteUser siteUser){
+        question.getAccuser().add(siteUser);
         questionRepository.save(question);
     }
 

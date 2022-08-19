@@ -33,25 +33,26 @@
     </div>
   </nav>
   <div>
+    <h5>즐겨찾는 게시판</h5>
     <a th:href="@{/board/create}" class="btn btn-primary" style="float:right;">게시판 등록하기</a>
     <br>
   </div>
 
   <div></div>
 
-  <div class="card my-3" th:each="board : ${paging}">
+  <div class="card my-3" th:each="board : ${paging}
+">
     <a style="text-decoration:none; color:inherit">
       <div class="card-body" >
         <a style="text-decoration:none; color:inherit" th:href="@{/board/question_list/} + ${board.id} + @{/}">
-        <div class="card-text" style="white-space: pre-line;">
-          <h5 th:text="${board.boardName}"></h5>
-          <span th:text="${board.boardIntro}"></span></div>
+        <div class="card-text" style="white-space: pre-line;margin-top:-1.8%;margin-bottom: 1.5%" >
+          <span style="float:left;display: flex">🔈</span>
 
-        <div class="my-3">
-          <a class="btn btn-sm">
-            📌
-          </a>
+          <h6 style="margin-top: -1.2%;margin-bottom: -1.5%; " th:text="${board.boardName}"></h6>
+          <span style="font-size: 12px" th:text="${board.boardIntro}"></span>
+
         </div>
+
       </a></div>
     </a>
   </div>
