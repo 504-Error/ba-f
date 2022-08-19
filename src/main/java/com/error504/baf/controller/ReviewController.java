@@ -48,7 +48,7 @@ public class ReviewController {
 
     @RequestMapping("")
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
-                             @RequestParam(value = "kw", defaultValue = "") String keyword) {
+                             @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, "");
         model.addAttribute("reviewPage", reviewPage);
         model.addAttribute("keyword", keyword);
@@ -57,7 +57,7 @@ public class ReviewController {
 
     @RequestMapping("/{category}")
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
-                       @RequestParam(value = "kw", defaultValue = "") String keyword, @PathVariable("category") String category) {
+                       @RequestParam(value = "keyword", defaultValue = "") String keyword, @PathVariable("category") String category) {
         logger.info("category : " + category);
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
         model.addAttribute("reviewPage", reviewPage);

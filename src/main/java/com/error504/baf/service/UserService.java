@@ -4,9 +4,16 @@ import com.error504.baf.exception.DataNotFoundException;
 import com.error504.baf.model.SiteUser;
 import com.error504.baf.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -30,6 +37,13 @@ public class UserService {
         }
     }
 
+    public Page<SiteUser> getList(int page, String keyword) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
+        Specification<SiteUser> spec = searchUser(keyword);
+        return this.userRepository.findAll(spec, pageable);
+    }
 
     public SiteUser create(String username, String email, String password, int type, int getWheel){
         SiteUser user = new SiteUser();
@@ -55,5 +69,12 @@ public class UserService {
        userRepository.delete(siteUser);
     }
 
+    private Specification searchUser(String keyword){
+        return (review, query, criteriaBuilder) -> {
+            query.distinct(true);
+
+            return criteriaBuilder.like(review.get("username"), "%" + keyword + "%");
+        };
+    }
 }
 

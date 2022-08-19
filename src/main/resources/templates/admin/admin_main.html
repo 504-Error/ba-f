@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
+    <title>Ba-f : 관리자 페이지</title>
+</head>
+<body>
+
+<header class="navbar navbar-expand-lg navbar-fix">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/question/list}">
+            <img src="/static/image/ba-f_logo.png" alt="" width="90" height="40">
+        </a>
+        <h3>관리자 페이지</h3>
+        <div class="d-flex">
+            <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/login}">LOGIN</a>
+            <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">LOGOUT</a>
+        </div>
+    </div>
+</header>
+
+<nav class="sideNav">
+    <ul class="admin-nav-menu">
+        <li><a href="#html">메인</a></li>
+        <li><a href="#css">회원 관리</a></li>
+        <li><a href="#js">게시판 관리</a></li>
+        <li><a href="#react">글 관리</a></li>
+        <li><a href="#mobile">기타</a></li>
+    </ul>
+</nav>
+
+<section class="admin-section">
+<!--    <div th:replace="${template}"></div>-->
+</section>
+
+</body>
+</html>

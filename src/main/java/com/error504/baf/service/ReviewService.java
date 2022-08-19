@@ -52,7 +52,7 @@ public class ReviewService {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
-        Specification<Review> spec = reviewSearch(keyword, category);
+        Specification<Review> spec = searchReview(keyword, category);
         return this.reviewRepository.findAll(spec, pageable);
     }
 
@@ -103,7 +103,7 @@ public class ReviewService {
         this.reviewRepository.delete(review);
     }
 
-    private Specification reviewSearch(String keyword, String category){
+    private Specification searchReview(String keyword, String category){
         return (review, query, criteriaBuilder) -> {
             query.distinct(true);
 

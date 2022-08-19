@@ -39,7 +39,7 @@
             <div id="review-search-input-group">
                 <form th:action="@{|/review/${category}|}" method="get" id="searchForm">
                     <div class="input-group mb-3 me-sm-3">
-                        <input type="text" th:value="${keyword}" name="kw" id="review-search-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
+                        <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
                         <input type="hidden" id="page" name="page" th:value="${reviewPage.number}">
                         <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
                     </div>
