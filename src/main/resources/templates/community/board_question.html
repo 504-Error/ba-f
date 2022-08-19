@@ -32,10 +32,9 @@
             </ul>
         </div>
     </nav>
-    <div>
-    </div>
+
     <a th:href="@{/question/create/}+${board.id}" class="btn btn-primary" style="float:right;">질문 등록하기</a>
-    <h3 class="border-bottom py-2" th:text="${board.boardName}"></h3>
+    <h5 class="border-bottom py-2" th:text="${board.boardName}"></h5>
 
     <h1> </h1>
     <h1> </h1>
@@ -50,7 +49,7 @@
                         <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
                     </div>
 
-                <div class="card-text" style="white-space: pre-line;">
+                <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
                     <div th:text="${question.subject}"></div>
                     </div>
 
@@ -65,9 +64,28 @@
             </div>
         </a>
     </div>
-</div>
-</body>
-</html>
+    <div th:if="${!questionList.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!questionList.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{|?page=${questionList.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, questionList.totalPages)}"
+                th:if="${page >= questionList.number-5 and page <= questionList.number+5}"
+                th:classappend="${page == questionList.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!questionList.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${questionList.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 
+</div>
 </body>
 </html>

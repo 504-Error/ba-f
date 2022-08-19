@@ -147,7 +147,7 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/board/question_list/{id}")
     public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value="page", defaultValue="0") int page) {
-        List<Question> questionList = questionService.getQuestionResult(id, page);
+        Page<Question> questionList = questionService.getQuestionResult(id,page);
         Board board = boardService.getBoard(id);
         model.addAttribute("questionList", questionList);
         model.addAttribute("board", board);

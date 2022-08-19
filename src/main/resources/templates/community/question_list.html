@@ -43,30 +43,30 @@
   <div></div>
 
   <a style="text-decoration:none; color:inherit" th:href="@{/question/weeklyHotList}">
-    <h4 th:unless="${weeklyList.size==0}">
-      주간 인기 게시물</h4>
+    <h5 class="border-bottom py-2" th:unless="${weeklyList.size==0}">
+      주간 인기 게시물</h5>
   </a>
-  <div class="card my-3" th:each="question : ${weeklyList}">
+  <div th:each="question : ${weeklyList}">
     <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
-      <div class="card-body" >
-        <div class="card-text" style="white-space: pre-line;">
-          <h5 th:text="${question.subject}"></h5>
-          <span th:text="${question.content}"></span>
-        </div>
-        <div class="d-flex justify-content-end">
-          <div class="my-3">
-            <div class="badge bg-light text-dark p-2 text-start">
-              <div th:text="${question.getDate(question.createDate)}"></div>
+      <div class="card my-3">
+        <div class="card-body" >
+          <div class="review-content-area mt-0 mb-4">
+            <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+            <div class="ms-5">
+              <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></p>
+              <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
             </div>
 
-            <a class="btn btn-sm">
-              ❤
-              <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
-            </a>
-            <a class="btn btn-sm">
-              🗨
-              <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.answerList)}"></span>
-            </a>
+            <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
+              <div th:text="${question.subject}"></div>
+            </div>
+
+            <div class="my-2">
+              <ul class="content-info">
+                <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
+                <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -76,33 +76,29 @@
 
 
   <a style="text-decoration:none; color:inherit" th:href="@{/question/hotList}">
-    <h4 th:unless="${hotList.size==0}">HOT 게시물</h4>
+    <h5 class="border-bottom py-2" th:unless="${hotList.size==0}">HOT 게시물</h5>
   </a>
-    <div class="card my-3" th:each="question : ${hotList}">
+    <div th:each="question : ${hotList}">
       <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
-        <div class="card-body" >
-          <div class="card-text" style="white-space: pre-line;">
-            <h5 th:text="${question.subject}"></h5>
-            <span th:text="${question.content}"></span>
-          </div>
-          <div class="d-flex justify-content-end">
-            <!--                <div class="badge bg-light text-dark p-2 text-start">-->
-            <!--                        <div th:text="${question.getDate(question.createDate)}"></div>-->
-            <!--                </div>-->
-
-            <div class="my-3">
-              <div class="badge bg-light text-dark p-2 text-start">
-                <div th:text="${question.getDate(question.createDate)}"></div>
+        <div class="card my-3">
+          <div class="card-body" >
+            <div class="review-content-area mt-0 mb-4">
+              <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+              <div class="ms-5">
+                <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></p>
+                <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
               </div>
 
-              <a class="btn btn-sm">
-                ❤
-                <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
-              </a>
-              <a class="btn btn-sm">
-                🗨
-                <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.answerList)}"></span>
-              </a>
+              <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
+                <div th:text="${question.subject}"></div>
+              </div>
+
+              <div class="my-2">
+                <ul class="content-info">
+                  <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
+                  <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -111,16 +107,16 @@
 
 
   <a style="text-decoration:none; color:inherit" th:href="@{/eventInfo}">
-    <h4>추천 정보</h4>
+    <h5 class="border-bottom py-2">추천 정보</h5>
   </a>
-        <div class="card my-5" style="float:left;width:625px; ">
-          <img src="/static/image/summer.png" height="390" >
+        <div class="card my-5" style="float:left;width:50%; ">
+          <img src="/static/image/summer.png" height="400" >
           <div class="card-body" >
             7월의 전시 추천
           </div>
         </div>
-        <div class="card my-5" style="float:left;width:625px; ">
-          <img src="/static/image/art_logo.png" height="390" >
+        <div class="card my-5" style="float:left;width:50%; ">
+          <img src="/static/image/art_logo.png" height="400" >
           <div class="card-body" >
             K 현대 미술관 오즈의 미술관 초대 이벤트
           </div>
