@@ -120,6 +120,7 @@ public class ReviewController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/upload")
+    @ResponseBody
     public Long reviewUpload(
             @Valid @RequestPart(name = "reviewData") ReviewForm reviewForm,
             @RequestPart(name = "images", required = false) List<MultipartFile> imageList,
@@ -208,7 +209,7 @@ public class ReviewController {
         return "redirect:/";
     }
 
-    @GetMapping("/create/search/place")
+    @GetMapping("/create/search/place/*")
     public String searchPlace() {
         return "review/review_search_place";
     }

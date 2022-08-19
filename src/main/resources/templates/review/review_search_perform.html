@@ -50,13 +50,14 @@
                             <p class="perform-place" th:text="${performInfo.facility}"></p>
                             <p th:text="${performInfo.startDate + ' - ' + performInfo.endDate}"></p>
                         </div>
-                        <button type="button" class="btn btn-secondary btn-sm float-end" id="btn-select-perform" th:attr="onclick=|selectPerform(this, ${performInfo})|">선택</button>
+                        <button type="button" class="btn btn-secondary btn-sm float-end" id="btn-select-perform" th:attr="onclick=|selectPerform(this, '${performInfo.title}', '${performInfo.facility}')|">선택</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script>
         const genreNum = new URLSearchParams(window.location.search).get("genre");
@@ -91,27 +92,44 @@
                 $("#inputGenre").val("0").prop("selected",true);
         }
 
-        function selectPerform(selectObject, performInfo) {
-            console.log("performInfo : ", performInfo);
+        function selectPerform(selectObject, performTitle, performFacility) {
+            console.log("performTitle : ", performTitle);
+            console.log("performFacility : ", performFacility);
 
+            // 장소 검색 객체를 생성합니다
+            var ps = new kakao.maps.services.Places();
+            ps.keywordSearch(performFacility, placesSearchCB);
 
-            // $.ajax({
-            //     url: "/bus/station-info",
-            //     type: "POST",
-            //     data: JSON.stringify(data), // 요청 시 포함되어질 데이터
-            //     contentType: 'application/json', //요청 컨텐트 타입
-            //     dataType: "json", // 응답 데이터 형식
-            //     beforeSend: function (jqXHR, settings) {
-            //         var header = $("meta[name='_csrf_header']").attr("content");
-            //         var token = $("meta[name='_csrf']").attr("content");
-            //         jqXHR.setRequestHeader(header, token);
-            //     },
-            //     success: function (result) {
-            //         stationSearchCB(stationNm, arsId, result);
-            //     }
-            // });
+            let selectPerformInfo = {
+                "title" : performTitle,
+                "place" : performFacility
+            };
+
+            sessionStorage.setItem("selectPerformInfo", JSON.stringify(selectPerformInfo));
         }
 
+        function placesSearchCB (data, status, pagination) {
+            let address = "";
+
+            if (!data[0].road_address_name) {
+                address = data[0].address_name.toString();
+            } else {
+                address = data[0].road_address_name.toString();
+            }
+
+            let selectPerformInfo = JSON.parse(sessionStorage.getItem("selectPerformInfo"));
+
+            let selectPerformData = {
+                "title" : selectPerformInfo["title"],
+                "place" : selectPerformInfo["place"],
+                "address" : address
+            };
+
+            sessionStorage.removeItem("selectPerformInfo");
+            sessionStorage.setItem("selectPerformData", JSON.stringify(selectPerformData));
+
+            location.href = "/review/create";
+        }
 
     </script>
 

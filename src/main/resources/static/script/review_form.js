@@ -9,7 +9,7 @@ if (window.sessionStorage.getItem('form_data')) {
     const inputPlaceReview = document.getElementById("inputPlaceReview");
     const inputAdditionalReview = document.getElementById("inputAdditionalReview");
 
-    if (!form_data["genre"]) {
+    if (form_data["genre"]) {
         $("#inputGenre").val(form_data["genre"]).prop("selected",true);
         if(form_data["genre"] === "음식점" || form_data["genre"] === "카페"){
             searchBtn.innerText = form_data["inputGenre"] + " 검색하기";
@@ -49,7 +49,26 @@ if (window.sessionStorage.getItem('selectPlaceData')) {
     const inputPlace = document.getElementById("inputPlace");
 
     inputTitle.value = selectPlace["placeName"];
-    inputPlace.value = selectPlace["address"];
+    inputPlace.value = selectPlace["placeName"] + " (" + selectPlace["address"] + ")";
+
+} else if (window.sessionStorage.getItem('selectPerformData')) {
+    const selectPerform = JSON.parse(sessionStorage.getItem('selectPerformData'));
+    console.log("selectPerformData : ", selectPerform);
+    const inputTitle = document.getElementById("inputTitle");
+    const inputPlace = document.getElementById("inputPlace");
+
+    inputTitle.value = selectPerform["title"];
+    inputPlace.value = selectPerform["place"] + " (" + selectPerform["address"] + ")";
+}
+
+if (window.sessionStorage.getItem('selectAddressData')) {
+    const selectAddressData = JSON.parse(sessionStorage.getItem('selectAddressData'));
+    console.log("selectAddressData : ", selectAddressData);
+    const inputTitle = document.getElementById("inputTitle");
+    const inputPlace = document.getElementById("inputPlace");
+
+    inputTitle.value = selectAddressData["placeName"];
+    inputPlace.value = selectAddressData["placeName"] + " (" + selectAddressData["address"] + ")";
 }
 
 function isChecked(category) {
@@ -158,13 +177,16 @@ function clickSearch(){
         alert("기타는 검색이 불가능합니다.");
     } else {
         localStorage.removeItem('selectPlaceData');
+        localStorage.removeItem('selectPerformData');
+        localStorage.removeItem('selectAddressData');
+
         let formdata = loadFormDataToJson();
         formdata["place"] = "";
         formdata["subject"] = "";
         sessionStorage.setItem("form_data", JSON.stringify(loadFormDataToJson()));
 
         if(select.options[select.selectedIndex].value === "음식점" || select.options[select.selectedIndex].value === "카페"){
-            location.href = "/review/create/search/place";
+            location.href = "/review/create/search/place/0";
         } else if(select.options[select.selectedIndex].value === "기타 공연"){
             location.href = "/review/create/search/perform?genre=0";
         } else if(select.options[select.selectedIndex].value === "뮤지컬"){
@@ -173,6 +195,24 @@ function clickSearch(){
             location.href = "/review/create/search/perform?genre=2";
         }
     }
+}
+
+function clickSearchAddress(){
+    localStorage.removeItem('selectPlaceData');
+    localStorage.removeItem('selectPerformData');
+    localStorage.removeItem('selectAddressData');
+
+    let place = "";
+    if ($('#inputPlace').val().indexOf(" (") && $('#inputPlace').val().indexOf(")") === ($('#inputPlace').val().length - 1)) {
+        place = $('#inputPlace').val().split(' (')[0];
+    } else {
+        place = $('#inputPlace').val();
+    }
+
+    let formdata = loadFormDataToJson();
+    formdata["place"] = "";
+    sessionStorage.setItem("form_data", JSON.stringify(loadFormDataToJson()));
+    location.href = "/review/create/search/place/1";
 }
 
 function uploadReview() {
@@ -210,6 +250,8 @@ function uploadReview() {
         success: function(data) {
             sessionStorage.removeItem("form_data");
             sessionStorage.removeItem("selectPlaceData");
+            sessionStorage.removeItem("selectPerformData");
+            sessionStorage.removeItem("selectAddressData");
             location.href = "/review/content/" + data;
         },
         error : function(error) {
@@ -233,20 +275,33 @@ function loadFormDataToJson() {
     }
 
     let placeAddress = "";
-    if (sessionStorage.getItem('selectPlaceData')) {
-        const selectPlace = JSON.parse(sessionStorage.getItem('selectPlaceData'));
-        console.log("selectPlaceData : ", selectPlace);
-        placeAddress = selectPlace["address"];
-    } else if(sessionStorage.getItem('selectPerformData')) {
-
+    let place = "";
+    if ($('#inputPlace').val().indexOf(" (") !== -1 && $('#inputPlace').val().indexOf(")") === ($('#inputPlace').val().length - 1)) {
+        place = $('#inputPlace').val().split(' (')[0];
+        placeAddress = $('#inputPlace').val().split(' (')[1].replace(")", "");
+    } else {
+        place = $('#inputPlace').val();
     }
+
+
+    // if (sessionStorage.getItem('selectPlaceData')) {
+    //     const selectPlace = JSON.parse(sessionStorage.getItem('selectPlaceData'));
+    //     console.log("selectPlaceData : ", selectPlace);
+    //     placeAddress = selectPlace["address"];
+    // } else if(sessionStorage.getItem('selectPerformData')) {
+    //     const selectPerformData = JSON.parse(sessionStorage.getItem('selectPerformData'));
+    //     console.log("selectPerformData : ", selectPerformData);
+    //     placeAddress = selectPerformData["address"];
+    // } else if(sessionStorage.getItem('selectAddressData')) {
+    //
+    // }
 
 
     let form_data = {
         "genre" : $("#inputGenre option:selected").val(),
         "subject" : $('#inputTitle').val(),
         "date" : $('#inputDate').val(),
-        "place" : $('#inputPlace').val(),
+        "place" : place,
         "placeAddress" : placeAddress,
         "grade" : grade,
         "amenities" : amenities,
