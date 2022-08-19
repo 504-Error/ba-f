@@ -14,12 +14,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.Principal;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.error504.baf.controller.ReviewSearchPerform.getPerformData;
 
@@ -69,7 +77,7 @@ public class ReviewController {
             case "카페":
                 model.addAttribute("category", "cafe");
                 break;
-            case "뮤지컬": case "연극": case "전시관":
+            case "뮤지컬": case "연극": case "기타 공연":
                 model.addAttribute("category", "perform");
                 break;
             case "기타":
@@ -84,60 +92,90 @@ public class ReviewController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
-    public String reviewCreate(ReviewForm reviewForm) {
+    public String reviewCreate(Model model, ReviewForm reviewForm) {
         return "review/review_form";
     }
 
+//    @PreAuthorize("isAuthenticated()")
+//    @PostMapping("/create")
+//    public String reviewCreate(@Valid ReviewForm reviewForm, BindingResult bindingResult, Principal principal) {
+//        if (bindingResult.hasErrors()) {
+//            return "review/review_form";
+//        }
+//
+//
+//        SiteUser siteUser = userService.getUser(principal.getName());
+//        logger.info(siteUser.toString());
+//
+//        String amenitiesList = String.join(",", reviewForm.getAmenities());
+//
+//        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        String dateToString = transFormat.format(reviewForm.getDate());
+//
+//        reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(),
+//                reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
+//
+//        return "redirect:/review";
+//    }
+
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/create")
-    public String reviewCreate(@Valid ReviewForm reviewForm, BindingResult bindingResult, Principal principal) {
-        if (bindingResult.hasErrors()) {
-            return "review/review_form";
+    @PostMapping("/create/upload")
+    public Long reviewUpload(
+            @Valid @RequestPart(name = "reviewData") ReviewForm reviewForm,
+            @RequestPart(name = "images", required = false) List<MultipartFile> imageList,
+            BindingResult bindingResult, Principal principal, HttpServletRequest request) throws IOException {
+//        if (bindingResult.hasErrors()) {
+//            logger.info("bindingResult.hasErrors()");
+//            return "review/review_form";
+//        }
+
+        logger.info("no binding error");
+        logger.info("reviewForm : " + reviewForm);
+        logger.info("reviewForm.getGenre() : " + reviewForm.getGenre());
+        if (imageList.size() > 0) {
+            logger.info("imageList : " + imageList.get(0));
         }
 
 //        logger.info("imgUrl ArrayList : ", reviewForm.getImageUrl());
 //
-//        SiteUser siteUser = userService.getUser(principal.getName());
-//        logger.info(siteUser.toString());
-//
-//        String amenitiesList = String.join(",", reviewForm.getAmenities());
-//
-//        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        String dateToString = transFormat.format(reviewForm.getDate());
-//
-//        reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(),
-//                reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
+        SiteUser siteUser = userService.getUser(principal.getName());
+        logger.info(siteUser.toString());
 
-        return "redirect:/review";
-    }
+        String amenitiesList = String.join(",", reviewForm.getAmenities());
 
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/create/upload")
-    public String reviewUpload(@Valid @ModelAttribute("reviewForm") ReviewForm reviewForm, BindingResult bindingResult, Principal principal) throws IOException {
-        if (bindingResult.hasErrors()) {
-            logger.info("bindingResult.hasErrors()");
-            return "review/review_form";
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateToString = transFormat.format(reviewForm.getDate());
+
+        Long id = reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(), reviewForm.getPlaceAddress(),
+                reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
+
+        logger.info("review id : " + id);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        String uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_image").toString();
+
+//        String root = request.getContextPath();
+//        String relativeFolder = File.separator + "resources" + File.separator + "static" + File.separator + "image" + File.separator + "upload_image" + File.separator;
+
+        for (int i = 0; i < imageList.size(); i++){
+            stringBuilder.append("/");
+            stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
+            stringBuilder.append(imageList.get(i).getOriginalFilename());
+
+            File path = new File(uploadRoot + stringBuilder);
+            try {
+                imageList.get(i).transferTo(path);
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Review review = this.reviewService.getReview(id);
+            this.reviewService.uploadImage(review, path.toString());
         }
 
-        logger.info("no binding error");
-        logger.info("reviewForm.getSubject() : ", reviewForm.getSubject());
-        logger.info("reviewForm.getAdditionalReview() : ", reviewForm.getAdditionalReview());
-        logger.info("reviewForm.getImages() : ", reviewForm.getImages().get(0));
-
-////        logger.info("imgUrl ArrayList : ", reviewForm.getImageUrl());
-//
-//        SiteUser siteUser = userService.getUser(principal.getName());
-//        logger.info(siteUser.toString());
-//
-//        String amenitiesList = String.join(",", reviewForm.getAmenities());
-//
-//        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        String dateToString = transFormat.format(reviewForm.getDate());
-//
-//        reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(),
-//                reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
-
-        return "success";
+        return id;
     }
 
 //    @RequestMapping("/list")
@@ -176,10 +214,12 @@ public class ReviewController {
     }
 
     @GetMapping("/create/search/perform")
-    public String searchShow(Model model) {
-        ArrayList<ReviewPerformInfo> performInfoList = getPerformData();
+    public String searchShow(Model model, @RequestParam(value="genre", defaultValue="0") int genre,
+                             @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+        ArrayList<ReviewPerformInfo> performInfoList = getPerformData(genre, keyword);
 
         model.addAttribute("performInfoList", performInfoList);
+        model.addAttribute("keyword", keyword);
 
         return "review/review_search_perform";
     }
