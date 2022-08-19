@@ -154,6 +154,15 @@ public class QuestionController {
         return "community/board_question";
     }
 
+    @RequestMapping("/list")
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page,
+        @RequestParam(value="kw", defaultValue="") String kw){
+        Page<Question> paging = this.questionService.getList(page, kw);
+        model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
+        return "communuity/board_question";
+    }
+
 //    @RequestMapping("/list")
 //    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
 //        Page<Review> reviewPage = this.reviewService.getList(page);

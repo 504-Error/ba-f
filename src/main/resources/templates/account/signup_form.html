@@ -50,7 +50,41 @@
       <label class="form-label">이메일</label>
       <input type="email" th:field="*{email}" class="form-control">
     </div>
+    <div class="row mb-3">
+      <label for="inputType" class="col-sm-2 col-form-label">장애 유형</label>
+      <div class="col-sm-5">
+        <select class="form-select" id="inputType" th:field="*{type}">
+          <option selected value="0">유형 선택</option>
+          <option value="1">지체 장애</option>
+          <option value="2">뇌병변</option>
+          <option value="3">시각 장애</option>
+          <option value="4">청각 장애</option>
+          <option value="5">언어 장애</option>
+          <option value="6">정신 지체</option>
+          <option value="7">발달 장애</option>
+          <option value="8">정신 장애</option>
+          <option value="9">신장 장애</option>
+          <option value="10">심장 장애</option>
+          <option value="11">호흡기 장애</option>
+          <option value="12">간장애</option>
+          <option value="13">안면장애</option>
+          <option value="14">장루,요루장애</option>
+          <option value="15">간질장애</option>
+        </select>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="inputType" class="col-sm-2 col-form-label">휠체어 탑승 여부</label>
+      <div class="col-sm-5">
+        <select class="form-select" id="getWheel" th:field="*{getWheel}">
+          <option selected value="0">탑승 여부 선택</option>
+          <option value="1">탑승</option>
+          <option value="2">미탑승</option>
+        </select>
+      </div>
+    </div>
     <button type="submit" class="btn btn-primary">회원가입</button>
   </form>
 </div>
+</body>
 </html>
