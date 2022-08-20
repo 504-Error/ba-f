@@ -37,12 +37,21 @@ public class QuestionController {
 
     @RequestMapping("/question/list")
     public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
+        Page<Question> questionList = questionService.getQuestion(page);
+        model.addAttribute("questionList", questionList);
         List<Question> weeklyList=questionService.getWeeklyHotList();
         model.addAttribute("weeklyList", weeklyList);
         List<Question> hotList=questionService.getHotList();
         model.addAttribute("hotList", hotList);
 
         return "community/question_list";
+    }
+
+    @RequestMapping("/question/search")
+    public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page){
+        Page<Question> questionList = questionService.getQuestion(page);
+        model.addAttribute("questionList", questionList);
+        return "community/question_search";
     }
 
     @PreAuthorize("isAuthenticated()")

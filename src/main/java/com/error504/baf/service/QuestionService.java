@@ -74,7 +74,6 @@ public class QuestionService {
         List<Question> weeklyList = new ArrayList<>();
         for(Question question:questionNewList){
             if((question.getVoter()).size()>2){ //하트 개수 정하기
-
                 if(Time.getWeekOfYear(question.getCreateDate().toLocalDate().toString())==Time.getWeekOfYear(LocalDate.now().toString())){
                     weeklyList.add(question);
                 }
@@ -113,6 +112,14 @@ public class QuestionService {
         return questionRepository.findAll(
 //                spec,
                 pageable);
+    }
+
+    @Transactional
+    public Page<Question> getQuestion(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return questionRepository.findAll(pageable);
     }
 
     @Transactional
