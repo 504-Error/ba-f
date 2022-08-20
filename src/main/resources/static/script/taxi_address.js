@@ -1,4 +1,3 @@
-/* /taxi/serachDes */
 // 마커를 담을 배열입니다
 var markers = [];
 
@@ -14,7 +13,11 @@ var geocoder = new kakao.maps.services.Geocoder();
 // 클릭한 위치를 표시할 마커입니다
 var marker = new kakao.maps.Marker();
 
-let destinationResult;
+let addressResult;
+
+let query = window.location.search;
+let params = new URLSearchParams(query);
+let category = params.get('category');
 
 // 키워드 검색을 요청하는 함수입니다
 function searchPlaces() {
@@ -93,12 +96,8 @@ function displayPlaces(places) {
 
             kakao.maps.event.addListener(marker, 'click', function() {
                 if(place.road_address_name){
-                    console.log(place.place_name);
-                    console.log(place.road_address_name);
                     onclickMarker(place.place_name, place.road_address_name);
                 } else {
-                    console.log(place.place_name);
-                    console.log(place.address_name);
                     onclickMarker(place.place_name, place.address_name);
                 }
             });
@@ -123,7 +122,12 @@ function onclickMarker(place_name, address_name) {
     let formData = window.localStorage.getItem('messageForm');
     formData = JSON.parse(formData);
 
-    formData.destinationAddress = address_name + "(" + place_name + ")";
+    if(category == "source"){
+        formData.sourceAddress = address_name + "(" + place_name + ")";
+    } else if (category == "destination"){
+        formData.destinationAddress = address_name + "(" + place_name + ")";
+    }
+
     window.localStorage.setItem('messageForm', JSON.stringify(formData));
 
     location.href = "/taxi";
@@ -247,11 +251,16 @@ function panToM(place_y, place_x) {
 kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
         if (status === kakao.maps.services.Status.OK) {
-            destinationResult = result[0];
+            addressResult = result[0];
 
             var detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
             detailAddr += '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
-            detailAddr += '<div style="float: right"><button type="button" class="btn btn-secondary" onclick="onClickSetDestination(destinationResult)">도착지 설정</button></div>'
+
+            if(category == "source"){
+                detailAddr += '<div style="float: right"><button type="button" class="btn btn-secondary" onclick="onClickSetAddress(addressResult)">출발지 설정</button></div>';
+            } else if (category == "destination"){
+                detailAddr += '<div style="float: right"><button type="button" class="btn btn-secondary" onclick="onClickSetAddress(addressResult)">도착지 설정</button></div>';
+            }
 
             var content = '<div class="bAddr">' +
                 '<span class="title">법정동 주소정보</span>' +
@@ -299,21 +308,23 @@ function displayCenterInfo(result, status) {
     }
 }
 
-// 도착지 설정 버튼 클릭 -> 도착지 설정
-function onClickSetDestination(result){
-    // console.log(result.toString());
-
+// 출발지/도착지 설정 버튼 클릭 -> 출발지/도착지 설정
+function onClickSetAddress(result){
     let formData = window.localStorage.getItem('messageForm');
     formData = JSON.parse(formData);
-
-    let newDestination;
+    let newAddress;
     if(result.road_address != null){
-        newDestination = result.road_address.address_name;
+        newAddress = result.road_address.address_name;
     }else{
-        newDestination = result.address.address_name;
+        newAddress = result.address.address_name;
     }
 
-    formData.destinationAddress = newDestination;
+    if(category == "source"){
+        formData.sourceAddress = newAddress;
+    } else if (category == "destination"){
+        formData.destinationAddress = newAddress;
+    }
+
     window.localStorage.setItem('messageForm', JSON.stringify(formData));
 
     location.href = "/taxi";

@@ -1,7 +1,3 @@
-let test = window.localStorage.getItem('messageForm');
-test = JSON.parse(test);
-console.log(test);
-
 checkStorage();
 function checkStorage(){
     let storageData = JSON.parse(window.localStorage.getItem('messageForm'));
@@ -57,7 +53,6 @@ function getDetailAddrFromCoords(locPosition) {
 
     let callback = function(result, status) {
         if (status === kakao.maps.services.Status.OK) {
-            // console.log(result);
             if(result[0].road_address != null){
                 resultAddr = result[0].road_address.address_name;
             }else{
@@ -72,9 +67,8 @@ function getDetailAddrFromCoords(locPosition) {
 }
 
 
-// 도착지 검색 -> 입력 폼 내용 localStroage에 저장
-// document.getElementById("desBtn").addEventListener('click',onClickDestinationBtn);
-function onClickDestinationBtn(){
+// 출발지/도착지 검색 -> 입력 폼 내용 localStroage에 저장
+function onClickAddressSearchBtn(){
     let passengerName = document.getElementById("passengerName").value,
         sourceAddress = document.getElementById("sourceAddress").value,
         destinationAddress = document.getElementById("destinationAddress").value,
@@ -83,8 +77,6 @@ function onClickDestinationBtn(){
     let obj = {"passengerName": passengerName, "sourceAddress": sourceAddress, "destinationAddress": destinationAddress, "passengerNum": passengerNum, "wChairRadioBtn": wChairRadioBtn}
     let objStr = JSON.stringify(obj);
     window.localStorage.setItem('messageForm', objStr);
-
-    console.log(window.localStorage.getItem('messageForm'));
 }
 
 
@@ -112,11 +104,6 @@ function onClickWriteBtn(){
         let msgBox = document.getElementById("msgTextarea");
         msgBox.innerHTML = msgStr;
     } else {
-        console.log(!isNull(passengerName));
-        console.log(!isNull(sourceAddress));
-        console.log(!isNull(destinationAddress));
-        console.log(!isNull(passengerNum));
-        console.log(wChairRadioBtn.is(":checked"));
         alert("필수 내용 입력을 확인하세요.");
     }
 }

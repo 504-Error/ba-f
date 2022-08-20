@@ -5,86 +5,119 @@
         xmlns:sec="http://www.w3.org/1999/xhtml"
 >
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
-  <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
-  <title>Hello, Ba-f</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
+    <title>Hello, Ba-f</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg">
-  <div class="container-fluid">
-    <a class="navbar-brand"  th:href="@{/visitReview}">
-      <img src="/static/image/ba-f_logo.png" alt="" width="90" height="40">
-    </a>
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/visitReview}">
+            <img src="/static/image/ba-f_logo.png" alt="" width="90" height="40">
+        </a>
 
-    <div class="d-flex">
-      <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/login}">LOGIN</a>
-      <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">LOGOUT</a>
+        <div class="d-flex">
+            <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/login}">LOGIN</a>
+            <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">LOGOUT</a>
+        </div>
     </div>
-  </div>
 </nav>
 
 <div layout:fragment="content" class="container my-3">
 
-  <div class="my-3 border-bottom">
-    <div>
-      <h4>회원가입</h4>
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>회원가입</h4>
+        </div>
     </div>
-  </div>
-  <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
-    <div th:replace="form_errors :: formErrorsFragment">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">사용자ID</label>
-      <input type="text" th:field="*{username}" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">비밀번호</label>
-      <input type="password" th:field="*{password1}" class="form-control"></div>
-    <div class="mb-3">
-      <label  class="form-label">비밀번호 확인</label>
-      <input type="password" th:field="*{password2}" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">이메일</label>
-      <input type="email" th:field="*{email}" class="form-control">
-    </div>
-    <div class="row mb-3">
-      <label for="inputType" class="col-sm-2 col-form-label">장애 유형</label>
-      <div class="col-sm-5">
-        <select class="form-select" id="inputType" th:field="*{type}">
-          <option selected value="0">유형 선택</option>
-          <option value="1">지체 장애</option>
-          <option value="2">뇌병변</option>
-          <option value="3">시각 장애</option>
-          <option value="4">청각 장애</option>
-          <option value="5">언어 장애</option>
-          <option value="6">정신 지체</option>
-          <option value="7">발달 장애</option>
-          <option value="8">정신 장애</option>
-          <option value="9">신장 장애</option>
-          <option value="10">심장 장애</option>
-          <option value="11">호흡기 장애</option>
-          <option value="12">간장애</option>
-          <option value="13">안면장애</option>
-          <option value="14">장루,요루장애</option>
-          <option value="15">간질장애</option>
-        </select>
-      </div>
-    </div>
-    <div class="row mb-3">
-      <label for="inputType" class="col-sm-2 col-form-label">휠체어 탑승 여부</label>
-      <div class="col-sm-5">
-        <select class="form-select" id="getWheel" th:field="*{getWheel}">
-          <option selected value="0">탑승 여부 선택</option>
-          <option value="1">탑승</option>
-          <option value="2">미탑승</option>
-        </select>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary">회원가입</button>
-  </form>
+
+    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+        <div style="width:40%">
+        <div th:replace="form_errors :: formErrorsFragment">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">사용자ID</label>
+            <input type="text" th:field="*{username}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">비밀번호</label>
+            <input type="password" th:field="*{password1}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">비밀번호 확인</label>
+            <input type="password" th:field="*{password2}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">이름</label>
+            <input type="text" th:field="*{name}" class="form-control">
+        </div>
+
+        <div class="row mb-3">
+            <label for="inputBirthday" class="col-sm-2 col-form-label">생년월일</label>
+            <div class="col-sm-5">
+                <input type="date" th:field="*{birthday}" class="form-control" id="inputBirthday" max="9999-12-31">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="inputGender" class="col-sm-2 col-form-label">성별</label>
+            <div class="gender_code">
+                <select class="form-select" id="inputGender" th:field="*{gender}">
+                    <option value="0" selected>성별 선택</option>
+                    <option value="1">남자</option>
+                    <option value="2">여자</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">이메일</label>
+            <input type="email" th:field="*{email}" class="form-control">
+        </div>
+
+        <div class="row mb-3">
+            <label for="inputType" class="col-sm-2 col-form-label">장애 유형</label>
+            <div class="col-sm-5">
+                <select class="form-select" id="inputType" th:field="*{type}">
+                    <option selected value="0">유형 선택</option>
+                    <option value="1">지체 장애</option>
+                    <option value="2">뇌병변</option>
+                    <option value="3">시각 장애</option>
+                    <option value="4">청각 장애</option>
+                    <option value="5">언어 장애</option>
+                    <option value="6">정신 지체</option>
+                    <option value="7">발달 장애</option>
+                    <option value="8">정신 장애</option>
+                    <option value="9">신장 장애</option>
+                    <option value="10">심장 장애</option>
+                    <option value="11">호흡기 장애</option>
+                    <option value="12">간장애</option>
+                    <option value="13">안면장애</option>
+                    <option value="14">장루,요루장애</option>
+                    <option value="15">간질장애</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="inputType" class="col-sm-2 col-form-label">휠체어 탑승 여부</label>
+            <div class="col-sm-7">
+                <select class="form-select" id="getWheel" th:field="*{getWheel}">
+                    <option selected value="0">탑승 여부 선택</option>
+                    <option value="1">탑승</option>
+                    <option value="2">미탑승</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">회원가입</button>
+
+        </div>
+    </form>
 </div>
 </body>
 </html>

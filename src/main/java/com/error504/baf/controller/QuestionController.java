@@ -44,13 +44,22 @@ public class QuestionController {
     }
 
     @RequestMapping("/question/list")
-    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-        List<Question> weeklyList = questionService.getWeeklyHotList();
+    public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
+        Page<Question> questionList = questionService.getQuestion(page);
+        model.addAttribute("questionList", questionList);
+        List<Question> weeklyList=questionService.getWeeklyHotList();
         model.addAttribute("weeklyList", weeklyList);
-        List<Question> hotList = questionService.getHotList();
+        List<Question> hotList=questionService.getHotList();
         model.addAttribute("hotList", hotList);
 
         return "community/question_list";
+    }
+
+    @RequestMapping("/question/search")
+    public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page){
+        Page<Question> questionList = questionService.getQuestion(page);
+        model.addAttribute("questionList", questionList);
+        return "community/question_search";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -179,7 +188,7 @@ public class QuestionController {
         Question question = questionService.getQuestion(id);
         SiteUser siteUser = userService.getUser(principal.getName());
         questionService.accuse(question, siteUser);
-        //신고가 접수되었습니다
+      //신고가 접수되었습니다
         return String.format("redirect:/question/detail/%s", id);
 
     }
@@ -190,10 +199,13 @@ public class QuestionController {
     }
 
 
+
+
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/board/question_list/{id}")
-    public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-        Page<Question> questionList = questionService.getQuestionResult(id, page);
+    public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<Question> questionList = questionService.getQuestionResult(id,page);
         Board board = boardService.getBoard(id);
         model.addAttribute("questionList", questionList);
         model.addAttribute("board", board);
@@ -201,8 +213,8 @@ public class QuestionController {
     }
 
     @RequestMapping("/list")
-    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-                       @RequestParam(value = "kw", defaultValue = "") String kw) {
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page,
+        @RequestParam(value="kw", defaultValue="") String kw){
         Page<Question> paging = this.questionService.getList(page, kw);
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
@@ -211,13 +223,15 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/user/mypage/write")
-    public String myPageWrite(Model model, Principal principal, @RequestParam(value = "page", defaultValue = "0") int page) {
+    public String myPageWrite(Model model, Principal principal, @RequestParam(value="page", defaultValue="0") int page){
         SiteUser siteUser = userService.getUser(principal.getName());
         Page<Question> questionList = questionService.getQuestionResultByUser(siteUser.getId(), page);
         model.addAttribute("siteUser", siteUser);
         model.addAttribute("questionList", questionList);
         return "account/my_page_write";
     }
+
+
 
 
 //    @PreAuthorize("isAuthenticated()")

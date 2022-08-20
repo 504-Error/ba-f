@@ -74,25 +74,42 @@ function placesSearchCB(data, status, pagination) {
 
 // 지도에 마커를 표출하는 함수입니다
 function displayPlaces(places) {
-
+    const url =
+        "http://openapi.seoul.go.kr:8088/41706d4e7663627136385153447866/json/tbTraficElvtr/1/1000/"
     // 몇번째 카테고리가 선택되어 있는지 얻어옵니다
     // 이 순서는 스프라이트 이미지에서의 위치를 계산하는데 사용됩니다
-    var order = document.getElementById(currCategory).getAttribute('data-order');
+    var order = document.getElementById(currCategory).getAttribute('data-order')
+    console.log(order);
+    if (order == 6 ){ //가연아 여기가 js 좌표로 찍어주는 거야
+        console.log("help");
+        fetch(url)
+            .then((res) => res.json())
+            .then((myJson) => {
+                const stores = myJson.tbTraficElvtr.row;
 
+                for (var i = 0; i < stores.length; i++) {
+                    var point = myJson.tbTraficElvtr.row[i].NODE_WKT;
+                    var test = point.split(/[(|)| ]/);//value에서 좌표만 추출
+                    // console.log(test[1],test[2]);
+                    // 마커를 생성하고 지도에 표시합니다
+                    addMarker(new kakao.maps.LatLng(test[2], test[1]), 3);
+                }
+            })
+    }
+    else{
+        for ( var i=0; i<places.length; i++ ) {
 
+            // 마커를 생성하고 지도에 표시합니다
+            var marker = addMarker(new kakao.maps.LatLng(places[i].y, places[i].x), order);
 
-    for ( var i=0; i<places.length; i++ ) {
-
-        // 마커를 생성하고 지도에 표시합니다
-        var marker = addMarker(new kakao.maps.LatLng(places[i].y, places[i].x), order);
-
-        // 마커와 검색결과 항목을 클릭 했을 때
-        // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
-        (function(marker, place) {
-            kakao.maps.event.addListener(marker, 'click', function() {
-                displayPlaceInfo(place);
-            });
-        })(marker, places[i]);
+            // 마커와 검색결과 항목을 클릭 했을 때
+            // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
+            (function(marker, place) {
+                kakao.maps.event.addListener(marker, 'click', function() {
+                    displayPlaceInfo(place);
+                });
+            })(marker, places[i]);
+        }
     }
 }
 
