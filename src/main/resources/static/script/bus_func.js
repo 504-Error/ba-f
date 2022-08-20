@@ -5,6 +5,7 @@ var markers = [];
 var BSmarkers = [];
 
 // 장소 검색 객체를 생성합니다
+// 장소 검색 객체를 생성합니다
 var ps = new kakao.maps.services.Places();
 
 // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
@@ -149,7 +150,7 @@ function addMarker(position, idx, title) {
 
 // 버스 정류장 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 function addBSMarker(position, idx) {
-    console.log(position);
+    //console.log(position);
     var imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
         imageSize = new kakao.maps.Size(40, 40),  // 마커 이미지의 크기
         imgOptions =  {
@@ -166,7 +167,7 @@ function addBSMarker(position, idx) {
     marker.setMap(map); // 지도 위에 마커를 표출합니다
     BSmarkers.push(marker);  // 배열에 생성된 마커를 추가합니다
 
-    console.log(marker.getPosition());
+    //console.log(marker.getPosition());
 
     return marker;
 }
@@ -308,13 +309,15 @@ function onClickBSMarker(arsId, stationNm) {
         },
         success: function (result) {
             stationSearchCB(stationNm, arsId, result);
+        },
+        error: function (){
+            // 검색 결과 없는 경우 메시지 출력 추가 필요
+            alert("저상버스 정보가 없습니다.");
         }
     });
 }
 
-function stationSearchCB(stationNm, arsId, lowBusData) {
-    // 검색 결과 없는 경우 메시지 출력 추가 필요
-
+function stationSearchCB(stationNm, arsId, lowBusData, nCheck = false) {
 
     // 버스 목록 출력
     displayLowBus(stationNm, arsId, lowBusData);
@@ -353,6 +356,12 @@ function displayLowBus(stationNm, arsId, lowBus){
     for ( var i=0; i<lowBus.length; i++ ) {
         let itemEl = getBusListItem(i, lowBus[i]); // 검색 결과 항목 Element를 생성합니다
 
+        (function(RouteId) {
+            itemEl.onclick =  function () {
+                onClickBusInfo(RouteId);
+            };
+        })(lowBus[i].busRouteId);
+
         fragment.appendChild(itemEl);
     }
 
@@ -376,4 +385,62 @@ function getBusListItem(index, lowBus) {
     el.className = 'item';
 
     return el;
+}
+
+// 버스 정보 클릭 -> 해당 버스의 노선 출력 함수 호출
+function onClickBusInfo(RouteId) {
+
+    var data = {};
+    data["busRouteId"] = RouteId;
+
+    $.ajax({
+        url: "/bus/bus-info",
+        type: "POST",
+        data: JSON.stringify(data), // 요청 시 포함되어질 데이터
+        contentType: 'application/json', //요청 컨텐트 타입
+        dataType: "json", // 응답 데이터 형식
+        beforeSend: function (jqXHR, settings) {
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
+            jqXHR.setRequestHeader(header, token);
+        },
+        success: function (result) {
+            console.log(result);
+            busSearchCB(result);
+        }
+    });
+}
+
+function busSearchCB(result){
+
+    let firstTM = result[0][0].firstLowTm.substring(8, 12);
+    let lastTM = result[0][0].lastLowTm.substring(8, 12);
+    let elWrap = document.getElementById('map_wrapper'),
+        expEl = document.createElement('div'),
+        expBefore = document.getElementById('menu_exp_wrap');
+
+    if(expBefore != null){
+        expBefore.remove();
+    }
+
+    // 버스 번호, 기점, 종점, 배차간격, 저상첫차시간, 저상막차시간
+    let contentStr = '<div style="text-align : center;margin-top: 30px">' +
+        '   <div><label style="font-size:12px;margin: 3px;">서울 저상 버스</label></div>' +
+        '   <div><label style="font-size:16px;font-weight: bold;margin: 3px;">'+ result[0][0].busRouteNm +'</label></div>' + // 버스 번호
+        '   <div><label style="font-size:12px;margin: 3px;">'+ result[0][0].stStationNm + ' ~ ' + result[0][0].edStationNm + '</label></div>' +
+        '   <div><label>배차 간격 | ' + result[0][0].term + '분</label></div>' +
+        '   <div><label style="font-size:12px;margin: 3px;">저상버스 첫차시간 | ' + firstTM.substring(0,2) + ':' + firstTM.substring(2,4) +'</label> ' +
+        '                                           <label>   저상버스 막차시간 | ' + lastTM.substring(0,2) + ':' + lastTM.substring(2,4) +'</label></div>' +
+        '</div><div style="margin: 20px 20px 20px 20px;">';
+
+    for(let i=0; i<result[1].length; i++){
+        contentStr += '<div style="margin: 3px;"><label>' + result[1][i].stationNm + '</label></div>';
+    }
+    contentStr += '</div>';
+
+    expEl.setAttribute("id", "menu_exp_wrap");
+    expEl.innerHTML = contentStr;
+    expEl.className='bg_white';
+
+    elWrap.appendChild(expEl);
 }

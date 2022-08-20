@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <title>Taxi</title>
 </head>
+
 <body class="row justify-content-center">
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
     <div  layout:fragment="content" class="container">
@@ -38,56 +39,89 @@
     <form class="row justify-content-center">
         <div class="row" style="width: 50%; margin: 0.7rem;">
             <div class="col-md-2" style="text-align: left">
-                <label for="inputName" class="col-form-label fs-5 fw-bold">이름</label>
+                <label for="passengerName" class="col-form-label fs-5 fw-bold">이름</label>
             </div>
             <div class="col">
-                <input type="text" class="form-control form-control-lg" style="width: 30%" value="회원이름" id="inputName">
+                <input type="text" class="form-control form-control-lg" style="width: 30%" value="회원이름" id="passengerName">
             </div>
         </div>
 
         <div class="row" style="width: 50%; margin: 0.7rem;">
             <div class="col-md-2" style="text-align: left">
-                <label for="source" class="col-form-label fs-5 fw-bold">출발지</label>
+                <label for="sourceAddress" class="col-form-label fs-5 fw-bold">출발지</label>
             </div>
             <div class="col">
-                <input type="text" class="form-control form-control-lg" value="서울특별시....." id="source">
+                <input type="text" class="form-control form-control-lg" placeholder="출발지를 입력하세요." id="sourceAddress">
+                <button type="button" class="btn btn-secondary" id="currentBtn" onclick="currentLocationCoord();">현재 위치</button>
+                <button type="button" class="btn btn-secondary" id="sourceBtn" onclick="location.href='/taxi/searchDes';onClickDestinationBtn();">검색하기</button>
             </div>
         </div>
 
         <div class="row" style="width: 50%; margin: 0.7rem;">
             <div class="col-md-2" style="text-align: left">
-                <label for="destination" class="col-form-label fs-5 fw-bold">도착지</label>
+                <label for="destinationAddress" class="col-form-label fs-5 fw-bold">도착지</label>
             </div>
             <div class="col">
-                <input type="text" class="form-control form-control-lg" placeholder="도착지를 입력하세요." id="destination">
+                <input type="text" class="form-control form-control-lg" placeholder="도착지를 입력하세요." id="destinationAddress">
+                <button type="button" class="btn btn-secondary" id="desBtn" onclick="location.href='/taxi/searchDes';onClickDestinationBtn();">검색하기</button>
             </div>
         </div>
 
         <div class="row" style="width: 50%; margin: 0.7rem;">
             <div class="col-md-2" style="text-align: left">
-                <label for="inputName" class="col-form-label fs-5 fw-bold">휠체어 탑승 여부 </label>
+                <label for="passengerNum" class="col-form-label fs-5 fw-bold">탑승 인원</label>
+            </div>
+            <div class="col">
+                <select class="form-select form-select-lg mb-3" aria-label="Default select example" name="passenger_num" id="passengerNum">
+                    <option value="1">1명</option>
+                    <option value="2">2명</option>
+                    <option value="3">3명</option>
+                    <option value="4">4명</option>
+                    <option value="5">5명</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="width: 50%; margin: 0.7rem;">
+            <div class="col-md-2" style="text-align: left">
+                <label class="col-form-label fs-5 fw-bold">휠체어 사용 여부 </label>
             </div>
             <div class="col">
                 <div class="form-check form-check-inline" style="padding-top: 0.5rem">
-                    <input class="form-check-input" type="radio" name="RadioOptions" id="inlineRadio1" value="option1">
-                    <label class="form-check-label fs-5" for="inlineRadio1">탑승</label>
+                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairYes" value="wChairYes">
+                    <label class="form-check-label fs-5" for="wChairYes">탑승</label>
                 </div>
                 <div class="form-check form-check-inline" style="padding-top: 0.5rem">
-                    <input class="form-check-input" type="radio" name="RadioOptions" id="inlineRadio2" value="option2">
-                    <label class="form-check-label fs-5" for="inlineRadio2">미탑승</label>
+                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo" checked="checked">
+                    <label class="form-check-label fs-5" for="wChairNo">미탑승</label>
                 </div>
             </div>
-        </div>
-
-        <div class="row col-3" style="width: 50%; margin: 0.7rem">
-            <label for="Textarea" class="form-label fs-5 fw-bold">문자 전송</label>
-            <textarea class="form-control" id="Textarea" rows="5" style="margin: 0.5rem; padding-right: 0.5rem"></textarea>
         </div>
 
         <div class="row justify-content-end" style="width: 50%; margin: 0.7rem;">
-            <button type="submit" class="col-2 btn text-light fs-5 fw-bold" style="background-color: #FA9622;">문자 전송</button>
+            <button type="button" class="col-2 btn text-light fs-5 fw-bold" id="writeBtn" style="background-color: #FA9622;">문자 작성</button>
         </div>
+
+        <div class="row col-3" style="width: 50%; margin: 0.7rem">
+            <label for="msgTextarea" class="form-label fs-5 fw-bold">문자 전송</label>
+            <textarea class="form-control" id="msgTextarea" rows="5" style="margin: 0.5rem; padding-right: 0.5rem"></textarea>
+        </div>
+
+        <div class="row justify-content-end" style="width: 50%; margin: 0.7rem;">
+            <button type="button" class="col-2 btn text-light fs-5 fw-bold" id="sendBtn" onclick="onClickSendBtn();" style="background-color: #FA9622;" >문자 전송</button>
+        </div>
+
+        <div class="row justify-content-end">
+            <img id="QRImage" src="">
+        </div>
+
     </form>
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
+        <script type="text/javascript" src="/static/script/taxi_func.js"></script>
     </div>
+
 </body>
 </html>

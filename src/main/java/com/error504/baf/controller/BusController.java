@@ -23,7 +23,7 @@ public class BusController {
     }
 
     @GetMapping("/bus")
-    public String callBusApi() throws IOException {
+    public String setBusPage() throws IOException {
         return "/baf_map/bus";
     }
 
@@ -41,5 +41,18 @@ public class BusController {
         ArrayList stationInfo = busService.getLowStaionByUid(input.get("arsId").toString());
 
         return stationInfo;
+    }
+
+    @PostMapping("/bus/bus-info")
+    @ResponseBody
+    public ArrayList[] busInfo(@RequestBody Map<String, Object> input) throws IOException {
+        ArrayList busInfo = busService.getRouteInfoItem(input.get("busRouteId").toString());
+        ArrayList busRouteInfo = busService.getStaionsByRouteList(input.get("busRouteId").toString());
+
+        ArrayList<ArrayList>[] result = new ArrayList[2];
+        result[0] = busInfo;
+        result[1] = busRouteInfo;
+
+        return result;
     }
 }

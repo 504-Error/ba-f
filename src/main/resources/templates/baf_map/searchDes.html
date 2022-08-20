@@ -6,38 +6,19 @@
         layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Bus</title>
+    <title>Title</title>
     <link rel="stylesheet" href="/static/css/map/icon/bus-page.css">
 </head>
-
 <body>
 <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
 
 <div layout:fragment="content">
-    <nav class="sub-navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <ul class="nav justify-content-center">
-                <li class="nav-item">
-                    <a class="nav-link" href="icon">아이콘</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="direction">길찾기</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link-select" href="#">저상버스</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="search">검색</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="taxi">장애인 콜택시</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
     <div id="map_wrapper" class="map_wrap">
         <div id="map" style="width:100%;height:100vh;position:relative;overflow:hidden;"></div>
+        <div class="hAddr" style="float: right;">
+            <span class="title">지도중심기준 행정동 주소정보</span>
+            <span id="centerAddr"></span>
+        </div>
 
         <div id="menu_wrap" class="bg_white" style="height:90vh;float:left;">
             <div class="option">
@@ -52,15 +33,17 @@
             <ul id="placesList"></ul>
             <div id="pagination"></div>
         </div>
-
     </div>
+
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
     <script type="text/javascript" src="/static/script/load_map.js"></script>
-    <script type="text/javascript" src="/static/script/bus_func.js"></script>
+    <script type="text/javascript" src="/static/script/taxi_destination.js"></script>
+
 
 </div>
+
 </body>
 </html>

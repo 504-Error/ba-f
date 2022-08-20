@@ -6,7 +6,6 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 
 // 지도를 생성합니다
 var map = new kakao.maps.Map(mapContainer, mapOption);
-
 var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png'
 
 function currentLocation() {
