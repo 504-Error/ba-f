@@ -1,7 +1,6 @@
 package com.error504.baf.service;
 
 import com.error504.baf.exception.DataNotFoundException;
-import com.error504.baf.model.Question;
 import com.error504.baf.model.Review;
 import com.error504.baf.model.ReviewImage;
 import com.error504.baf.model.SiteUser;
@@ -203,6 +202,7 @@ public class ReviewService {
             return criteriaBuilder.and(predicate1, predicate2);
         };
     }
+
 
 //    public void uploadReview(Map<String, Object> param, List<MultipartFile> fileList) throws Exception {
 //        boardMapper.insertMypageQna(param);

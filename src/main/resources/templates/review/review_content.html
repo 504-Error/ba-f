@@ -221,6 +221,17 @@
 
     <!--    div 겹침 방지-->
     <div style="clear:both;"></div>
+    <div th:if="${#lists.size(review.reviewImages)} > 0" class="review-content-area">
+        <label class="form-label">이미지</label>
+        <div class="col-12">
+            <div class="board-preview-add-img" th:each="imgPath : ${review.reviewImages}">
+                <img class="btn preview-img float-start" th:src="@{|/review/display?filePath=${imgPath.getImage()}|}">
+            </div>
+        </div>
+    </div>
+
+    <!--    div 겹침 방지-->
+    <div style="clear:both;"></div>
     <h5 class="my-3 border-top border-bottom pt-4 pb-2">댓글</h5>
     <div class="review-content-area mb-5">
         <form th:action="@{|/review/comment/create/${review.id}|}" th:object="${reviewCommentForm}" method="post">
