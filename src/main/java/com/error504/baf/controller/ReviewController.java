@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.error504.baf.controller.ReviewSearchPerform.getPerformData;
+import static com.error504.baf.controller.ReviewSearchPerformController.getPerformData;
 
 @RequestMapping("/review")
 @RequiredArgsConstructor
@@ -49,6 +49,7 @@ public class ReviewController {
     @RequestMapping("")
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+        // 카테고리 없이 카테고리 자체도 검색 키워드가 될 수 있도록...!
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, "");
         model.addAttribute("reviewPage", reviewPage);
         model.addAttribute("keyword", keyword);
@@ -57,7 +58,8 @@ public class ReviewController {
 
     @RequestMapping("/{category}")
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
-                       @RequestParam(value = "keyword", defaultValue = "") String keyword, @PathVariable("category") String category) {
+                             @RequestParam(value = "keyword", defaultValue = "") String keyword,
+                             @PathVariable("category") String category) {
         logger.info("category : " + category);
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
         model.addAttribute("reviewPage", reviewPage);
@@ -118,6 +120,7 @@ public class ReviewController {
 //        return "redirect:/review";
 //    }
 
+    // 뭔가 예외처리가 필요할 것 같음
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/upload")
     @ResponseBody
@@ -152,13 +155,10 @@ public class ReviewController {
 
         logger.info("review id : " + id);
 
-        StringBuilder stringBuilder = new StringBuilder();
         String uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_image").toString();
 
-//        String root = request.getContextPath();
-//        String relativeFolder = File.separator + "resources" + File.separator + "static" + File.separator + "image" + File.separator + "upload_image" + File.separator;
-
         for (int i = 0; i < imageList.size(); i++){
+            StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("/");
             stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
             stringBuilder.append(imageList.get(i).getOriginalFilename());
@@ -173,6 +173,7 @@ public class ReviewController {
             }
 
             Review review = this.reviewService.getReview(id);
+            logger.info("path.toString" + path.toString());
             this.reviewService.uploadImage(review, path.toString());
         }
 
@@ -191,7 +192,7 @@ public class ReviewController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
-    public String questionVote(Principal principal, @PathVariable("id") Long id) {
+    public String reviewVote(Principal principal, @PathVariable("id") Long id) {
         Review review = this.reviewService.getReview(id);
         SiteUser siteUser = this.userService.getUser(principal.getName());
         this.reviewService.vote(review, siteUser);
@@ -200,13 +201,22 @@ public class ReviewController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
-    public String questionDelete(Principal principal, @PathVariable("id") Long id) {
+    public String reviewDelete(Principal principal, @PathVariable("id") Long id) {
         Review review = this.reviewService.getReview(id);
         if (!review.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
         this.reviewService.delete(review);
-        return "redirect:/";
+        return "redirect:/review";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/accuser/{id}")
+    public String reviewAccuser(Principal principal, @PathVariable("id") Long id) {
+        Review review = this.reviewService.getReview(id);
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+        this.reviewService.accuse(review, siteUser);
+        return String.format("redirect:/review/content/%s", id);
     }
 
     @GetMapping("/create/search/place/*")
@@ -221,6 +231,7 @@ public class ReviewController {
 
         model.addAttribute("performInfoList", performInfoList);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("genre", genre);
 
         return "review/review_search_perform";
     }

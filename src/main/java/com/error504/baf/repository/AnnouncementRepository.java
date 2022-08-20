@@ -1,14 +1,12 @@
 package com.error504.baf.repository;
 
-import com.error504.baf.model.Board;
+import com.error504.baf.model.Announcement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BoardRepository extends JpaRepository<Board, Long> {
-    Page<Board> findAll(Pageable pageable);
-    Board findBoardById(Long id);
+public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
+    Page<Announcement> findAll(Specification<Announcement> spec, Pageable pageable);
 
-    Page<Board> findAll(Specification<Board> spec, Pageable pageable);
 }

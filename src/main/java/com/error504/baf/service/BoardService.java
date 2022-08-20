@@ -1,20 +1,16 @@
 package com.error504.baf.service;
 
-import com.error504.baf.model.Answer;
-import com.error504.baf.model.Board;
-import com.error504.baf.model.Question;
-import com.error504.baf.model.SiteUser;
+import com.error504.baf.model.*;
 import com.error504.baf.repository.BoardRepository;
-import com.error504.baf.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +22,14 @@ public class BoardService {
     @Autowired
     public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
+    }
+
+    public Page<Board> getList(int page, String keyword) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
+        Specification<Board> spec = searchBoard(keyword);
+        return boardRepository.findAll(spec, pageable);
     }
 
     public Page<Board> getList(int page) {
@@ -49,5 +53,16 @@ public class BoardService {
         return boardRepository.findBoardById(id);
     }
 
+    public void delete(Board board) {
+        this.boardRepository.delete(board);
+    }
+
+    public Specification searchBoard(String keyword) {
+        return (board, query, criteriaBuilder) -> {
+            query.distinct(true);
+
+            return criteriaBuilder.like(board.get("boardName"), "%" + keyword + "%");
+        };
+    }
 
 }

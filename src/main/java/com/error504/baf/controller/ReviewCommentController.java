@@ -5,6 +5,7 @@ import com.error504.baf.service.ReviewCommentService;
 import com.error504.baf.service.ReviewService;
 import com.error504.baf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ public class ReviewCommentController {
         this.reviewCommentService = reviewCommentService;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/review/comment/create/{id}")
     public String createReviewComment(Model model, @PathVariable("id") Long id,
                                       @Valid ReviewCommentForm reviewCommentForm, BindingResult bindingResult, Principal principal) {

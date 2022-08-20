@@ -1,12 +1,7 @@
 package com.error504.baf.controller;
 
 import com.error504.baf.model.ReviewPerformInfo;
-import com.error504.baf.service.ReviewService;
-import com.error504.baf.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,7 +15,7 @@ import java.util.ArrayList;
 
 @RequiredArgsConstructor
 @Controller
-public class ReviewSearchPerform {
+public class ReviewSearchPerformController {
     public static ArrayList<ReviewPerformInfo> getPerformData(int genreNum, String keyword) {
         ArrayList<ReviewPerformInfo> performInfo = new ArrayList<ReviewPerformInfo>();
 

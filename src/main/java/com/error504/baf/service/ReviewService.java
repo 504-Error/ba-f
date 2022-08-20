@@ -1,8 +1,8 @@
 package com.error504.baf.service;
 
 import com.error504.baf.exception.DataNotFoundException;
+import com.error504.baf.model.Question;
 import com.error504.baf.model.Review;
-import com.error504.baf.model.ReviewComment;
 import com.error504.baf.model.ReviewImage;
 import com.error504.baf.model.SiteUser;
 import com.error504.baf.repository.ReviewImageRepository;
@@ -16,16 +16,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -53,6 +51,14 @@ public class ReviewService {
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
         Specification<Review> spec = searchReview(keyword, category);
+        return this.reviewRepository.findAll(spec, pageable);
+    }
+
+    public Page<Review> getListWithUsername(int page, String keyword, int categoryId) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
+        Specification<Review> spec = searchReviewWithUsername(keyword, categoryId);
         return this.reviewRepository.findAll(spec, pageable);
     }
 
@@ -84,8 +90,7 @@ public class ReviewService {
 //        reviewImage.setImageNUm(num);
         reviewImage.setImage(path);
         reviewImage.setReview(review);
-
-        this.reviewRepository.save(review);
+        this.reviewImageRepository.save(reviewImage);
     }
 
 //    public List<ReviewImage> loadImage() {
@@ -96,6 +101,11 @@ public class ReviewService {
 
     public void vote(Review review, SiteUser siteUser){
         review.getVoter().add(siteUser);
+        this.reviewRepository.save(review);
+    }
+
+    public void accuse(Review review, SiteUser siteUser){
+        review.getAccuser().add(siteUser);
         this.reviewRepository.save(review);
     }
 
@@ -136,6 +146,55 @@ public class ReviewService {
             Predicate predicate1 = criteriaBuilder.or(
                     criteriaBuilder.like(review.get("subject"), "%" + keyword + "%"),
                     criteriaBuilder.like(review.get("place"),  "%" + keyword + "%")
+            );
+
+            Predicate predicate2 = criteriaBuilder.and(review.get("genre").in(categories));
+
+
+            return criteriaBuilder.and(predicate1, predicate2);
+        };
+    }
+
+    private Specification searchReviewWithUsername(String keyword, int categoryId){
+        return (review, query, criteriaBuilder) -> {
+            query.distinct(true);
+
+            List<String> categories = new ArrayList<>();
+
+            switch(categoryId){
+                case 1:
+                    categories.add("음식점");
+                    break;
+                case 2:
+                    categories.add("카페");
+                    break;
+                case 3:
+                    categories.add("뮤지컬");
+                    break;
+                case 4:
+                    categories.add("연극");
+                    break;
+                case 5:
+                    categories.add("기타 공연");
+                    break;
+                case 6:
+                    categories.add("기타");
+                    break;
+                default:
+                    categories.add("음식점");
+                    categories.add("카페");
+                    categories.add("뮤지컬");
+                    categories.add("연극");
+                    categories.add("기타 공연");
+                    categories.add("기타");
+            }
+
+            Join<Review, SiteUser> siteUser = review.join("author", JoinType.LEFT);
+
+            Predicate predicate1 = criteriaBuilder.or(
+                    criteriaBuilder.like(review.get("subject"), "%" + keyword + "%"),
+                    criteriaBuilder.like(review.get("place"),  "%" + keyword + "%"),
+                    criteriaBuilder.like(siteUser.get("username"),  "%" + keyword + "%")
             );
 
             Predicate predicate2 = criteriaBuilder.and(review.get("genre").in(categories));

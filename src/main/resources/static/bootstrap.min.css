@@ -12208,6 +12208,10 @@ textarea.form-control-lg {
     padding: 0;
 }
 
+.admin-nav-menu, .admin-nav-child-menu {
+    list-style:none;
+}
+
 .admin-nav-menu li a {
     height:30px;
     line-height:30px;
@@ -12222,10 +12226,8 @@ textarea.form-control-lg {
     color:white;
 }
 
-.admin-section {
-    padding-left:220px;
-    padding-top:20px;
-    padding-right:20px;
-    padding-bottom:20px;
-    padding:20px;
+.admin-main {
+    margin-left: 200px;
+    padding: 1rem 3rem;
 }
+

@@ -60,4 +60,7 @@ public class Review {
 
     @ManyToMany
     Set<SiteUser> voter;
+
+    @ManyToMany
+    Set<SiteUser> accuser;
 }

@@ -18,8 +18,6 @@ public class Board {
     private String boardName;
     private String boardIntro;
 
-
-
     @OneToMany (mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Question> questionList;
 }

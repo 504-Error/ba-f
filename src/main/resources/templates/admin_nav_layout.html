@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:layout="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
+    <title>Ba-f : 관리자 페이지</title>
+</head>
+<body>
+
+<header class="navbar navbar-expand-lg navbar-fix">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/management/account/0}">
+            <img src="/static/image/ba-f_logo.png" alt="" width="90" height="40">
+        </a>
+        <h3>관리자 페이지</h3>
+        <div class="d-flex">
+            <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/login}">LOGIN</a>
+            <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">LOGOUT</a>
+        </div>
+    </div>
+</header>
+
+<nav class="sideNav">
+    <ul class="admin-nav-menu">
+        <li><a href="#">메인</a></li>
+        <li><a th:href="@{/management/account/0}">회원 관리</a>
+            <ul class="admin-nav-child-menu">
+                <li><a th:href="@{/management/account/0}">가입 대기 회원</a></li>
+                <li><a th:href="@{/management/account/1}">회원 관리</a>
+            </ul></li>
+        <li><a th:href="@{/management/board}">게시판 관리</a></li>
+        <li><a th:href="@{/management/content/0}">글 관리</a>
+            <ul class="admin-nav-child-menu">
+                <li><a th:href="@{/management/content/0}">게시판 글 관리</a></li>
+                <li><a th:href="@{/management/content/1}">리뷰 관리</a>
+            </ul>
+        </li>
+        <li><a th:href="@{/management/announce}">기타</a>
+            <ul class="admin-nav-child-menu">
+                <li><a th:href="@{/management/announce}">공지사항 관리</a></li>
+                <li><a href="#">몰라요</a>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<th:block layout:fragment="content"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+</body>
+</html>

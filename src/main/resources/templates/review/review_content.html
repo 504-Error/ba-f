@@ -43,6 +43,10 @@
            class="delete btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"
            th:if="${review.author != null and #authentication.getPrincipal().getUsername() == review.author.username}"
            th:text="삭제"></a>
+        <a href="javascript:void(0);" th:data-uri="@{|/review/accuser/${review.id}|}"
+           class="accuse btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"
+           th:unless="${review.author != null and #authentication.getPrincipal().getUsername() == review.author.username}"
+           th:text="신고"></a>
         <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
         <div class="ms-5">
             <p class="fw-bolder mb-0 content-nickname" th:if="${review.isAnonymous == true}" th:text="익명"></p>
@@ -325,6 +329,15 @@
     Array.from(delete_elements).forEach(function(element) {
         element.addEventListener('click', function() {
             if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+
+    const accuse_elements = document.getElementsByClassName("accuse");
+    Array.from(accuse_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 신고하시겠습니까?")) {
                 location.href = this.dataset.uri;
             };
         });

@@ -45,12 +45,14 @@ public class QuestionService {
 
 
 
-    public Page<Question> getList(int page){
+    public Page<Question> getAllQuestion(int page, String keyword, int boardId){
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
-        return questionRepository.findAll(pageable);
+        Specification<Question> spec = searchQuestion(keyword, boardId);
+        return questionRepository.findAll(spec, pageable);
     }
+
     public List<Question> getHotList(){
         List<Question> questionList = new ArrayList<>();
         questionList = questionRepository.findAll();
@@ -159,7 +161,29 @@ public class QuestionService {
     }
 
     public void delete(Question question) {
-        questionRepository.delete(question); }
+        questionRepository.delete(question);
+    }
 
+    private Specification searchQuestion(String keyword, int boardId) {
+        return (question, query, criteriaBuilder) -> {
+            query.distinct(true);
+
+            Join<Question, SiteUser> siteUser = question.join("author", JoinType.LEFT);
+
+            Predicate predicate1 = criteriaBuilder.or(
+                    criteriaBuilder.like(question.get("subject"), "%" + keyword + "%"),
+                    criteriaBuilder.like(question.get("content"), "%" + keyword + "%"),
+                    criteriaBuilder.like(siteUser.get("username"),  "%" + keyword + "%")
+            );
+
+            if (boardId == 0) {
+                return predicate1;
+            } else {
+                Predicate predicate2 = criteriaBuilder.equal(question.get("board"), boardId);
+
+                return criteriaBuilder.and(predicate1, predicate2);
+            }
+        };
+    }
 
 }

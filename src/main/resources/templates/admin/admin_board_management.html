@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{admin_main}">
+<head>
+    <meta charset="UTF-8">
+    <title>ba-f : 관리자 페이지</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
+</head>
+<body>
+<div layout:fragment="content" class="container my-3 admin-main">
+    <h5 class="my-3 border-bottom pb-2">게시판 관리</h5>
+
+    <div class="float-end" style="width: 30%">
+        <form th:action="@{|/management/board|}" method="get" id="searchForm">
+            <div class="input-group mb-3 me-sm-3">
+                <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control" placeholder="게시판 검색" aria-label="review search" aria-describedby="button-addon2">
+                <input type="hidden" id="page" name="page" th:value="${boardPage.number}">
+                <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
+            </div>
+        </form>
+    </div>
+
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <th>번호</th>
+            <th>게시판</th>
+            <th>게시글 수</th>
+            <th>게시판 관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board, loop : ${boardPage}">
+            <td th:text="${boardPage.getTotalElements - (boardPage.number * boardPage.size) - loop.index}"></td>
+            <td th:text="${board.boardName}"></td>
+            <td th:text="${#lists.size(board.questionList)}"></td>
+            <td>
+                <!--                관리자 권한 확인 필요!-->
+                <a href="javascript:void(0);" th:data-uri="@{|/management/board/delete/${board.id}|}"
+                   class="delete btn btn-danger">삭제</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!boardPage.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!boardPage.hasPrevious} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${boardPage.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, boardPage.totalPages-1)}"
+                th:if="${page >= boardPage.number-5 and page <= boardPage.number+5}"
+                th:classappend="${page == boardPage.number} ? 'active'" class="page-item">
+                <a th:text="${page+1}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!boardPage.hasNext} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${boardPage.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<script layout:fragment="script" type='text/javascript'>
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+    const btn_search = document.getElementById("review-button-search");
+    btn_search.addEventListener('click', function() {
+        document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+        document.getElementById('searchForm').submit();
+    });
+
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+</script>
+
+</body>
+</html>

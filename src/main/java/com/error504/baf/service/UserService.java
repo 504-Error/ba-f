@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,11 +38,20 @@ public class UserService {
         }
     }
 
-    public Page<SiteUser> getList(int page, String keyword) {
+    public SiteUser getUser(Long id){
+        Optional<SiteUser> siteUser = userRepository.findById(id);
+        if(siteUser.isPresent()){
+            return siteUser.get();
+        }else{
+            throw new DataNotFoundException("siteuser not found");
+        }
+    }
+
+    public Page<SiteUser> getList(int page, String keyword, int getAuth) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("id"));
         Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
-        Specification<SiteUser> spec = searchUser(keyword);
+        Specification<SiteUser> spec = searchUser(keyword, getAuth);
         return this.userRepository.findAll(spec, pageable);
     }
 
@@ -65,15 +75,23 @@ public class UserService {
         userRepository.save(siteUser);
     }
 
-    public void deleteMember(SiteUser siteUser) {
-       userRepository.delete(siteUser);
+    public void updateMemberAuth(SiteUser siteUser, int updateAuth) {
+        siteUser.upadteAuth(updateAuth);
+        userRepository.save(siteUser);
     }
 
-    private Specification searchUser(String keyword){
-        return (review, query, criteriaBuilder) -> {
+    public void deleteMember(SiteUser siteUser) {
+        userRepository.delete(siteUser);
+    }
+
+    private Specification searchUser(String keyword, int getAuth){
+        return (user, query, criteriaBuilder) -> {
             query.distinct(true);
 
-            return criteriaBuilder.like(review.get("username"), "%" + keyword + "%");
+            return criteriaBuilder.and(
+                    criteriaBuilder.like(user.get("username"), "%" + keyword + "%"),
+                    criteriaBuilder.equal(user.get("getAuth"), getAuth)
+            );
         };
     }
 }

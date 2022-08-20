@@ -34,6 +34,9 @@ public class SiteUser {
     public void updateEmail(String newEmail) {
         this.email = newEmail;
     }
+    public void upadteAuth(int newAuth){
+        this.getAuth = newAuth;
+    }
 
 
 }

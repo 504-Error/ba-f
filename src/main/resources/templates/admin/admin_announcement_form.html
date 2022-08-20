@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{admin_main}">
+<head>
+    <meta charset="UTF-8">
+    <title>ba-f : 관리자 페이지</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
+</head>
+<body>
+<div layout:fragment="content" class="container my-3 admin-main">
+    <h5 class="my-3 border-bottom pb-2">공지사항 추가</h5>
+    <form th:action="@{/management/announce/create}" th:object="${announcementForm}" method="post">
+        <div th:replace="form_errors :: formErrorsFragment"></div>
+        <div class="mb-3">
+            <label id="subject" class="form-label">공지사항 제목</label>
+            <input type="text" name="subject" class="form-control"> </div>
+        <div class="mb-3">
+            <label id="content" class="form-label">공지사항 내용</label>
+            <textarea name="content" class="form-control" rows="10"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary my-2">저장</button>
+    </form>
+</div>
+</body>
+</html>

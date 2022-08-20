@@ -18,20 +18,20 @@
         <div class="review-header-content">
             <form th:action="@{/review/create/search/perform}" method="get" id="searchForm">
                 <select class="form-select float-start me-3" th:value="${genre}" name="genre" id="inputGenre" style="width: 17%">
-                    <option selected value="0">전체</option>
-                    <option value="1">뮤지컬</option>
-                    <option value="2">연극</option>
-                    <option value="3">클래식</option>
-                    <option value="4">오페라</option>
-                    <option value="5">무용</option>
-                    <option value="6">국악</option>
-                    <option value="7">기타</option>
+                    <option value="0" th:selected="${genre} == '0'">전체</option>
+                    <option value="1" th:selected="${genre} == '1'">뮤지컬</option>
+                    <option value="2" th:selected="${genre} == '2'">연극</option>
+                    <option value="3" th:selected="${genre} == '3'">클래식</option>
+                    <option value="4" th:selected="${genre} == '4'">오페라</option>
+                    <option value="5" th:selected="${genre} == '5'">무용</option>
+                    <option value="6" th:selected="${genre} == '6'">국악</option>
+                    <option value="7" th:selected="${genre} == '7'">기타</option>
                 </select>
 
                 <div id="review-search-input-group">
                     <div class="input-group mb-3 me-sm-3">
                         <input type="text" th:value="${keyword}" name="keyword" id="review-search-review-input" class="form-control" placeholder="공연을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-orange" type="submit" id="review-button-search">검색</button>
+                        <button class="btn btn-outline-orange" type="submit" id="button-review-search">검색</button>
                     </div>
                 </div>
             </form>
@@ -60,37 +60,37 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script>
-        const genreNum = new URLSearchParams(window.location.search).get("genre");
-        console.log("genreNum", genreNum);
-
-        switch (Number(genreNum)) {
-            case 0:
-                $("#inputGenre").val("0").prop("selected",true);
-                break;
-            case 1:
-                $("#inputGenre").val("1").prop("selected",true);
-                break;
-            case 2:
-                $("#inputGenre").val("2").prop("selected",true);
-                break;
-            case 3:
-                $("#inputGenre").val("3").prop("selected",true);
-                break;
-            case 4:
-                $("#inputGenre").val("4").prop("selected",true);
-                break;
-            case 5:
-                $("#inputGenre").val("5").prop("selected",true);
-                break;
-            case 6:
-                $("#inputGenre").val("6").prop("selected",true);
-                break;
-            case 7:
-                $("#inputGenre").val("7").prop("selected",true);
-                break;
-            default:
-                $("#inputGenre").val("0").prop("selected",true);
-        }
+        // const genreNum = new URLSearchParams(window.location.search).get("genre");
+        // console.log("genreNum", genreNum);
+        //
+        // switch (Number(genreNum)) {
+        //     case 0:
+        //         $("#inputGenre").val("0").prop("selected",true);
+        //         break;
+        //     case 1:
+        //         $("#inputGenre").val("1").prop("selected",true);
+        //         break;
+        //     case 2:
+        //         $("#inputGenre").val("2").prop("selected",true);
+        //         break;
+        //     case 3:
+        //         $("#inputGenre").val("3").prop("selected",true);
+        //         break;
+        //     case 4:
+        //         $("#inputGenre").val("4").prop("selected",true);
+        //         break;
+        //     case 5:
+        //         $("#inputGenre").val("5").prop("selected",true);
+        //         break;
+        //     case 6:
+        //         $("#inputGenre").val("6").prop("selected",true);
+        //         break;
+        //     case 7:
+        //         $("#inputGenre").val("7").prop("selected",true);
+        //         break;
+        //     default:
+        //         $("#inputGenre").val("0").prop("selected",true);
+        // }
 
         function selectPerform(selectObject, performTitle, performFacility) {
             console.log("performTitle : ", performTitle);
@@ -130,7 +130,6 @@
 
             location.href = "/review/create";
         }
-
     </script>
 
 </div>
