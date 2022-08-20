@@ -66,8 +66,9 @@
         <div class="option">
             <div>
                 <form onsubmit="searchPlaces(); return false;">
-                    키워드 : <input type="text" value="태릉입구 맛집" id="keyword" size="15">
-                    <button type="submit" style="background-color:#ffffff; border-color:#FA9622;color:#FA9622">검색하기</button>
+                    키워드 :
+                    <input type="text" th:value="${keyword}" name="kw" id="keyword" aria-label="review search" aria-describedby="button-addon2" size="15">
+                    <button type="submit" style="background-color:#ffffff; border-color:#FA9622;color:#FA9622" id="review-button-search">검색하기</button>
                 </form>
             </div>
         </div>
@@ -75,18 +76,20 @@
         <ul id="placesList"></ul>
         <div id="pagination"></div>
     </div>
-    <div class="map_info_wrap">
-        <div id="menu_info_wrap" class="bg_white">
-            <!-- 이게 창 -->
-        </div>
-    </div>
 </div>
 
 
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6f5ee4dc680406f1dbe36437ebafb94f&libraries=services"></script>
-<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>-->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
 <script type="text/javascript" src="/static/script/search.js"></script>
+<script>
+    const btn_search = document.getElementById("review-button-search");
+    btn_search.addEventListener('click', function() {
+        document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+        document.getElementById('searchForm').submit();
+    });
+</script>
 
 </body>
 </html>

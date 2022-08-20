@@ -29,7 +29,7 @@ public class TaxiService {
             InputStream is = conn.getInputStream();
             System.out.println("test! : " + is);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            is.transferTo(byteArrayOutputStream);
+            //is.transferTo(byteArrayOutputStream);
             byte[] bytesData = byteArrayOutputStream.toByteArray();
             System.out.println(new String(bytesData));
             is.close();

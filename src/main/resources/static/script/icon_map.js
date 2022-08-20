@@ -189,3 +189,4 @@ function changeCategoryClass(el) {
         el.className = 'on';
     }
 }
+
