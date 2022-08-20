@@ -149,8 +149,7 @@ function addMarker(position, idx, title) {
 }
 
 // 버스 정류장 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
-function addBSMarker(position, idx) {
-    //console.log(position);
+function addBSMarker(position) {
     var imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
         imageSize = new kakao.maps.Size(40, 40),  // 마커 이미지의 크기
         imgOptions =  {
@@ -166,8 +165,6 @@ function addBSMarker(position, idx) {
 
     marker.setMap(map); // 지도 위에 마커를 표출합니다
     BSmarkers.push(marker);  // 배열에 생성된 마커를 추가합니다
-
-    //console.log(marker.getPosition());
 
     return marker;
 }
@@ -405,7 +402,6 @@ function onClickBusInfo(RouteId) {
             jqXHR.setRequestHeader(header, token);
         },
         success: function (result) {
-            console.log(result);
             busSearchCB(result);
         }
     });
