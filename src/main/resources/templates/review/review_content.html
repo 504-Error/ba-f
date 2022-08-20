@@ -225,7 +225,7 @@
         <label class="form-label">이미지</label>
         <div class="col-12">
             <div class="board-preview-add-img" th:each="imgPath : ${review.reviewImages}">
-                <img class="btn preview-img float-start" th:src="@{|/review/display?filePath=${imgPath.getImage()}|}">
+                <img class="btn preview-img float-start" th:src="@{|/display?filePath=${imgPath.getImage()}|}">
             </div>
         </div>
     </div>

@@ -61,7 +61,7 @@
     <div class="card my-3" th:each="review : ${reviewPage}" style="clear:right">
         <a th:href="@{|/review/content/${review.id}|}" style="text-decoration:none; color:inherit">
             <div class="image-box float-start me-3" th:if="${#lists.size(review.reviewImages)} > 0">
-                <img class="image-thumbnail" th:src="@{|/review/display?filePath=${review.reviewImages.get(0).getImage()}|}">
+                <img class="image-thumbnail" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}">
             </div>
             <div class="card-body">
                 <div class="review-content-area mt-0 mb-3">

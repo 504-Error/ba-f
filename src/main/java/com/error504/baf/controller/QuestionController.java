@@ -14,10 +14,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.Principal;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,26 +37,26 @@ public class QuestionController {
     private UserService userService;
 
     @Autowired
-    public QuestionController(QuestionService questionService, UserService userService, BoardService boardService){
+    public QuestionController(QuestionService questionService, UserService userService, BoardService boardService) {
         this.questionService = questionService;
         this.userService = userService;
         this.boardService = boardService;
     }
 
     @RequestMapping("/question/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
-        List<Question> weeklyList=questionService.getWeeklyHotList();
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        List<Question> weeklyList = questionService.getWeeklyHotList();
         model.addAttribute("weeklyList", weeklyList);
-        List<Question> hotList=questionService.getHotList();
+        List<Question> hotList = questionService.getHotList();
         model.addAttribute("hotList", hotList);
 
         return "community/question_list";
     }
 
     @PreAuthorize("isAuthenticated()")
-     @GetMapping("/question/hotList")
+    @GetMapping("/question/hotList")
     public String hotList(Model model) {
-         List<Question> hotList=questionService.getHotList();
+        List<Question> hotList = questionService.getHotList();
         model.addAttribute("hotList", hotList);
         return "community/hot_board";
     }
@@ -56,14 +64,14 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/weeklyHotList")
     public String weeklyHotList(Model model) {
-        List<Question> weeklyList=questionService.getWeeklyHotList();
+        List<Question> weeklyList = questionService.getWeeklyHotList();
         model.addAttribute("weeklyList", weeklyList);
         return "community/weekly_board";
     }
 
     @GetMapping(value = "/question/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm){
-        logger.info("Viewing Question detail: "+id);
+    public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm) {
+        logger.info("Viewing Question detail: " + id);
         Question question = questionService.getQuestion(id);
         model.addAttribute("question", question);
 
@@ -72,16 +80,17 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/create/{id}")
-    public String questionCreate(QuestionForm questionForm,  @PathVariable("id") Long boardId, Model model){
+    public String questionCreate(QuestionForm questionForm, @PathVariable("id") Long boardId, Model model) {
         List<Board> board = boardService.findAll();
         model.addAttribute("boardId", boardId);
         model.addAttribute("board", board);
         return "community/question_form";
 
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/create/")
-    public String questionCreateNull(QuestionForm questionForm, Model model){
+    public String questionCreateNull(QuestionForm questionForm, Model model) {
         List<Board> board = boardService.findAll();
         model.addAttribute("board", board);
         return "community/question_form";
@@ -89,21 +98,59 @@ public class QuestionController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/question/create")
-    public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult,
-                                 Principal principal)
-    {
-        if(bindingResult.hasErrors()) {
-            return "community/question_form";
-        }
+    @PostMapping("/question/create/upload")
+    @ResponseBody
+    public Long questionCreate(@Valid @RequestPart(name = "contentData") QuestionForm questionForm,
+                                 @RequestPart(name = "images", required = false) List<MultipartFile> imageList,
+                                 BindingResult bindingResult, Principal principal, HttpServletRequest request) throws IOException {
+
         SiteUser siteUser = userService.getUser(principal.getName());
         logger.info(questionForm.getBoardId().toString());
         Board board = boardService.getBoard(questionForm.getBoardId());
         Long boardId = questionForm.getBoardId();
         logger.info(siteUser.toString());
-        questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board);
-        return String.format("redirect:/board/question_list/%s", boardId);
+        Long id = questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board);
+
+        String uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_image").toString();
+
+        for (int i = 0; i < imageList.size(); i++){
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("/");
+            stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
+            stringBuilder.append(imageList.get(i).getOriginalFilename());
+
+            File path = new File(uploadRoot + stringBuilder);
+            try {
+                imageList.get(i).transferTo(path);
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Question question = this.questionService.getQuestion(id);
+            this.questionService.uploadImage(question, path.toString());
+        }
+
+        return boardId;
     }
+
+
+//    @PreAuthorize("isAuthenticated()")
+//    @PostMapping("/question/create")
+//    public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult,
+//                                 Principal principal) {
+//        if (bindingResult.hasErrors()) {
+//            return "community/question_form";
+//        }
+//        SiteUser siteUser = userService.getUser(principal.getName());
+//        logger.info(questionForm.getBoardId().toString());
+//        Board board = boardService.getBoard(questionForm.getBoardId());
+//        Long boardId = questionForm.getBoardId();
+//        logger.info(siteUser.toString());
+//        questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board);
+//        return String.format("redirect:/board/question_list/%s", boardId);
+//    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/vote/{id}")
@@ -121,8 +168,10 @@ public class QuestionController {
         Question question = this.questionService.getQuestion(id);
         if (!question.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-        } this.questionService.delete(question);
-        return "redirect:/question/list"; }
+        }
+        this.questionService.delete(question);
+        return "redirect:/question/list";
+    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/accuse/{id}")
@@ -130,7 +179,7 @@ public class QuestionController {
         Question question = questionService.getQuestion(id);
         SiteUser siteUser = userService.getUser(principal.getName());
         questionService.accuse(question, siteUser);
-      //신고가 접수되었습니다
+        //신고가 접수되었습니다
         return String.format("redirect:/question/detail/%s", id);
 
     }
@@ -141,13 +190,10 @@ public class QuestionController {
     }
 
 
-
-
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/board/question_list/{id}")
-    public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value="page", defaultValue="0") int page) {
-        Page<Question> questionList = questionService.getQuestionResult(id,page);
+    public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Question> questionList = questionService.getQuestionResult(id, page);
         Board board = boardService.getBoard(id);
         model.addAttribute("questionList", questionList);
         model.addAttribute("board", board);
@@ -155,8 +201,8 @@ public class QuestionController {
     }
 
     @RequestMapping("/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page,
-        @RequestParam(value="kw", defaultValue="") String kw){
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+                       @RequestParam(value = "kw", defaultValue = "") String kw) {
         Page<Question> paging = this.questionService.getList(page, kw);
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
@@ -165,15 +211,13 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/user/mypage/write")
-    public String myPageWrite(Model model, Principal principal, @RequestParam(value="page", defaultValue="0") int page){
+    public String myPageWrite(Model model, Principal principal, @RequestParam(value = "page", defaultValue = "0") int page) {
         SiteUser siteUser = userService.getUser(principal.getName());
         Page<Question> questionList = questionService.getQuestionResultByUser(siteUser.getId(), page);
         model.addAttribute("siteUser", siteUser);
         model.addAttribute("questionList", questionList);
         return "account/my_page_write";
     }
-
-
 
 
 //    @PreAuthorize("isAuthenticated()")

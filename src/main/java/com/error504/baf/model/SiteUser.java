@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,6 +28,14 @@ public class SiteUser {
     private int getWheel;
 
     private int getAuth;
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "review_voter", joinColumns = @JoinColumn(name = "voter_id"), inverseJoinColumns = @JoinColumn(name = "review_id"))
+    Set<Review> voter;
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "review_accuser", joinColumns = @JoinColumn(name = "accuser_id"), inverseJoinColumns = @JoinColumn(name = "review_id"))
+    Set<Review> accuser;
 
     public void updatePassword(String newPassword) {
         this.password = newPassword;

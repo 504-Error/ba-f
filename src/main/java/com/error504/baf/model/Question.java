@@ -27,6 +27,9 @@ public class Question {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    private List<QuestionImage> questionImages;
+
     private LocalDateTime createDate;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
@@ -44,6 +47,7 @@ public class Question {
     @Column(columnDefinition = "BOOLEAN")
     private Boolean isAnonymous;
     private String date;
+
     public String getDate( LocalDateTime time){
         date = Time.convertLocaldatetimeToTime(time);
         return date;

@@ -243,25 +243,5 @@ public class ReviewController {
         return "review/review_search_perform";
     }
 
-    @GetMapping(value = "/display")
-    public ResponseEntity<Resource> display(@Param("filePath") String filePath) {
-        logger.info("filePath : " + filePath);
-        FileSystemResource resource = new FileSystemResource(filePath);
 
-        if (!resource.exists()) {
-            return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
-        }
-
-        HttpHeaders header = new HttpHeaders();
-        try {
-            Path imgPath = Paths.get(filePath);
-            logger.info("img path : " + imgPath);
-
-            header.add("Content-Type", Files.probeContentType(imgPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
-    }
 }

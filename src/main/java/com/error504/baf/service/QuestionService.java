@@ -4,6 +4,7 @@ import com.error504.baf.Time;
 import com.error504.baf.exception.DataNotFoundException;
 import com.error504.baf.model.*;
 import com.error504.baf.repository.BoardRepository;
+import com.error504.baf.repository.QuestionImageRepository;
 import com.error504.baf.repository.QuestionRepository;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,14 @@ import javax.persistence.criteria.Root;
 @Service
 public class QuestionService {
     private QuestionRepository questionRepository;
+    private QuestionImageRepository questionImageRepository;
     private BoardRepository boardRepository;
 
 
     @Autowired
-    public QuestionService(QuestionRepository questionRepository, BoardRepository boardRepository){
+    public QuestionService(QuestionRepository questionRepository, QuestionImageRepository questionImageRepository){
         this.questionRepository = questionRepository;
+        this.questionImageRepository = questionImageRepository;
     }
 
 
@@ -140,8 +143,7 @@ public class QuestionService {
         }
     }
 
-
-    public void create(String subject, String content, SiteUser user, Board board)
+    public Long create(String subject, String content, SiteUser user, Board board)
     { Question q = new Question();
         q.setSubject(subject);
         q.setContent(content);
@@ -149,6 +151,16 @@ public class QuestionService {
         q.setAuthor(user);
         q.setBoard(board);
         questionRepository.save(q);
+        questionRepository.flush();
+
+        return q.getId();
+    }
+
+    public void uploadImage(Question question, String path) {
+        QuestionImage questionImage = new QuestionImage();
+        questionImage.setImage(path);
+        questionImage.setQuestion(question);
+        questionImageRepository.save(questionImage);
     }
 
     public void vote(Question question, SiteUser siteUser){
