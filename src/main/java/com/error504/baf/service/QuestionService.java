@@ -21,10 +21,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -67,6 +64,12 @@ public class QuestionService {
                 }
             }
         }
+
+        Collections.reverse(hotList);
+        if (hotList.size()>3){
+            hotList=hotList.subList(0,4);
+            return hotList;
+        }
         return hotList;
     }
 
@@ -79,9 +82,14 @@ public class QuestionService {
             if((question.getVoter()).size()>2){ //하트 개수 정하기
                 if(Time.getWeekOfYear(question.getCreateDate().toLocalDate().toString())==Time.getWeekOfYear(LocalDate.now().toString())){
                     weeklyList.add(question);
-                }
 
+                }
             }
+        }
+        Collections.reverse(weeklyList);
+        if (weeklyList.size()>3){
+            weeklyList=weeklyList.subList(0,4);
+            return weeklyList;
         }
         return weeklyList;
     }

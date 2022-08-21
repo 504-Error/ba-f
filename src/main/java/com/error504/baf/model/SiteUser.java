@@ -2,8 +2,10 @@ package com.error504.baf.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Getter
@@ -14,19 +16,20 @@ public class SiteUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     @Column(unique = true)
     private String username;
 
     private String password;
 
-    private String birthday;
+    private String name;
 
-    private int gender;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date birthday;
 
     @Column(unique = true)
     private String email;
+
+    private int gender;
 
     private int type;
 

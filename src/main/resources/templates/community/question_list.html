@@ -49,37 +49,6 @@
   </div>
 
   <div></div>
-  <a style="text-decoration:none; color:inherit">
-    <h5 class="border-bottom py-2" th:unless="${questionList.size==0}">
-      전체 게시물</h5>
-  </a>
-  <div th:each="question : ${questionList}">
-    <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
-      <div class="card my-3">
-        <div class="card-body" >
-          <div class="review-content-area mt-0 mb-4">
-            <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
-            <div class="ms-5">
-              <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></p>
-              <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
-            </div>
-
-            <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
-              <div th:text="${question.subject}"></div>
-            </div>
-
-            <div class="my-2">
-              <ul class="content-info">
-                <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
-                <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-  </div>
-
 
   <a style="text-decoration:none; color:inherit" th:href="@{/question/weeklyHotList}">
     <h5 class="border-bottom py-2" th:unless="${weeklyList.size==0}">

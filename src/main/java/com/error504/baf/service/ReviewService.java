@@ -1,6 +1,7 @@
 package com.error504.baf.service;
 
 import com.error504.baf.exception.DataNotFoundException;
+import com.error504.baf.model.Question;
 import com.error504.baf.model.Review;
 import com.error504.baf.model.ReviewImage;
 import com.error504.baf.model.SiteUser;
@@ -20,7 +21,9 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +55,28 @@ public class ReviewService {
         Specification<Review> spec = searchReview(keyword, category);
         return this.reviewRepository.findAll(spec, pageable);
     }
+
+    public List<Review> getReviewList(){
+        List<Review> reviewList = new ArrayList<>();
+        reviewList = reviewRepository.findAll();
+        List<Review> reviewHotList = new ArrayList<>();
+        for(Review review:reviewList){
+            if((review.getVoter()).size()>2){ //하트 개수 정하기
+                if(ChronoUnit.HOURS.between(review.getCreateDate(), LocalDateTime.now())<24){
+                    reviewHotList.add(review);
+                }
+            }
+        }
+
+        Collections.reverse(reviewHotList);
+        if (reviewHotList.size()>3){
+            reviewHotList=reviewHotList.subList(0,4);
+            return reviewHotList;
+        }
+        return reviewHotList;
+    }
+
+
 
     public Page<Review> getListWithUsername(int page, String keyword, int categoryId) {
         List<Sort.Order> sorts = new ArrayList<>();

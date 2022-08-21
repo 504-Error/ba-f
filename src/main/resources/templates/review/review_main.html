@@ -67,62 +67,67 @@
                     </h4>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
+                    <li class="list-group-item" th:each="review: ${reviewList}">
                         <a class="review-rate" href="#">
                             <span class="star">
-                                <span class="star-on" style="width: 60%">
-                                    <span class="blind">평점 3점</span>
+                                <span class="star-on" th:style="'width: ' + ${review.grade} * 20 + '%'">
+                                    <span class="blind" th:text="${review.grade}"></span>
                                 </span>
                             </span>
-                            <h4>[카페] A 카페</h4>
+                            <h4 th:text="'[' + ${review.genre} + '] ' + ${review.subject}"></h4>
                             <ul class="content-info">
-                                <li class="recommend">0</li>
-                                <li class="comment">0</li>
+                                <li class="recommend" th:text="${#lists.size(review.voter)}"></li>
+                                <li class="comment" th:text="${#lists.size(review.reviewCommentsList)}"></li>
                             </ul>
                         </a>
                     </li>
-                    <li class="list-group-item">
-                        <a class="review-rate" href="#">
-                            <span class="star">
-                                <span class="star-on" style="width: 80%">
-                                    <span class="blind">평점 4점</span>
-                                </span>
-                            </span>
-                            <h4>[뮤지컬] 아이다</h4>
-                            <ul class="content-info">
-                                <li class="recommend">5</li>
-                                <li class="comment">3</li>
-                            </ul>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="review-rate" href="#">
-                            <span class="star">
-                                <span class="star-on" style="width: 100%">
-                                    <span class="blind">평점 5점</span>
-                                </span>
-                            </span>
-                            <h4>[뮤지컬] 킹키부츠</h4>
-                            <ul class="content-info">
-                                <li class="recommend">7</li>
-                                <li class="comment">10</li>
-                            </ul>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="review-rate" href="#">
-                            <span class="star">
-                                <span class="star-on" style="width: 20%">
-                                    <span class="blind">평점 1점</span>
-                                </span>
-                            </span>
-                            <h4>[음식점] B 한식집</h4>
-                            <ul class="content-info">
-                                <li class="recommend">10</li>
-                                <li class="comment">3</li>
-                            </ul>
-                        </a>
-                    </li>
+
+<!--                        <li class="list-group-item">-->
+<!--                            <a class="review-rate" href="#">-->
+<!--                            <span class="star">-->
+<!--                                <span class="star-on" style="width: 80%">-->
+<!--                                    <span class="blind">평점 4점</span>-->
+<!--                                </span>-->
+<!--                            </span>-->
+<!--                                <h4>[뮤지컬] 아이다</h4>-->
+<!--                                <ul class="content-info">-->
+<!--                                    <li class="recommend">5</li>-->
+<!--                                    <li class="comment">3</li>-->
+<!--                                </ul>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li class="list-group-item">-->
+<!--                            <a class="review-rate" href="#">-->
+<!--                            <span class="star">-->
+<!--                                <span class="star-on" style="width: 100%">-->
+<!--                                    <span class="blind">평점 5점</span>-->
+<!--                                </span>-->
+<!--                            </span>-->
+<!--                                <h4>[뮤지컬] 킹키부츠</h4>-->
+<!--                                <ul class="content-info">-->
+<!--                                    <li class="recommend">7</li>-->
+<!--                                    <li class="comment">10</li>-->
+<!--                                </ul>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li class="list-group-item">-->
+<!--                            <a class="review-rate" href="#">-->
+<!--                            <span class="star">-->
+<!--                                <span class="star-on" style="width: 20%">-->
+<!--                                    <span class="blind">평점 1점</span>-->
+<!--                                </span>-->
+<!--                            </span>-->
+<!--                                <h4>[음식점] B 한식집</h4>-->
+<!--                                <ul class="content-info">-->
+<!--                                    <li class="recommend">10</li>-->
+<!--                                    <li class="comment">3</li>-->
+<!--                                </ul>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+
                 </ul>
             </div>
         </div>
