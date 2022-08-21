@@ -145,9 +145,9 @@ public class ReviewController {
         logger.info("no binding error");
         logger.info("reviewForm : " + reviewForm);
         logger.info("reviewForm.getGenre() : " + reviewForm.getGenre());
-        if (imageList.size() > 0) {
-            logger.info("imageList : " + imageList.get(0));
-        }
+//        if (imageList.size() > 0) {
+//            logger.info("imageList : " + imageList.get(0));
+//        }
 
 //        logger.info("imgUrl ArrayList : ", reviewForm.getImageUrl());
 //
@@ -166,28 +166,30 @@ public class ReviewController {
 
         String uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_image").toString();
 
-        for (int i = 0; i < imageList.size(); i++){
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("/");
-            stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
-            stringBuilder.append(imageList.get(i).getOriginalFilename());
+        if (imageList != null) {
+            for (int i = 0; i < imageList.size(); i++) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("/");
+                stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
+                stringBuilder.append(imageList.get(i).getOriginalFilename());
 
-            File path = new File(uploadRoot + stringBuilder);
-            try {
-                imageList.get(i).transferTo(path);
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                File path = new File(uploadRoot + stringBuilder);
+                try {
+                    imageList.get(i).transferTo(path);
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Review review = this.reviewService.getReview(id);
+                logger.info("path.toString" + path.toString());
+                this.reviewService.uploadImage(review, path.toString());
             }
-
-            Review review = this.reviewService.getReview(id);
-            logger.info("path.toString" + path.toString());
-            this.reviewService.uploadImage(review, path.toString());
         }
 
-        return id;
-    }
+            return id;
+        }
 
 //    @RequestMapping("/list")
 //    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page,

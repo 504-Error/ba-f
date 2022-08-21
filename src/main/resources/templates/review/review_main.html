@@ -67,8 +67,7 @@
                     </h4>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <div th:each="review: ${reviewList}">
-                    <li class="list-group-item">
+                    <li class="list-group-item" th:each="review: ${reviewList}">
                         <a class="review-rate" href="#">
                             <span class="star">
                                 <span class="star-on" th:style="'width: ' + ${review.grade} * 20 + '%'">
@@ -128,7 +127,6 @@
 <!--                </ul>-->
 <!--            </div>-->
 <!--        </div>-->
-                    </div>
 
                 </ul>
             </div>
