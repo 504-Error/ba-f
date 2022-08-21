@@ -10,15 +10,20 @@ import java.util.Set;
 @Setter
 @Entity
 public class SiteUser {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String name;
 
     @Column(unique = true)
     private String username;
 
     private String password;
+
+    private String birthday;
+
+    private int gender;
 
     @Column(unique = true)
     private String email;
@@ -26,6 +31,8 @@ public class SiteUser {
     private int type;
 
     private int getWheel;
+
+    private String certifyFilePath;
 
     private int getAuth;
 

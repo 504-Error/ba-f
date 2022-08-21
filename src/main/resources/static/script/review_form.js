@@ -1,8 +1,9 @@
 const select = document.getElementById("inputGenre");
 const searchBtn = document.getElementById("btn-search");
 // sessionStorage.clear();
-if (window.sessionStorage.getItem('form_data')) {
+if (sessionStorage.getItem('form_data')) {
     let form_data = JSON.parse(sessionStorage.getItem("form_data"));
+    console.log("form data : ", form_data);
     const inputTitle = document.getElementById("inputTitle");
     const inputDate = document.getElementById("inputDate");
     const inputPlace = document.getElementById("inputPlace");
@@ -12,11 +13,11 @@ if (window.sessionStorage.getItem('form_data')) {
     if (form_data["genre"]) {
         $("#inputGenre").val(form_data["genre"]).prop("selected",true);
         if(form_data["genre"] === "음식점" || form_data["genre"] === "카페"){
-            searchBtn.innerText = form_data["inputGenre"] + " 검색하기";
+            searchBtn.innerText = form_data["genre"] + " 검색하기";
         } else if(form_data["genre"] === "뮤지컬" || form_data["genre"] === "연극" || form_data["genre"] === "기타 공연"){
             searchBtn.innerText = "공연 검색하기";
         } else {
-            searchBtn.innerText = + "검색하기";
+            searchBtn.innerText = "검색하기";
         }
     }
 
@@ -42,7 +43,7 @@ if (window.sessionStorage.getItem('form_data')) {
     }
 }
 
-if (window.sessionStorage.getItem('selectPlaceData')) {
+if (sessionStorage.getItem('selectPlaceData')) {
     const selectPlace = JSON.parse(sessionStorage.getItem('selectPlaceData'));
     console.log("selectPlaceData : ", selectPlace);
     const inputTitle = document.getElementById("inputTitle");
@@ -51,7 +52,7 @@ if (window.sessionStorage.getItem('selectPlaceData')) {
     inputTitle.value = selectPlace["placeName"];
     inputPlace.value = selectPlace["placeName"] + " (" + selectPlace["address"] + ")";
 
-} else if (window.sessionStorage.getItem('selectPerformData')) {
+} else if (sessionStorage.getItem('selectPerformData')) {
     const selectPerform = JSON.parse(sessionStorage.getItem('selectPerformData'));
     console.log("selectPerformData : ", selectPerform);
     const inputTitle = document.getElementById("inputTitle");
@@ -61,13 +62,15 @@ if (window.sessionStorage.getItem('selectPlaceData')) {
     inputPlace.value = selectPerform["place"] + " (" + selectPerform["address"] + ")";
 }
 
-if (window.sessionStorage.getItem('selectAddressData')) {
+if (sessionStorage.getItem('selectAddressData')) {
     const selectAddressData = JSON.parse(sessionStorage.getItem('selectAddressData'));
     console.log("selectAddressData : ", selectAddressData);
     const inputTitle = document.getElementById("inputTitle");
     const inputPlace = document.getElementById("inputPlace");
 
-    inputTitle.value = selectAddressData["placeName"];
+    if (inputTitle.value === "") {
+        inputTitle.value = selectAddressData["placeName"];
+    }
     inputPlace.value = selectAddressData["placeName"] + " (" + selectAddressData["address"] + ")";
 }
 
@@ -176,9 +179,9 @@ function clickSearch(){
     } else if(select.options[select.selectedIndex].value === "기타"){
         alert("기타는 검색이 불가능합니다.");
     } else {
-        localStorage.removeItem('selectPlaceData');
-        localStorage.removeItem('selectPerformData');
-        localStorage.removeItem('selectAddressData');
+        sessionStorage.removeItem('selectPlaceData');
+        sessionStorage.removeItem('selectPerformData');
+        sessionStorage.removeItem('selectAddressData');
 
         let formdata = loadFormDataToJson();
         formdata["place"] = "";
@@ -198,9 +201,9 @@ function clickSearch(){
 }
 
 function clickSearchAddress(){
-    localStorage.removeItem('selectPlaceData');
-    localStorage.removeItem('selectPerformData');
-    localStorage.removeItem('selectAddressData');
+    sessionStorage.removeItem('selectPlaceData');
+    sessionStorage.removeItem('selectPerformData');
+    sessionStorage.removeItem('selectAddressData');
 
     let place = "";
     if ($('#inputPlace').val().indexOf(" (") && $('#inputPlace').val().indexOf(")") === ($('#inputPlace').val().length - 1)) {

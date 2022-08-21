@@ -26,7 +26,7 @@ public class Review {
     @Column(length = 200)
     private String subject;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT" )
     private String date;
 
     @Column(columnDefinition = "TEXT")

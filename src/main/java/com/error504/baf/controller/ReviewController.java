@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,9 +27,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -140,12 +143,12 @@ public class ReviewController {
 //            return "review/review_form";
 //        }
 
-        logger.info("no binding error");
-        logger.info("reviewForm : " + reviewForm);
-        logger.info("reviewForm.getGenre() : " + reviewForm.getGenre());
-        if (imageList.size() > 0) {
-            logger.info("imageList : " + imageList.get(0));
-        }
+//        logger.info("no binding error");
+//        logger.info("reviewForm : " + reviewForm);
+//        logger.info("reviewForm.getGenre() : " + reviewForm.getGenre());
+//        if (imageList.size() > 0) {
+//            logger.info("imageList : " + imageList.get(0));
+//        }
 
 //        logger.info("imgUrl ArrayList : ", reviewForm.getImageUrl());
 //
@@ -162,26 +165,45 @@ public class ReviewController {
 
         logger.info("review id : " + id);
 
-        String uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_image").toString();
+        Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
+        Path uploadPath;
+        logger.info("uploadRoot : " + uploadRoot);
 
-        for (int i = 0; i < imageList.size(); i++){
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("/");
-            stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
-            stringBuilder.append(imageList.get(i).getOriginalFilename());
+        if (imageList != null) {
+            for (int i = 0; i < imageList.size(); i++){
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
+                stringBuilder.append(imageList.get(i).getOriginalFilename());
+                String filename = StringUtils.cleanPath(String.valueOf(stringBuilder)); // org.springframework.util
+                filename = StringUtils.getFilename(filename);
+                filename = filename.replace(":", "-");
+                filename = filename.replace(" ", "_");
+                logger.info("file name : " + filename);
 
-            File path = new File(uploadRoot + stringBuilder);
-            try {
-                imageList.get(i).transferTo(path);
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                uploadPath = uploadRoot.resolve(filename);
+
+                logger.info("uploadPath : " + uploadPath);
+
+                try (InputStream file = imageList.get(i).getInputStream()) {
+                    Files.copy(file, uploadPath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    throw new IllegalStateException("업로드 실패...", e);
+                }
+
+
+//                try {
+////                    imageList.get(i).transferTo(path);
+////                    Files.copy(path, imageList.get(i));
+//                } catch (IllegalStateException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
+                Review review = this.reviewService.getReview(id);
+                logger.info("path.toString : " + uploadPath.toString());
+                this.reviewService.uploadImage(review, uploadPath.toString());
             }
-
-            Review review = this.reviewService.getReview(id);
-            logger.info("path.toString" + path.toString());
-            this.reviewService.uploadImage(review, path.toString());
         }
 
         return id;
@@ -243,5 +265,25 @@ public class ReviewController {
         return "review/review_search_perform";
     }
 
+    @GetMapping(value = "/display")
+    public ResponseEntity<Resource> display(@Param("filePath") String filePath) {
+        logger.info("filePath : " + filePath);
+        FileSystemResource resource = new FileSystemResource(filePath);
 
+        if (!resource.exists()) {
+            return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+        }
+
+        HttpHeaders header = new HttpHeaders();
+        try {
+            Path imgPath = Paths.get(filePath);
+            logger.info("img path : " + imgPath);
+
+            header.add("Content-Type", Files.probeContentType(imgPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
+    }
 }

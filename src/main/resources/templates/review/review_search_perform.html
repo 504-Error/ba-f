@@ -60,38 +60,6 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script>
-        // const genreNum = new URLSearchParams(window.location.search).get("genre");
-        // console.log("genreNum", genreNum);
-        //
-        // switch (Number(genreNum)) {
-        //     case 0:
-        //         $("#inputGenre").val("0").prop("selected",true);
-        //         break;
-        //     case 1:
-        //         $("#inputGenre").val("1").prop("selected",true);
-        //         break;
-        //     case 2:
-        //         $("#inputGenre").val("2").prop("selected",true);
-        //         break;
-        //     case 3:
-        //         $("#inputGenre").val("3").prop("selected",true);
-        //         break;
-        //     case 4:
-        //         $("#inputGenre").val("4").prop("selected",true);
-        //         break;
-        //     case 5:
-        //         $("#inputGenre").val("5").prop("selected",true);
-        //         break;
-        //     case 6:
-        //         $("#inputGenre").val("6").prop("selected",true);
-        //         break;
-        //     case 7:
-        //         $("#inputGenre").val("7").prop("selected",true);
-        //         break;
-        //     default:
-        //         $("#inputGenre").val("0").prop("selected",true);
-        // }
-
         function selectPerform(selectObject, performTitle, performFacility) {
             console.log("performTitle : ", performTitle);
             console.log("performFacility : ", performFacility);
@@ -111,11 +79,14 @@
         function placesSearchCB (data, status, pagination) {
             let address = "";
 
-            if (!data[0].road_address_name) {
-                address = data[0].address_name.toString();
-            } else {
-                address = data[0].road_address_name.toString();
+            if (data[0]) {
+                if (data[0].road_address_name) {
+                    address = data[0].road_address_name.toString();
+                } else {
+                    address = data[0].address_name.toString();
+                }
             }
+
 
             let selectPerformInfo = JSON.parse(sessionStorage.getItem("selectPerformInfo"));
 
