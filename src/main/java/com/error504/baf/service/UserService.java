@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,9 +56,12 @@ public class UserService {
         return this.userRepository.findAll(spec, pageable);
     }
 
-    public SiteUser create(String username, String email, String password, int type, int getWheel){
+    public SiteUser create(String username, String name, int gender, Date birthday, String email, String password, int type, int getWheel){
         SiteUser user = new SiteUser();
         user.setUsername(username);
+        user.setName(name);
+        user.setGender(gender);
+        user.setBirthday(birthday);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setType(type);

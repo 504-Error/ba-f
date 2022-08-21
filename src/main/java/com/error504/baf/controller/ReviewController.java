@@ -58,6 +58,8 @@ public class ReviewController {
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         // 카테고리 없이 카테고리 자체도 검색 키워드가 될 수 있도록...!
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, "");
+        List<Review> reviewList = this.reviewService.getReviewList();
+        model.addAttribute("reviewList", reviewList);
         model.addAttribute("reviewPage", reviewPage);
         model.addAttribute("keyword", keyword);
         return "review/review_main";
