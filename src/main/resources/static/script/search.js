@@ -100,17 +100,25 @@ function displayPlaces(places) {
             kakao.maps.event.addListener(marker, 'click', function() {
                 displayPlaceInfo(place);
             });
+            itemEl.onclick =  function () {
+                panTo(place.y, place.x);
+                storeInfo(place);
+                console.log("click");
+            };
         })(marker, places[i]);
 
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
         bounds.extend(placePosition);
-        fragment.appendChild(itemEl);
+        fragment.appendChild(itemEl)
+
+
     }
 
     // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
     listEl.appendChild(fragment);
     menuEl.scrollTop = 0;
+
 
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
     map.setBounds(bounds);
@@ -137,8 +145,6 @@ function getListItem(index, places) {
         '</div>';
     el.innerHTML = itemStr;
     el.className = 'item';
-
-
     return el;
 }
 
@@ -161,6 +167,28 @@ function addMarker(position, idx, title) {
     markers.push(marker);  // 배열에 생성된 마커를 추가합니다
 
     return marker;
+}
+//목록을 선택하면 상세정보 창을 보여주는 함수입니다.
+function storeInfo(place){
+    let elWrap = document.getElementById('map_wrapper'),
+        info = document.createElement('div'),
+        expBefore = document.getElementById('menu_info_wrap');
+
+    if(expBefore != null){
+        expBefore.remove();
+    }
+
+    let str = '<div>안녕하세요</div>'+
+    '<iframe src="'+ place.place_url +'" id = "chat_iframe"></iframe>';
+
+
+    info.setAttribute("id", "menu_info_wrap");
+    info.className='bg_white';
+    info.innerHTML = str;
+
+    console.log(info);
+
+    elWrap.appendChild(info);
 }
 
 // 지도 위에 표시되고 있는 마커를 모두 제거합니다
@@ -198,6 +226,8 @@ function panTo(y,x) {
 
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+    map.panTo(moveLatLon);
+    map.setLevel(2);
     map.panTo(moveLatLon);
 }
 

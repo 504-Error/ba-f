@@ -1,5 +1,9 @@
 <!doctype html>
-<html lang="ko" xmlns="http://www.w3.org/1999/html">
+<html lang="ko" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,82 +18,49 @@
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-fix">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/question/list">
-            <img src="/static/image/ba-f_logo.png" alt="" width="90" height="40">
-        </a>
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link" href="/question/list">커뮤니티</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/icon">Ba-f 맵</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/review">방문 후기</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">My Page</a>
-            </li>
-        </ul>
-        <div class="d-flex">
-            <a class="nav-link" href="/user/login">LOGIN</a>
-
+<div layout:fragment="content">
+    <nav class="sub-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
+                <li class="nav-item">
+                    <a class="nav-link" href="icon">아이콘</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="bus">저상버스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-select" href="#">검색</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="taxi">장애인 콜택시</a>
+                </li>
+            </ul>
         </div>
+    </nav>
 
-    </div>
-</nav>
-
-<nav class="sub-navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <ul class="nav justify-content-center" style="padding-bottom: 20px;">
-            <li class="nav-item">
-                <a class="nav-link" href="icon">아이콘</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="bus">저상버스</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link-select" href="#">검색</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="taxi">장애인 콜택시</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-<div class="map_wrap">
-    <div id="map" style="width:100%;height:500px;position:relative;overflow:hidden;"></div>
-    <div id="menu_wrap" class="bg_white">
-        <div class="option">
-            <div>
-                <form onsubmit="searchPlaces(); return false;">
-                    키워드 :
-                    <input type="text" th:value="${keyword}" name="kw" id="keyword" aria-label="review search" aria-describedby="button-addon2" size="15">
-                    <button type="submit" style="background-color:#ffffff; border-color:#FA9622;color:#FA9622" id="review-button-search">검색하기</button>
-                </form>
+    <div id ="map_wrapper" class="map_wrap">
+        <div id="map" style="width:100%;height:500px;position:relative;overflow:hidden;"></div>
+        <div id="menu_wrap" class="bg_white">
+            <div class="option">
+                <div>
+                    <form onsubmit="searchPlaces(); return false;">
+                        키워드 :
+                        <input type="text" th:value="${keyword}" name="kw" id="keyword" aria-label="review search" aria-describedby="button-addon2" size="15">
+                        <button type="submit" style="background-color:#ffffff; border-color:#FA9622;color:#FA9622" id="review-button-search">검색하기</button>
+                    </form>
+                </div>
             </div>
+            <hr>
+            <ul id="placesList"></ul>
+            <div id="pagination"></div>
         </div>
-        <hr>
-        <ul id="placesList"></ul>
-        <div id="pagination"></div>
+        <!--장소 정보를 보여주는 div 창입니다.<div id="menu_info_wrap" class="bg_white"></div>-->
+
     </div>
 </div>
-
-
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6f5ee4dc680406f1dbe36437ebafb94f&libraries=services"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
 <script type="text/javascript" src="/static/script/search.js"></script>
-<script>
-    const btn_search = document.getElementById("review-button-search");
-    btn_search.addEventListener('click', function() {
-        document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
-        document.getElementById('searchForm').submit();
-    });
-</script>
-
 </body>
 </html>

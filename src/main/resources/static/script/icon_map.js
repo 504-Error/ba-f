@@ -74,15 +74,17 @@ function placesSearchCB(data, status, pagination) {
 
 // 지도에 마커를 표출하는 함수입니다
 function displayPlaces(places) {
-    const url =
+    const traUrl =
         "http://openapi.seoul.go.kr:8088/41706d4e7663627136385153447866/json/tbTraficElvtr/1/1000/"
+    const url =
+        "http://openapi.seoul.go.kr:8088/41706d4e7663627136385153447866/json/trafficSafetyA073PInfo/1/1000/"
     // 몇번째 카테고리가 선택되어 있는지 얻어옵니다
     // 이 순서는 스프라이트 이미지에서의 위치를 계산하는데 사용됩니다
     var order = document.getElementById(currCategory).getAttribute('data-order')
     console.log(order);
     if (order == 6 ){ //가연아 여기가 js 좌표로 찍어주는 거야
         console.log("help");
-        fetch(url)
+        fetch(traUrl)
             .then((res) => res.json())
             .then((myJson) => {
                 const stores = myJson.tbTraficElvtr.row;
@@ -94,7 +96,35 @@ function displayPlaces(places) {
                     // 마커를 생성하고 지도에 표시합니다
                     addMarker(new kakao.maps.LatLng(test[2], test[1]), 3);
                 }
-            })
+            });
+    }
+    else if (order == 7){
+        Proj4js.defs["EPSG:5186"] = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=600000 +ellps=GRS80 +units=m +no_defs";
+        Proj4js.defs["EPSG:4326"] = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+        var s_srs = new Proj4js.Proj("EPSG:5186");
+        var t_srs = new Proj4js.Proj("EPSG:4326");
+
+        console.log("신호등");
+        fetch(url)
+            .then((res) => res.json())
+            .then((myJson) => {
+                //console.log(myJson.trafficSafetyA073PInfo.row);
+                const stores = myJson.trafficSafetyA073PInfo.row;
+                // console.log(stores.length)
+                // console.log(stores[4].XCE)
+                for(var j = 0; j< stores.length; j++) {
+                    var x=stores[j].XCE; //5179 좌표계 x
+                    var y=stores[j].YCE; //5179 좌표계 y
+
+                    var pt = new Proj4js.Point(x,y); //포인트 생성
+                    var result =Proj4js.transform(s_srs, t_srs, pt); //좌표계 변경
+                    // console.log(result.x,result.y); //경도, 위도;
+
+                    // 마커를 생성하고 지도에 표시합니다
+                    // addMarker(new kakao.maps.LatLng(test[2], test[1]), 3);
+                    addMarker(new kakao.maps.LatLng(result.y,result.x), 4);
+                }
+            });
     }
     else{
         for ( var i=0; i<places.length; i++ ) {
