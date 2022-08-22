@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -179,13 +180,18 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/vote/{id}")
-    public String questionVote(Principal principal, @PathVariable("id") Long id) {
+    public String questionVote(Principal principal, @PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         Question question = questionService.getQuestion(id);
         SiteUser siteUser = userService.getUser(principal.getName());
+        if(question.getVoter().contains(siteUser)){
+            redirectAttributes.addFlashAttribute("message", "이미 좋아요 누른 글입니다.");
+            return String.format("redirect:/question/detail/%s", id);
+        }
         questionService.vote(question, siteUser);
         return String.format("redirect:/question/detail/%s", id);
 
     }
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/delete/{id}")
@@ -200,15 +206,19 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/accuse/{id}")
-    public String questionAccuse(Principal principal, @PathVariable("id") Long id) {
+    public String questionAccuse(Principal principal, @PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         Question question = questionService.getQuestion(id);
         SiteUser siteUser = userService.getUser(principal.getName());
+        if(question.getAccuser().contains(siteUser))
+        {
+            redirectAttributes.addFlashAttribute("message", "이미 신고 접수가 완료된 글입니다.");
+            return String.format("redirect:/question/detail/%s", id);
+        }
         questionService.accuse(question, siteUser);
-      //신고가 접수되었습니다
+        //신고가 접수되었습니다
         return String.format("redirect:/question/detail/%s", id);
 
     }
-
     @RequestMapping("/eventInfo")
     public String index() {
         return "community/event_info";

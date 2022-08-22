@@ -1,5 +1,6 @@
 package com.error504.baf.model;
 
+import com.error504.baf.Time;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -63,4 +64,9 @@ public class Review {
 
     @ManyToMany
     Set<SiteUser> accuser;
+
+    public String getDate( LocalDateTime time){
+        date = Time.convertLocaldatetimeToTime(time);
+        return date;
+    }
 }

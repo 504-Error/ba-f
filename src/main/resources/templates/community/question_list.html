@@ -62,20 +62,19 @@
                     <div class="review-content-area mt-0 mb-4">
                         <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
                         <div class="ms-5">
-                            <p class="fw-bolder mb-0 content-nickname" th:if="${question.isAnonymous == true}" th:text="익명"></p>
-                            <p class="fw-bolder mb-0 content-nickname" th:unless="${question.isAnonymous == true}" th:text="${question.author.username}"></p>
-                            <time class="fw-normal content-time"
-                                  th:text="${question.getDate(question.createDate)}"></time>
+                            <span class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></span>
+                            <span class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></span>
                         </div>
 
-                        <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
+                        <div class="card-text" style="white-space: pre-line;">
                             <div th:text="${question.subject}"></div>
+                            <small th:text="${question.content}"></small>
                         </div>
 
-                        <div class="my-2">
+                        <div class="mb-4">
                             <ul class="content-info">
-                                <li class="recommend" th:text="${#lists.size(question.voter)}"></li>
-                                <li class="comment" th:text="${#lists.size(question.answerList)}"></li>
+                                <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
+                                <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
                             </ul>
                         </div>
                     </div>
@@ -83,6 +82,7 @@
             </div>
         </a>
     </div>
+
 
 
     <a style="text-decoration:none; color:inherit" th:href="@{/question/hotList}">
@@ -95,20 +95,19 @@
                     <div class="review-content-area mt-0 mb-4">
                         <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
                         <div class="ms-5">
-                            <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}"
-                               th:text="${question.author.username}"></p>
-                            <time class="fw-normal content-time"
-                                  th:text="${question.getDate(question.createDate)}"></time>
+                            <span class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></span>
+                            <span class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></span>
                         </div>
 
-                        <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
-                            <div th:text="${question.subject}"></div>
+                        <div class="card-text" style="white-space: pre-line;">
+                            <div th:text="${question.subject}" style="padding-bottom: -2%"></div>
+                            <small th:text="${question.content}"></small>
                         </div>
 
-                        <div class="my-2">
+                        <div class="mb-4"  style="padding-bottom: -2%">
                             <ul class="content-info">
-                                <li class="recommend" th:text="${#lists.size(question.voter)}"></li>
-                                <li class="comment" th:text="${#lists.size(question.answerList)}"></li>
+                                <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
+                                <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
                             </ul>
                         </div>
                     </div>

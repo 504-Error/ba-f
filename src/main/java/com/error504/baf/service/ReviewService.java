@@ -242,6 +242,15 @@ public class ReviewService {
     }
 
 
+
+    public Page<Review> getReviewResult(Long id, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return reviewRepository.findReviewByAuthorId(pageable, id);
+    }
+
+
 //    public void uploadReview(Map<String, Object> param, List<MultipartFile> fileList) throws Exception {
 //        boardMapper.insertMypageQna(param);
 //        List<Map<String,Object>> list = fileutils.fileUpload(param, fileList);
