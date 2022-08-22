@@ -6,6 +6,9 @@
         layout:decorate="~{layout}">
 
 <div layout:fragment="content" class="container my-3">
+    <div th:if="${message}" class="alert alert-danger" role="alert">
+        <p th:text="${message}">message fail</p>
+    </div>
     <h5 class="my-3 border-bottom pb-2" th:text="${question.subject}">리뷰 내용</h5>
     <div class="review-content-area mt-0 mb-4">
         <a href="javascript:void(0);" th:data-uri="@{|/question/delete/${question.id}|}"

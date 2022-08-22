@@ -277,4 +277,15 @@ public class ReviewController {
 
         return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
     }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/user/mypage/write")
+    public String myPageWriteReview(Model model, Principal principal, @RequestParam(value="page", defaultValue="0") int page){
+        SiteUser siteUser = userService.getUser(principal.getName());
+        Page<Review> reviewPage = reviewService.getReviewResult(siteUser.getId(), page);
+        model.addAttribute("siteUser", siteUser);
+        model.addAttribute("reviewPage", reviewPage);
+        return "account/my_page_write_review";
+    }
 }

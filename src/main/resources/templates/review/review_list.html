@@ -70,7 +70,7 @@
                     <div style="height: 30px;line-height:30px;">
                         <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:if="${review.isAnonymous == true}" th:text="익명"></span>
                         <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></span>
-                        <span class="fw-normal content-time" th:text="${#temporals.format(review.createDate, 'yy/MM/dd HH:mm')}"></span>
+                        <span class="fw-normal content-time" th:text="${review.getDate(review.createDate)}"></span>
                     </div>
                 </div>
                 <div class="card-text">
