@@ -42,7 +42,7 @@
                 <label for="passengerName" class="col-form-label fs-5 fw-bold">이름</label>
             </div>
             <div class="col">
-                <input type="text" class="form-control form-control-lg" style="width: 30%" value="회원이름" id="passengerName">
+                <input type="text" class="form-control form-control-lg" style="width: 30%" th:value="${name}" id="passengerName">
             </div>
         </div>
 
@@ -92,7 +92,7 @@
                     <label class="form-check-label fs-5" for="wChairYes">탑승</label>
                 </div>
                 <div class="form-check form-check-inline" style="padding-top: 0.5rem">
-                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo" checked="checked">
+                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo">
                     <label class="form-check-label fs-5" for="wChairNo">미탑승</label>
                 </div>
             </div>
