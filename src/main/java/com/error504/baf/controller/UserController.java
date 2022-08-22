@@ -161,6 +161,16 @@ public class UserController {
 
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/wheelchair")
+    public String changeWheelchair(Model model, Principal principal) {
+        SiteUser siteUser = userService.getUser(principal.getName());
+        model.addAttribute("siteUser", siteUser);
+        return "account/my_page_wheelchair";
+
+    }
+
+
 
 //    @PreAuthorize("isAuthenticated()")
 //    @GetMapping("/mypage/comment")
