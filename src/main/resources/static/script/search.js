@@ -178,8 +178,10 @@ function storeInfo(place){
         expBefore.remove();
     }
 
-    let str = '<div>안녕하세요</div>'+
-    '<iframe src="'+ place.place_url +'" id = "chat_iframe"></iframe>';
+    let str = '<div class="wrap">'+
+    '<iframe class="frame" src="'+ place.place_url +'" id = "chat_iframe"></iframe>'+
+    '</div>'+
+    '<div></div>';
 
 
     info.setAttribute("id", "menu_info_wrap");

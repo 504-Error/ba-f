@@ -27,7 +27,7 @@
 .placeinfo .jibun {color:#999;font-size:11px;margin-top:0;}
 
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
-.map_wrap {position:relative;width:100%;height:500px;}
+.map_wrap {position:relative;width:100%;height:auto;}
 #menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
 .bg_white {background:#fff;}
 #menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
@@ -64,8 +64,34 @@
 #pagination .on {font-weight: bold; cursor: default;color:#777;}
 
 /*이게 정보 창 css*/
-#menu_info_wrap {position:absolute;top:0;left:260px;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
+.map_info_wrap a, .map_info_wrap a:hover, .map_info_wrap a:active{color:#000;text-decoration: none;}
+.map_info_wrap {position:relative;width:100%;height:auto;}
+#menu_info_wrap {overflow: hidden;position:absolute;top:0;left:260px;height:650px;width:500px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
 .bg_white {background:#fff;}
+.wrap {
+    width: 500px;
+    height: 650px;
+    padding: 0;
+    overflow: hidden;
+}
+.frame {
+    margin-left: -120px;
+    margin-top: -70px;
+    width: 1000px;
+    height: 2000px;
+    border: 0;
+    -ms-transform: scale(0.75);
+    -moz-transform: scale(0.75);
+    -o-transform: scale(0.75);
+    -webkit-transform: scale(0.75);
+    transform: scale(0.75);
+
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
 #menu_info_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
 #menu_info_wrap .option{text-align: center;}
 #menu_info_wrap .option p {margin:10px 0;}
