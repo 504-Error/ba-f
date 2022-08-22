@@ -56,9 +56,12 @@ public class ReviewService {
         return this.reviewRepository.findAll(spec, pageable);
     }
 
+    public List<Review> getListByAuthor(Long id) {
+        return this.reviewRepository.findByAuthorId(id);
+    }
+
     public List<Review> getReviewList(){
-        List<Review> reviewList = new ArrayList<>();
-        reviewList = reviewRepository.findAll();
+        List<Review> reviewList = reviewRepository.findAll();
         List<Review> reviewHotList = new ArrayList<>();
         for(Review review:reviewList){
             if((review.getVoter()).size()>2){ //하트 개수 정하기
@@ -135,6 +138,13 @@ public class ReviewService {
 
     public void delete(Review review) {
         this.reviewRepository.delete(review);
+    }
+
+    public void deleteUser(List<Review> reviewList) {
+        for (Review review : reviewList) {
+            review.setAuthor(null);
+            this.reviewRepository.save(review);
+        }
     }
 
     private Specification searchReview(String keyword, String category){

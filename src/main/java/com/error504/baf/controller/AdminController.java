@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,7 +24,9 @@ import java.util.List;
 public class AdminController {
     private final UserService userService;
     private final QuestionService questionService;
+    private final AnswerService answerService;
     private final ReviewService reviewService;
+    private final ReviewCommentService reviewCommentService;
     private final BoardService boardService;
     private final AnnouncementService announcementService;
 
@@ -81,6 +84,21 @@ public class AdminController {
 //        if (!siteUser.getAuthor().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
 //        }
+
+        List<Question> questionList = this.questionService.getQuestionByAuthor(id);
+        this.questionService.deleteByAuthor(questionList);
+
+        List<Answer> answerList = this.answerService.getAnswerByAuthor(id);
+        this.answerService.deleteByAuthor(answerList);
+
+        List<Review> reviewList = this.reviewService.getListByAuthor(id);
+        this.reviewService.deleteUser(reviewList);
+
+        List<ReviewComment> reviewCommentList = this.reviewCommentService.getReviewCommentByAuthor(id);
+        this.reviewCommentService.deleteByAuthor(reviewCommentList);
+
+
+
 
         this.userService.deleteMember(siteUser);
 

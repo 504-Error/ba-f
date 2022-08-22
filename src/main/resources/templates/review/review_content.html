@@ -116,7 +116,9 @@
                 <a th:href="@{|/review/${category}?keyword=${review.place}|}">
                     <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 장소 리뷰 </span>
                 </a>
-                <div id="map" style="width:200px;height:150px;" th:value="${review.placeAddress}"></div>
+                <div class="map_wrap">
+                    <div id="map" style="width:200px;height:150px;" th:value="${review.placeAddress}"></div>
+                </div>
             </td>
         </tr>
         <tr>
@@ -400,6 +402,8 @@
             center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
             level: 3 // 지도의 확대 레벨
         };
+
+    console.log("mapcontatiner : ", mapContainer);
 
     // 지도를 생성합니다
     var map = new kakao.maps.Map(mapContainer, mapOption);

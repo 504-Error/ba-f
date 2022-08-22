@@ -6,28 +6,22 @@ import com.error504.baf.model.*;
 import com.error504.baf.repository.BoardRepository;
 import com.error504.baf.repository.QuestionImageRepository;
 import com.error504.baf.repository.QuestionRepository;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 
 @Service
@@ -72,6 +66,10 @@ public class QuestionService {
         }
         return hotList;
     }
+
+//    public void deleteVoterById(Long id) {
+//
+//    }
 
 
     public List<Question> getWeeklyHotList(){
@@ -141,6 +139,10 @@ public class QuestionService {
         return questionRepository.findQuestionByAuthorId(pageable, id);
     }
 
+    public List<Question> getQuestionByAuthor(Long id){
+        return questionRepository.findQuestionByAuthorId(id);
+    }
+
     public Question getQuestion(Long id){
         Optional<Question> question = questionRepository.findById(id);
         if (question.isPresent()){
@@ -181,6 +183,13 @@ public class QuestionService {
 
     public void delete(Question question) {
         questionRepository.delete(question);
+    }
+
+    public void deleteByAuthor(List<Question> questionList) {
+        for (Question question : questionList) {
+            question.setAuthor(null);
+            this.questionRepository.save(question);
+        }
     }
 
     private Specification searchQuestion(String keyword, Long boardId) {
