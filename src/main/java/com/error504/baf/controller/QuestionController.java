@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +22,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -56,9 +61,12 @@ public class QuestionController {
     }
 
     @RequestMapping("/question/search")
-    public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page){
-        Page<Question> questionList = questionService.getQuestion(page);
+    public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page,
+                             @RequestParam(value="keyword", defaultValue = "") String keyword){
+        logger.info("keyword : " + keyword);
+        Page<Question> questionList = questionService.getAllQuestion(page, keyword, 0L);
         model.addAttribute("questionList", questionList);
+        model.addAttribute("keyword", keyword);
         return "community/question_search";
     }
 
@@ -118,27 +126,35 @@ public class QuestionController {
         Board board = boardService.getBoard(questionForm.getBoardId());
         Long boardId = questionForm.getBoardId();
         logger.info(siteUser.toString());
-        Long id = questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board);
+        Long id = questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board, questionForm.getIsAnonymous());
 
-        String uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_image").toString();
+        Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
+        Path uploadPath;
 
-        for (int i = 0; i < imageList.size(); i++){
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("/");
-            stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
-            stringBuilder.append(imageList.get(i).getOriginalFilename());
+        if (imageList != null) {
+            for (int i = 0; i < imageList.size(); i++) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
+                stringBuilder.append(imageList.get(i).getOriginalFilename());
+                String filename = StringUtils.cleanPath(String.valueOf(stringBuilder)); // org.springframework.util
+                filename = StringUtils.getFilename(filename);
+                filename = filename.replace(":", "-");
+                filename = filename.replace(" ", "_");
+                logger.info("file name : " + filename);
 
-            File path = new File(uploadRoot + stringBuilder);
-            try {
-                imageList.get(i).transferTo(path);
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                uploadPath = uploadRoot.resolve(filename);
+
+                logger.info("uploadPath : " + uploadPath);
+
+                try (InputStream file = imageList.get(i).getInputStream()) {
+                    Files.copy(file, uploadPath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    throw new IllegalStateException("업로드 실패...", e);
+                }
+
+                Question question = this.questionService.getQuestion(id);
+                this.questionService.uploadImage(question, uploadPath.toString());
             }
-
-            Question question = this.questionService.getQuestion(id);
-            this.questionService.uploadImage(question, path.toString());
         }
 
         return boardId;
@@ -204,22 +220,17 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/board/question_list/{id}")
-    public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value="page", defaultValue="0") int page) {
-        Page<Question> questionList = questionService.getQuestionResult(id,page);
+    public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value="page", defaultValue="0") int page,
+                                   @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+        Page<Question> questionList = questionService.getAllQuestion(page, keyword, id);
         Board board = boardService.getBoard(id);
         model.addAttribute("questionList", questionList);
         model.addAttribute("board", board);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("boardId", id);
         return "community/board_question";
     }
 
-    @RequestMapping("/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page,
-        @RequestParam(value="kw", defaultValue="") String kw){
-        Page<Question> paging = this.questionService.getList(page, kw);
-        model.addAttribute("paging", paging);
-        model.addAttribute("kw", kw);
-        return "communuity/board_question";
-    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/user/mypage/write")

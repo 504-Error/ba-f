@@ -72,7 +72,6 @@ public class ReviewController {
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword,
                              @PathVariable("category") String category) {
-        logger.info("category : " + category);
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
         model.addAttribute("reviewPage", reviewPage);
         model.addAttribute("keyword", keyword);
@@ -172,7 +171,7 @@ public class ReviewController {
         logger.info("uploadRoot : " + uploadRoot);
 
         if (imageList != null) {
-            for (int i = 0; i < imageList.size(); i++){
+            for (int i = 0; i < imageList.size(); i++) {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
                 stringBuilder.append(imageList.get(i).getOriginalFilename());
@@ -210,16 +209,6 @@ public class ReviewController {
 
         return id;
     }
-
-//    @RequestMapping("/list")
-//    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page,
-//                       @RequestParam(value = "kw", defaultValue = "") String keyword) {
-//        Page<Review> reviewPage = this.reviewService.getList(page, keyword);
-//        model.addAttribute("reviewPage", reviewPage);
-//        model.addAttribute("keyword", keyword);
-//        logger.info("reviewPage : ", reviewPage, ", keyword : ", keyword);
-//        return "review/review_list";
-//    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")

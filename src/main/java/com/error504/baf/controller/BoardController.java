@@ -30,9 +30,11 @@ public class BoardController {
     }
 
     @RequestMapping("/board/board_list")
-    public String bookmarked_list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
-        Page<Board> paging = boardService.getList(page);
+    public String bookmarked_list(Model model, @RequestParam(value="page", defaultValue = "0") int page,
+                                  @RequestParam(value="keyword", defaultValue="") String keyword){
+        Page<Board> paging = boardService.getList(page, keyword);
         model.addAttribute("paging", paging);
+        model.addAttribute("keyword", keyword);
         return "community/board_list";
     }
 

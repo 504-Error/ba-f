@@ -5,150 +5,138 @@
         xmlns:sec="http://www.w3.org/1999/xhtml"
         layout:decorate="~{layout}">
 <head>
-  <meta charset="UTF-8">
-  <title>Ba-f Community</title>
-  <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <meta charset="UTF-8">
+    <title>Ba-f Community</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
 </head>
 <body>
-<div  layout:fragment="content" class="container">
-  <nav class="sub-navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <ul class="nav justify-content-center" style="padding-bottom: 20px;">
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/question/hotList}">HOT 게시물</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link"  th:href="@{/question/weeklyHotList}">주간 인기글</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link-select" th:href="@{/question/list}">HOME</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/board/board_list}">즐겨찾는 게시판</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/eventInfo}">추천 정보</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-  <div>
-
-    <div class="review-main-container mt-5" style="padding-bottom: 5%">
-    <div class="review-header-content">
-    <div id="review-search-input-group">
-      <div class="input-group mb-3 me-sm-3">
-        <input type="text" th:value="${keyword}" id="review-search-review-input" class="form-control" placeholder="글 제목, 내용 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
-        <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
-      </div>
-    </div>
-    <a th:href="@{/question/create/}" class="btn btn-primary" style="float:right;">질문 등록하기</a>
-    </div>
-    </div>
-
-  </div>
-
-  <div></div>
-
-  <a style="text-decoration:none; color:inherit" th:href="@{/question/weeklyHotList}">
-    <h5 class="border-bottom py-2" th:unless="${weeklyList.size==0}">
-      주간 인기 게시물</h5>
-  </a>
-  <div th:each="question : ${weeklyList}">
-    <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
-      <div class="card my-3">
-        <div class="card-body" >
-          <div class="review-content-area mt-0 mb-4">
-            <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
-            <div class="ms-5">
-              <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></p>
-              <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
-            </div>
-
-            <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
-              <div th:text="${question.subject}"></div>
-            </div>
-
-            <div class="my-2">
-              <ul class="content-info">
-                <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
-                <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
-              </ul>
-            </div>
-          </div>
+<div layout:fragment="content" class="container">
+    <nav class="sub-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/question/hotList}">HOT 게시물</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/question/weeklyHotList}">주간 인기글</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-select" th:href="@{/question/list}">HOME</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/board/board_list}">즐겨찾는 게시판</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/eventInfo}">추천 정보</a>
+                </li>
+            </ul>
         </div>
-      </div>
+    </nav>
+
+    <div>
+        <div class="review-main-container mt-5" style="padding-bottom: 5%">
+            <div class="review-header-content">
+                <div id="review-search-input-group">
+                    <form th:action="@{|/question/search|}" method="get" id="searchForm">
+                        <div class="input-group mb-3 me-sm-3">
+                            <input type="text" name="keyword" id="search-input"
+                                   class="form-control" placeholder="글 제목, 내용 등을 검색해주세요" aria-label="review search"
+                                   aria-describedby="button-addon2">
+                            <button class="btn btn-outline-orange" type="submit" id="button-search">검색</button>
+                        </div>
+                    </form>
+                </div>
+                <a th:href="@{/question/create/}" class="btn btn-primary" style="float:right;">질문 등록하기</a>
+            </div>
+        </div>
+    </div>
+
+    <a style="text-decoration:none; color:inherit" th:href="@{/question/weeklyHotList}">
+        <h5 class="border-bottom py-2" th:unless="${weeklyList.size==0}">
+            주간 인기 게시물</h5>
     </a>
-  </div>
+    <div th:each="question : ${weeklyList}">
+        <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
+            <div class="card my-3">
+                <div class="card-body">
+                    <div class="review-content-area mt-0 mb-4">
+                        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+                        <div class="ms-5">
+                            <p class="fw-bolder mb-0 content-nickname" th:if="${question.isAnonymous == true}" th:text="익명"></p>
+                            <p class="fw-bolder mb-0 content-nickname" th:unless="${question.isAnonymous == true}" th:text="${question.author.username}"></p>
+                            <time class="fw-normal content-time"
+                                  th:text="${question.getDate(question.createDate)}"></time>
+                        </div>
 
+                        <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
+                            <div th:text="${question.subject}"></div>
+                        </div>
 
-
-  <a style="text-decoration:none; color:inherit" th:href="@{/question/hotList}">
-    <h5 class="border-bottom py-2" th:unless="${hotList.size==0}">HOT 게시물</h5>
-  </a>
-    <div th:each="question : ${hotList}">
-      <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
-        <div class="card my-3">
-          <div class="card-body" >
-            <div class="review-content-area mt-0 mb-4">
-              <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
-              <div class="ms-5">
-                <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></p>
-                <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
-              </div>
-
-              <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
-                <div th:text="${question.subject}"></div>
-              </div>
-
-              <div class="my-2">
-                <ul class="content-info">
-                  <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
-                  <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
-                </ul>
-              </div>
+                        <div class="my-2">
+                            <ul class="content-info">
+                                <li class="recommend" th:text="${#lists.size(question.voter)}"></li>
+                                <li class="comment" th:text="${#lists.size(question.answerList)}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </a>
+        </a>
     </div>
 
 
-  <a style="text-decoration:none; color:inherit" th:href="@{/eventInfo}">
-    <h5 class="border-bottom py-2">추천 정보</h5>
-  </a>
-        <div class="card my-5" style="float:left;width:50%; ">
-          <img src="/static/image/summer.png" height="400" >
-          <div class="card-body" >
+    <a style="text-decoration:none; color:inherit" th:href="@{/question/hotList}">
+        <h5 class="border-bottom py-2" th:unless="${hotList.size==0}">HOT 게시물</h5>
+    </a>
+    <div th:each="question : ${hotList}">
+        <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
+            <div class="card my-3">
+                <div class="card-body">
+                    <div class="review-content-area mt-0 mb-4">
+                        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+                        <div class="ms-5">
+                            <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}"
+                               th:text="${question.author.username}"></p>
+                            <time class="fw-normal content-time"
+                                  th:text="${question.getDate(question.createDate)}"></time>
+                        </div>
+
+                        <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
+                            <div th:text="${question.subject}"></div>
+                        </div>
+
+                        <div class="my-2">
+                            <ul class="content-info">
+                                <li class="recommend" th:text="${#lists.size(question.voter)}"></li>
+                                <li class="comment" th:text="${#lists.size(question.answerList)}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+    <a style="text-decoration:none; color:inherit" th:href="@{/eventInfo}">
+        <h5 class="border-bottom py-2">추천 정보</h5>
+    </a>
+    <div class="card my-5" style="float:left;width:50%; ">
+        <img src="/static/image/summer.png" height="400">
+        <div class="card-body">
             7월의 전시 추천
-          </div>
-        </div>
-        <div class="card my-5" style="float:left;width:50%; ">
-          <img src="/static/image/art_logo.png" height="400" >
-          <div class="card-body" >
-            K 현대 미술관 오즈의 미술관 초대 이벤트
-          </div>
         </div>
     </div>
-
+    <div class="card my-5" style="float:left;width:50%; ">
+        <img src="/static/image/art_logo.png" height="400">
+        <div class="card-body">
+            K 현대 미술관 오즈의 미술관 초대 이벤트
+        </div>
+    </div>
+</div>
 
 
 </div>
 
-<script layout:fragment="script" type='text/javascript'>
-  const page_elements = document.getElementsByClassName("page-link");
-  Array.from(page_elements).forEach(function(element) {
-    element.addEventListener('click', function() {
-      document.getElementById('page').value = this.dataset.page;
-      document.getElementById('searchForm').submit();
-    });
-  });
-  const btn_search = document.getElementById("review-button-search");
-  btn_search.addEventListener('click', function() {
-    document.getElementById('kw').value = document.getElementById('review-search-review-input').value;
-    document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
-    document.getElementById('searchForm').submit();
-  });
-</script>
 </body>
 </html>

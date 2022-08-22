@@ -44,8 +44,8 @@ public class QuestionService {
     }
 
 
-
-    public Page<Question> getAllQuestion(int page, String keyword, int boardId){
+    @Transactional
+    public Page<Question> getAllQuestion(int page, String keyword, Long boardId){
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
@@ -134,14 +134,6 @@ public class QuestionService {
     }
 
     @Transactional
-    public Page<Question> getQuestionResult(Long id, int page ) {
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return questionRepository.findQuestionByBoardId(pageable, id);
-    }
-
-    @Transactional
     public Page<Question> getQuestionResultByUser(Long id, int page){
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
@@ -158,15 +150,15 @@ public class QuestionService {
         }
     }
 
-    public Long create(String subject, String content, SiteUser user, Board board)
+    public Long create(String subject, String content, SiteUser user, Board board, Boolean isAnonymous)
     { Question q = new Question();
         q.setSubject(subject);
         q.setContent(content);
         q.setCreateDate(LocalDateTime.now());
         q.setAuthor(user);
         q.setBoard(board);
-        questionRepository.save(q);
-        questionRepository.flush();
+        q.setIsAnonymous(isAnonymous);
+        questionRepository.saveAndFlush(q);
 
         return q.getId();
     }
@@ -191,7 +183,7 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
-    private Specification searchQuestion(String keyword, int boardId) {
+    private Specification searchQuestion(String keyword, Long boardId) {
         return (question, query, criteriaBuilder) -> {
             query.distinct(true);
 

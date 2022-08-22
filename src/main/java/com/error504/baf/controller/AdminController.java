@@ -92,14 +92,14 @@ public class AdminController {
                                          @PathVariable("kindOfContent") int kindOfContent,
                                          @RequestParam(value="page", defaultValue="0") int page,
                                          @RequestParam(value = "keyword", defaultValue = "") String keyword,
-                                         @RequestParam(value = "boardId", defaultValue = "0") int boardId) {
+                                         @RequestParam(value = "boardId", defaultValue = "0") Long boardId) {
         if (kindOfContent == 0) {
             Page<Question> questionPage = this.questionService.getAllQuestion(page, keyword, boardId);
             List<Board> board = boardService.findAll();
             model.addAttribute("contentPage", questionPage);
             model.addAttribute("board", board);
         } if (kindOfContent == 1) {
-            Page<Review> reviewPage = this.reviewService.getListWithUsername(page, keyword, boardId);
+            Page<Review> reviewPage = this.reviewService.getListWithUsername(page, keyword, boardId.intValue());
             model.addAttribute("contentPage", reviewPage);
         }
 

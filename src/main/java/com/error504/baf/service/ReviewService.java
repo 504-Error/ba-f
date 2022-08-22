@@ -168,8 +168,10 @@ public class ReviewService {
             }
 
             Predicate predicate1 = criteriaBuilder.or(
+                    criteriaBuilder.like(review.get("genre"), "%" + keyword + "%"),
                     criteriaBuilder.like(review.get("subject"), "%" + keyword + "%"),
-                    criteriaBuilder.like(review.get("place"),  "%" + keyword + "%")
+                    criteriaBuilder.like(review.get("place"),  "%" + keyword + "%"),
+                    criteriaBuilder.like(review.get("placeAddress"),  "%" + keyword + "%")
             );
 
             Predicate predicate2 = criteriaBuilder.and(review.get("genre").in(categories));
@@ -218,6 +220,7 @@ public class ReviewService {
             Predicate predicate1 = criteriaBuilder.or(
                     criteriaBuilder.like(review.get("subject"), "%" + keyword + "%"),
                     criteriaBuilder.like(review.get("place"),  "%" + keyword + "%"),
+                    criteriaBuilder.like(review.get("placeAddress"),  "%" + keyword + "%"),
                     criteriaBuilder.like(siteUser.get("username"),  "%" + keyword + "%")
             );
 
