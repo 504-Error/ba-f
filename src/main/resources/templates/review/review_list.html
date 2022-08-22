@@ -34,7 +34,6 @@
     </nav>
 
     <div class="review-main-container mt-5">
-        <!--        검색창 및 글쓰기 버튼 생성-->
         <div class="review-header-content">
             <div id="review-search-input-group">
                 <form th:action="@{|/review/${category}|}" method="get" id="searchForm">
@@ -47,21 +46,23 @@
             </div>
 
             <a th:href="@{|/review/create|}">
-                <button id="review-btn-write" type="button" class="btn btn-primary">리뷰 작성</button>
+                <button id="review-btn-write" type="button" class="btn btn-primary float-end">리뷰 작성</button>
             </a>
         </div>
     </div>
 
-    <div class="hstack gap-3" style="clear: left">
-        <div class="ms-auto">목록형</div>
-        <div class="vr"></div>
-        <div class="">카드형</div>
-    </div>
+    <h5 class="border-bottom py-2" th:if="${category == 'all'}" style="clear: both">검색 결과</h5>
 
-    <div class="card my-3" th:each="review : ${reviewPage}" style="clear:right">
+<!--    <div class="hstack gap-3" style="clear: left">-->
+<!--        <div class="ms-auto">목록형</div>-->
+<!--        <div class="vr"></div>-->
+<!--        <div class="">카드형</div>-->
+<!--    </div>-->
+
+    <div class="card my-3" th:each="review : ${reviewPage}" style="clear: both">
         <a th:href="@{|/review/content/${review.id}|}" style="text-decoration:none; color:inherit">
             <div class="image-box float-start me-3" th:if="${#lists.size(review.reviewImages)} > 0">
-                <img class="image-thumbnail" th:src="@{|/review/display?filePath=${review.reviewImages.get(0).getImage()}|}">
+                <img class="image-thumbnail" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}">
             </div>
             <div class="card-body">
                 <div class="review-content-area mt-0 mb-3">
@@ -69,7 +70,7 @@
                     <div style="height: 30px;line-height:30px;">
                         <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:if="${review.isAnonymous == true}" th:text="익명"></span>
                         <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></span>
-                        <span class="fw-normal content-time" th:text="${#temporals.format(review.createDate, 'yy/MM/dd HH:mm')}"></span>
+                        <span class="fw-normal content-time" th:text="${review.getDate(review.createDate)}"></span>
                     </div>
                 </div>
                 <div class="card-text">

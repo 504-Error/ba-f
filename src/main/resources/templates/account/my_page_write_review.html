@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Ba-f Community</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+</head>
+<body>
+
+// 수빈
+<div layout:fragment="content" class="container">
+    <div class="col-9">
+        <div class="container" style="padding-top: 5%">
+            <div class="row">
+                <div class="col-md-3 col-sm-4">
+                    <div class="list-group" style="padding-top:31%">
+                        <a th:href="@{/user/mypage}" class="list-group-item list-group-item-action">내 정보</a>
+                        <a th:href="@{/user/mypage/write}" class="list-group-item list-group-item-action">사용자 작성글 조회</a>
+                        <a th:href="@{/answer/mypage/comment}" class="list-group-item list-group-item-action">댓글 모아보기</a>
+                        <a th:href="@{/user/whatIsBaf}" class="list-group-item list-group-item-action">Ba-f 소개</a>
+                        <a th:href="@{/user/mypage/notice}" class="list-group-item list-group-item-action">공지사항</a>
+                    </div>
+
+                </div>
+
+                <div class="col-9 col-sm-9" style="padding-left:10%">
+                    <h4 class="col-sm-12">사용자 작성글</h4>
+                    <div class="hstack gap-3" style="clear: left">
+                        <div class="ms-auto">
+                            <a th:href="@{/user/mypage/write}">커뮤니티</a></div>
+                        <div class="vr"></div>
+                        <div class=""><a th:href="@{/user/mypage/write/review}">방문 후기</a></div>
+                        </a>
+                    </div>
+
+                    <div class="card my-3" th:each="review : ${reviewPage}" style="clear:right">
+                        <a th:href="@{|/review/content/${review.id}|}" style="text-decoration:none; color:inherit">
+                            <div class="image-box float-start me-3" th:if="${#lists.size(review.reviewImages)} > 0">
+                                <img class="image-thumbnail" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}">
+                            </div>
+                            <div class="card-body">
+                                <div class="review-content-area mt-0 mb-3">
+                                    <img class="img-profile-content float-start me-1" src="/static/image/anonymous_profile.png" style="width: 30px; height: 30px;">
+                                    <div style="height: 30px;line-height:30px;">
+                                        <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:if="${review.isAnonymous == true}" th:text="익명"></span>
+                                        <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></span>
+
+                                        <!--                        //수빈-->
+                                        <span class="fw-normal content-time" th:text="${review.getDate(review.createDate)}"></span>
+
+
+                                    </div>
+                                </div>
+                                <div class="card-text">
+                                    <div>
+                                        <span class="strong" th:text="'[' + ${review.genre} + '] ' + ${review.subject}"></span>
+                                        <span class="review-content-place" th:text="'(' + ${review.place} + ')'"></span>
+                                    </div>
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <span class="float-start me-2">평점 : </span>
+                                            </td>
+                                            <td>
+                                <span class="star float-start">
+                                    <span class="star-on" th:style="'width: ' + ${review.grade} * 20 + '%'">
+                                        <span class="blind" th:text="'평점' + ${review.grade}"></span>
+                                    </span>
+                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="2">
+                                                <div class="ms-1">
+                                    <span th:if="${#strings.contains(review.amenities,'0')}" class="amenities-img float-start me-2">
+                                        <img id="img_amenities_elevator_select" src="/static/image/amenities_elevator_select.png" height="30" width="30" />
+                                    </span>
+                                                    <span th:if="${#strings.contains(review.amenities,'1')}" class="amenities-img float-start me-2">
+                                        <img id="img_amenities_incline_select" src="/static/image/amenities_incline_select.png" height="30" width="30" />
+                                    </span>
+                                                    <span th:if="${#strings.contains(review.amenities,'2')}" class="amenities-img float-start me-2">
+                                        <img id="img_amenities_parking_select" src="/static/image/amenities_parking_select.png" height="30" width="30" />
+                                    </span>
+                                                    <span th:if="${#strings.contains(review.amenities,'3')}" class="amenities-img float-start me-2">
+                                        <img id="img_amenities_table_select" src="/static/image/amenities_table_select.png" height="30" width="30" />
+                                    </span>
+                                                    <span th:if="${#strings.contains(review.amenities,'4')}" class="amenities-img float-start me-2">
+                                        <img id="img_amenities_rest-room_select" src="/static/image/amenities_rest-room_select.png" height="30" width="30" />
+                                    </span>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="mb-4">
+                                    <ul class="content-info">
+                                        <li class="recommend" th:text="${#lists.size(review.voter)}"></li>
+                                        <li class="comment" th:text="${#lists.size(review.reviewCommentsList)}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div th:if="${!reviewPage.isEmpty()}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!reviewPage.hasPrevious} ? 'disabled'">
+                                <a class="page-link" href="javascript:void(0)" th:data-page="${reviewPage.number-1}">
+                                    <span>이전</span>
+                                </a>
+                            </li>
+                            <li th:each="page: ${#numbers.sequence(0, reviewPage.totalPages-1)}"
+                                th:if="${page >= reviewPage.number-5 and page <= reviewPage.number+5}"
+                                th:classappend="${page == reviewPage.number} ? 'active'" class="page-item">
+                                <a th:text="${page+1}" class="page-link" href="javascript:void(0)"
+                                   th:data-page="${page}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${!reviewPage.hasNext} ? 'disabled'">
+                                <a class="page-link" href="javascript:void(0)" th:data-page="${reviewPage.number+1}">
+                                    <span>다음</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

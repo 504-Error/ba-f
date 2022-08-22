@@ -2,30 +2,182 @@
         xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Ba-f : 게시글 작성</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <meta name="_csrf" th:content="${_csrf?.token}">
+    <meta name="_csrf_header" th:content="${_csrf?.headerName}">
+</head>
 <div layout:fragment="content" class="container">
-  <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-  <form th:action="@{/question/create}" th:object="${questionForm}" method="post">
-    <input th:if="${boardId != null}" type="hidden" id="boardId" name="boardId" th:value="${boardId}"/>
-    <div th:replace="form_errors :: formErrorsFragment"></div>
-      <div class="row mb-3">
-        <label for="inputBoard" th:if="${boardId == null}" class="col-sm-2 col-form-label">게시판 선택</label>
-        <div class="col-sm-5">
-          <select class="form-select" id="inputBoard" th:if="${boardId == null}" th:field="*{boardId}">
-            <option selected value="0">게시판 선택</option>
-            <option th:each="board : ${board}"
-                    th:value="${board.id}"
-                    th:text="${board.boardName}"></option>
-          </select>
+    <h5 class="my-3 border-bottom pb-2">질문등록</h5>
+    <form th:action="@{/question/create}" th:object="${questionForm}" method="post">
+        <input th:if="${boardId != null}" type="hidden" id="boardId" name="boardId" th:value="${boardId}"/>
+        <div th:replace="form_errors :: formErrorsFragment"></div>
+        <div class="row mb-3">
+            <label for="inputBoard" th:if="${boardId == null}" class="col-sm-2 col-form-label">게시판 선택</label>
+            <div class="col-sm-5">
+                <select class="form-select" id="inputBoard" th:if="${boardId == null}" th:field="*{boardId}">
+                    <option selected value="0">게시판 선택</option>
+                    <option th:each="board : ${board}"
+                            th:value="${board.id}"
+                            th:text="${board.boardName}"></option>
+                </select>
+            </div>
         </div>
-      </div>
-    <div class="mb-3">
-      <label id="subject" class="form-label">제목</label>
-      <input type="text" name="subject" class="form-control"> </div>
-    <div class="mb-3">
-      <label id="content" class="form-label">내용</label>
-      <textarea name="content" class="form-control" rows="10"></textarea>
-    </div>
-    <input type="submit" value="저장하기" class="btn btn-primary my-2"> </form>
+        <div class="mb-3">
+            <label id="subject" class="form-label">제목</label>
+            <input id="subjectValue" type="text" name="subject" class="form-control"></div>
+        <div class="mb-3">
+            <label id="content" class="form-label">내용</label>
+            <textarea id="contentValue" name="content" class="form-control" rows="10"></textarea>
+        </div>
+        <div class="row mb-3">
+            <label class="form-label">이미지 추가</label>
+            <div class="col-12">
+                <input class="form-control d-none" type="file" accept="image/*" id="formFileMultiple"
+                       onchange="addImg()" multiple>
+                <label for="formFileMultiple" class="btn new-img">
+                    <img src="/static/image/new_img.png">
+                </label>
+                <div id="board-preview-add-img"></div>
+            </div>
+        </div>
+        <div class="row mb-3 float-end">
+            <div class="w-auto text-sm-center" style="padding: 6px 6px">
+                <input class="form-check-input" type="checkbox" th:field="*{isAnonymous}" id="check_anonymous"
+                       value=false style="margin-top: 0.4rem">
+                <label class="form-check-label" for="check_anonymous">익명</label>
+            </div>
+            <div class="w-auto">
+                <button type="button" class="btn btn-primary" id="btn-submit" onclick="uploadContent()">저장하기</button>
+            </div>
+        </div>
+        <!--    <input type="submit" value="저장하기" class="btn btn-primary my-2"> </form>-->
+    </form>
+
+    <script type="text/javascript">
+        var inputFileList = new Array();
+
+        function addImg() {
+            const fileInput = document.getElementById("formFileMultiple");
+            const selectedFile = fileInput.files;
+
+            if ((inputFileList.length + selectedFile.length) > 5) {
+                alert("이미지는 최대 5개까지 업로드 가능합니다.");
+                $('input[name=images]').val();
+                return;
+            }
+
+            console.log("addimg-selectedFile : ", selectedFile);
+            for (let i = 0; i < selectedFile.length; i++) {
+                let div = document.createElement('div');
+                div.className = "btn preview-img"
+                div.id = (selectedFile[i].name).replace(/-/g, "_") + "-" + selectedFile[i].lastModified;
+                div.onclick = function () {
+                    for (let i = 0; i < inputFileList.length; i++) {
+                        var fileData = div.id.split('-');
+                        console.log("div.id.split : ", div.id);
+                        console.log("fileData : ", fileData);
+                        if (inputFileList[i].name.replace(/-/g, "_") === fileData[0] && inputFileList[i].lastModified == fileData[1]) {
+                            inputFileList.splice(i, 1);
+                            console.log("delete img num : ", i);
+                            break;
+                        }
+                    }
+                    document.getElementById('board-preview-add-img').removeChild(div);
+                    console.log("delete after inputFileList : ", inputFileList);
+                }
+
+                let child_div = document.createElement('div');
+                child_div.className = "preview-img-background";
+                div.appendChild(child_div);
+
+                let p = document.createElement('p');
+                p.className = "preview-img-del";
+                p.appendChild(document.createTextNode("이미지 삭제"));
+                child_div.appendChild(p);
+
+                const fileReader = new FileReader();
+                fileReader.onload = e => {
+                    div.style = "background-image:url(" + e.target.result + ");"
+                    document.getElementById('board-preview-add-img').appendChild(div);
+                }
+
+                fileReader.readAsDataURL(selectedFile[i]);
+                inputFileList.push(selectedFile[i]);
+                console.log("add img : ", selectedFile[i]);
+            }
+
+            fileInput.value = "";
+        }
+
+        $("#check_anonymous").change(function () {
+            console.log("change check");
+            if (this.checked) {
+                $(this).attr('value', true);
+            } else {
+                $(this).attr('value', false);
+            }
+        });
+
+        function uploadContent() {
+            let formData = new FormData();
+
+            let bordId = ";"
+            if($('#boardId').val()) {
+                bordId = $('#boardId').val();
+            } else {
+                bordId = $("#inputBoard option:selected").val();
+            }
+
+            console.log("boardid : ", bordId);
+
+            let contentData = {
+                "subject"    : $('#subjectValue').val(),
+                "content"    : $('#contentValue').val(),
+                "boardId"    : bordId,
+                "isAnonymous": document.getElementById('check_anonymous').checked
+            }
+
+            formData.append("contentData", new Blob([JSON.stringify(contentData)], {type: "application/json"}));
+
+            for (let key of formData.keys()) {
+                console.log(key, ":", formData.get(key));
+            }
+            for (let i = 0; i < inputFileList.length; i++) {
+                formData.append("images", inputFileList[i]);  // 배열에서 이미지들을 꺼내 폼 객체에 담는다.
+            }
+
+            for (let key of formData.keys()) {
+                console.log(key, ":", formData.get(key));
+            }
+            // document.getElementById('reviewForm').submit();
+            // return false;
+
+            $.ajax({
+                url        : '/question/create/upload',
+                type       : 'POST',
+                data       : formData,
+                enctype    : "multipart/form-data",
+                processData: false,
+                contentType: false,
+                cache      : false,
+                beforeSend : function (jqXHR, settings) {
+                    var header = $("meta[name='_csrf_header']").attr("content");
+                    var token = $("meta[name='_csrf']").attr("content");
+                    jqXHR.setRequestHeader(header, token);
+                },
+                success    : function (data) {
+                    location.href = "/board/question_list/" + data;
+                },
+                error      : function (error) {
+                    alert("code : " + error.status + "\n" + "message : " + error.responseText + "\n" + "error : " + error);
+                }
+            });
+        }
+    </script>
 </div>
 </html>
 

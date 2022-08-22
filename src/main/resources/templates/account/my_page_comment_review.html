@@ -23,51 +23,54 @@
                         <a th:href="@{/user/whatIsBaf}" class="list-group-item list-group-item-action">Ba-f 소개</a>
                         <a th:href="@{/user/mypage/notice}" class="list-group-item list-group-item-action">공지사항</a>
                     </div>
+
                 </div>
                 <div class="col-9 col-sm-9" style="padding-left:10%" >
-                    <h4 class="col-sm-12">좋아요 모아보기</h4>
-                    <div th:each="question : ${questionList}">
-                        <a style="text-decoration:none; color:inherit"th:href="@{/question/detail/} + ${question.id} + @{/}">
+                    <h4 class="col-sm-12">사용자 작성 댓글 모아보기</h4>
+                    <div class="hstack gap-3" style="clear: left">
+                        <div class="ms-auto">
+                            <a th:href="@{/answer/mypage/comment}">커뮤니티</a></div>
+                        <div class="vr"></div>
+                        <div class=""><a th:href="@{/review/mypage/comment}">방문 후기</a></div>
+                        </a>
+                    </div>
+                    <div th:each="answer : ${answerList}">
+<!--                        <a style="text-decoration:none; color:inherit"th:href="@{/question/detail/} + ${question.question.id} + @{/}">-->
                             <div class="card my-3">
                                 <div class="card-body" >
                                     <div class="review-content-area mt-0 mb-4">
                                         <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
                                         <div class="ms-5">
-                                            <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></p>
-                                            <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
+                                            <p class="fw-bolder mb-0 content-nickname" th:if="${answer.author != null}" th:text="${answer.author.username}"></p>
+                                            <time class="fw-normal content-time" th:text="${answer.getDate(answer.createDate)}"></time>
                                         </div>
 
                                         <div class="card-text" style="white-space: pre-line; padding-bottom: -10%">
-                                            <div th:text="${question.subject}"></div>
+                                            <div th:text="${answer.content}"></div>
                                         </div>
 
-                                        <div class="my-2">
-                                            <ul class="content-info">
-                                                <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
-                                                <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
-                                            </ul>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </a>
                     </div>
-                    <div th:if="${!questionList.isEmpty()}">
+                    <div th:if="${!answerList.isEmpty()}">
                         <ul class="pagination justify-content-center">
-                            <li class="page-item" th:classappend="${!questionList.hasPrevious} ? 'disabled'">
+                            <li class="page-item" th:classappend="${!answerList.hasPrevious} ? 'disabled'">
                                 <a class="page-link"
-                                   th:href="@{|?page=${questionList.number-1}|}">
+                                   th:href="@{|?page=${answerList.number-1}|}">
                                     <span>이전</span>
                                 </a>
                             </li>
-                            <li th:each="page: ${#numbers.sequence(0, questionList.totalPages-1)}"
-                                th:if="${page >= questionList.number-5 and page <= questionList.number+5}"
-                                th:classappend="${page == questionList.number} ? 'active'"
+                            <li th:each="page: ${#numbers.sequence(0, answerList.totalPages-1)}"
+                                th:if="${page >= answerList.number-5 and page <= answerList.number+5}"
+                                th:classappend="${page == answerList.number} ? 'active'"
                                 class="page-item">
                                 <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
                             </li>
-                            <li class="page-item" th:classappend="${!questionList.hasNext} ? 'disabled'">
-                                <a class="page-link" th:href="@{|?page=${questionList.number+1}|}">
+                            <li class="page-item" th:classappend="${!answerList.hasNext} ? 'disabled'">
+                                <a class="page-link" th:href="@{|?page=${answerList.number+1}|}">
                                     <span>다음</span>
                                 </a>
                             </li>

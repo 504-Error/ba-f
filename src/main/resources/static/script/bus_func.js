@@ -149,19 +149,30 @@ function addMarker(position, idx, title) {
 }
 
 // 버스 정류장 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
-function addBSMarker(position) {
-    var imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-        imageSize = new kakao.maps.Size(40, 40),  // 마커 이미지의 크기
+function addBSMarker(position, lowBusExisting) {
+    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+        imageSize = new kakao.maps.Size(27, 28),  // 마커 이미지의 크기
+        imgOptions;
+
+    if(lowBusExisting == "true") {
         imgOptions =  {
-            spriteSize : new kakao.maps.Size(60, 710), // 스프라이트 이미지의 크기
-            spriteOrigin : new kakao.maps.Point(0, (9*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-        },
-        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
-        marker = new kakao.maps.Marker({
-            position: position, // 마커의 위치
-            image: markerImage
-        });
+            spriteSize : new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
+            spriteOrigin : new kakao.maps.Point(46, (1*36)), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+            offset: new kakao.maps.Point(11, 28) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        };
+    } else {
+        imgOptions =  {
+            spriteSize : new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
+            spriteOrigin : new kakao.maps.Point(46, (5*36)), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+            offset: new kakao.maps.Point(11, 28) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        };
+    }
+
+    markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+    marker = new kakao.maps.Marker({
+        position: position, // 마커의 위치
+        image: markerImage
+    });
 
     marker.setMap(map); // 지도 위에 마커를 표출합니다
     BSmarkers.push(marker);  // 배열에 생성된 마커를 추가합니다
@@ -247,24 +258,26 @@ function panToM(place_y, place_x) {
     data["LAT"] = place_y;
     data["LNG"] = place_x;
 
+    let lowBusExisting;
+
     $.ajax({
         url: "/bus/search-station",
         type: "POST",
         data: JSON.stringify(data), // 요청 시 포함되어질 데이터
         contentType: 'application/json', //요청 컨텐트 타입
-        dataType: "json", // 응답 데이터 형식
+        dataType: "json", // 응답 데이터 형식,
         beforeSend: function (jqXHR, settings) {
             var header = $("meta[name='_csrf_header']").attr("content");
             var token = $("meta[name='_csrf']").attr("content");
             jqXHR.setRequestHeader(header, token);
         },
         success: function (result) {
-            let arrStr = JSON.stringify(result);
+            let arrStr = JSON.stringify(result[0]);
             let arrJson = JSON.parse(arrStr);
-            for (let i = 0; i < result.length; i++) {
+            for (let i = 0; i < result[0].length; i++) {
                 var stationPosition = new kakao.maps.LatLng(arrJson[i].gpsY, arrJson[i].gpsX)
-
-                let BSmarker = addBSMarker(stationPosition, i);
+                lowBusExisting = result[1][i];
+                let BSmarker = addBSMarker(stationPosition, lowBusExisting);
 
                 (function (BSmarker, title, arsId) {
                     kakao.maps.event.addListener(BSmarker, 'mouseover', function () {

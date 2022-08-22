@@ -2,14 +2,17 @@ package com.error504.baf.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 public class SiteUser {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,14 +22,39 @@ public class SiteUser {
 
     private String password;
 
+    private String name;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date birthday;
+
     @Column(unique = true)
     private String email;
+
+    private int gender;
 
     private int type;
 
     private int getWheel;
 
+    private String certifyFilePath;
+
     private int getAuth;
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "question_voter", joinColumns = @JoinColumn(name = "voter_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
+    Set<Question> questionVoter;
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "question_accuser", joinColumns = @JoinColumn(name = "accuser_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
+    Set<Question> questionAccuser;
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "review_voter", joinColumns = @JoinColumn(name = "voter_id"), inverseJoinColumns = @JoinColumn(name = "review_id"))
+    Set<Review> reviewVoter;
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "review_accuser", joinColumns = @JoinColumn(name = "accuser_id"), inverseJoinColumns = @JoinColumn(name = "review_id"))
+    Set<Review> reviewAccuser;
 
     public void updatePassword(String newPassword) {
         this.password = newPassword;

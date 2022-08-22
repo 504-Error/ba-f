@@ -1,6 +1,7 @@
 package com.error504.baf.service;
 
 import com.error504.baf.exception.DataNotFoundException;
+import com.error504.baf.model.Question;
 import com.error504.baf.model.Review;
 import com.error504.baf.model.ReviewImage;
 import com.error504.baf.model.SiteUser;
@@ -20,7 +21,9 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +55,31 @@ public class ReviewService {
         Specification<Review> spec = searchReview(keyword, category);
         return this.reviewRepository.findAll(spec, pageable);
     }
+
+    public List<Review> getListByAuthor(Long id) {
+        return this.reviewRepository.findByAuthorId(id);
+    }
+
+    public List<Review> getReviewList(){
+        List<Review> reviewList = reviewRepository.findAll();
+        List<Review> reviewHotList = new ArrayList<>();
+        for(Review review:reviewList){
+            if((review.getVoter()).size()>2){ //하트 개수 정하기
+                if(ChronoUnit.HOURS.between(review.getCreateDate(), LocalDateTime.now())<24){
+                    reviewHotList.add(review);
+                }
+            }
+        }
+
+        Collections.reverse(reviewHotList);
+        if (reviewHotList.size()>3){
+            reviewHotList=reviewHotList.subList(0,4);
+            return reviewHotList;
+        }
+        return reviewHotList;
+    }
+
+
 
     public Page<Review> getListWithUsername(int page, String keyword, int categoryId) {
         List<Sort.Order> sorts = new ArrayList<>();
@@ -112,6 +140,13 @@ public class ReviewService {
         this.reviewRepository.delete(review);
     }
 
+    public void deleteUser(List<Review> reviewList) {
+        for (Review review : reviewList) {
+            review.setAuthor(null);
+            this.reviewRepository.save(review);
+        }
+    }
+
     private Specification searchReview(String keyword, String category){
         return (review, query, criteriaBuilder) -> {
             query.distinct(true);
@@ -143,8 +178,10 @@ public class ReviewService {
             }
 
             Predicate predicate1 = criteriaBuilder.or(
+                    criteriaBuilder.like(review.get("genre"), "%" + keyword + "%"),
                     criteriaBuilder.like(review.get("subject"), "%" + keyword + "%"),
-                    criteriaBuilder.like(review.get("place"),  "%" + keyword + "%")
+                    criteriaBuilder.like(review.get("place"),  "%" + keyword + "%"),
+                    criteriaBuilder.like(review.get("placeAddress"),  "%" + keyword + "%")
             );
 
             Predicate predicate2 = criteriaBuilder.and(review.get("genre").in(categories));
@@ -193,6 +230,7 @@ public class ReviewService {
             Predicate predicate1 = criteriaBuilder.or(
                     criteriaBuilder.like(review.get("subject"), "%" + keyword + "%"),
                     criteriaBuilder.like(review.get("place"),  "%" + keyword + "%"),
+                    criteriaBuilder.like(review.get("placeAddress"),  "%" + keyword + "%"),
                     criteriaBuilder.like(siteUser.get("username"),  "%" + keyword + "%")
             );
 
@@ -201,6 +239,15 @@ public class ReviewService {
 
             return criteriaBuilder.and(predicate1, predicate2);
         };
+    }
+
+
+
+    public Page<Review> getReviewResult(Long id, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return reviewRepository.findReviewByAuthorId(pageable, id);
     }
 
 

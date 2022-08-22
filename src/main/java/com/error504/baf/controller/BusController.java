@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -31,16 +32,49 @@ public class BusController {
     @ResponseBody
     public ArrayList searchStation(@RequestBody Map<String, Object> input) throws IOException {
         ArrayList result = busService.getStationsByPos(input.get("LAT").toString(), input.get("LNG").toString());
+        System.out.println(result);
 
-        return result;
+        ArrayList<String> lowBusNumList =  new ArrayList<String>();
+        for(int i=0; i<result.size(); i++){
+            String[] arr = result.get(i).toString().split(",");
+            arr = arr[7].split("=");
+
+            ArrayList stationInfo = busService.getLowStationByUid(arr[1]);
+            String lowBusExisting = "true";
+            if(stationInfo == null){
+                lowBusExisting = "false";
+            }
+
+            lowBusNumList.add(lowBusExisting);
+        }
+        System.out.println(lowBusNumList);
+
+        ArrayList<ArrayList<String>> test = new ArrayList<ArrayList<String>>();
+        test.add(result);
+        test.add(lowBusNumList);
+
+        System.out.println(test);
+
+        return test;
     }
 
     @PostMapping("/bus/station-info")
     @ResponseBody
     public ArrayList stationInfo(@RequestBody Map<String, Object> input) throws IOException {
-        ArrayList stationInfo = busService.getLowStaionByUid(input.get("arsId").toString());
+        ArrayList stationInfo = busService.getLowStationByUid(input.get("arsId").toString());
 
         return stationInfo;
+    }
+
+    @PostMapping("/bus/lowBus-num")
+    @ResponseBody
+    public String lowBusExisting(@RequestBody Map<String, Object> input) throws IOException {
+        ArrayList stationInfo = busService.getLowStationByUid(input.get("arsId").toString());
+        String lowBusExisting = "true";
+        if(stationInfo == null){
+            lowBusExisting = "false";
+        }
+        return lowBusExisting;
     }
 
     @PostMapping("/bus/bus-info")

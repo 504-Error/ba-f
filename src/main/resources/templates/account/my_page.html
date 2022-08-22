@@ -13,17 +13,19 @@
 
 <div  layout:fragment="content" class="container">
 
+<!--    //수빈-->
 
-    <div class="col-8">
+    <div class="col-9">
 
         <div class="container" style="padding-top: 5%">
             <div class="row">
                 <div class="col-md-3 col-sm-4">
                     <div class="list-group" style="padding-top:31%">
                         <a th:href="@{/user/mypage}" class="list-group-item list-group-item-action">내 정보</a>
-                        <a th:href="@{/user/mypage/email}" class="list-group-item list-group-item-action">이메일 변경</a>
-                        <a th:href="@{/user/mypage/pwd}" class="list-group-item list-group-item-action">패스워드 변경</a>
-                        <a th:href="@{/user/mypage/delete}" class="list-group-item list-group-item-action">회원 탈퇴</a>
+                        <a th:href="@{/user/mypage/write}" class="list-group-item list-group-item-action">사용자 작성글 조회</a>
+                        <a th:href="@{/answer/mypage/comment}" class="list-group-item list-group-item-action">댓글 모아보기</a>
+                        <a th:href="@{/user/whatIsBaf}" class="list-group-item list-group-item-action">Ba-f 소개</a>
+                        <a th:href="@{/user/mypage/notice}" class="list-group-item list-group-item-action">공지사항</a>
                     </div>
 
                 </div>
@@ -41,34 +43,36 @@
                                 </div>
                             </div>
                             <div  class="border-bottom py-2">
-                                <span style="font-size:16px"> 사용자 작성글</span>
-                                <a class="form-text text-muted" style="float:right"
-                                   th:href="@{/user/mypage/write}">더보기</a>
+                                <span style="font-size:16px"> 휠체어 탑승 여부 변경</span>
+                                <div class="btn_switch" style="float: right">
+                                    <input type="checkbox" id="regionIp" class="switch_checkbox">
+                                    <label for="regionIp" class="switch_btn">
+                                    <span id="regionIp_toggle_switch_on" class="switch_on" role="checkbox"
+                                  aria-checked="false">ON</span>
+                                        <span id="regionIp_toggle_switch_off" class="switch_off" role="checkbox"
+                                              aria-checked="true">OFF</span>
+                                    </label>
+                                </div>
                             </div>
                             <br>
                             <div  class="border-bottom py-2">
-                                 <span style="font-size:16px"> 좋아요 모아보기</span>
+                                <span style="font-size:16px"> 이메일 변경</span>
                                 <a class="form-text text-muted" style="float:right"
-                                   th:href="@{/user/mypage/like}">더보기</a>
+                                   th:href="@{/user/mypage/email}">바로 가기</a>
                             </div>
                             <br>
                             <div  class="border-bottom py-2">
-                                <span style="font-size:16px"> 댓글 모아보기 </span>
+                                 <span style="font-size:16px"> 비밀번호 변경</span>
                                 <a class="form-text text-muted" style="float:right"
-                                   th:href="@{/answer/mypage/comment}">더보기</a>
+                                   th:href="@{/user/mypage/pwd}">바로 가기</a>
                             </div>
                             <br>
                             <div  class="border-bottom py-2">
-                                <span style="font-size:16px"> Ba-f 소개 </span>
+                                <span style="font-size:16px"> 회원 탈퇴</span>
                                 <a class="form-text text-muted" style="float:right"
-                                   th:href="@{/user/whatIsBaf}">더보기</a>
+                                   th:href="@{/user/mypage/delete}">바로 가기</a>
                             </div>
-                            <br>
-                            <div  class="border-bottom py-2">
-                                <span style="font-size:16px"> 공지사항 </span>
-                                <a class="form-text text-muted" style="float:right"
-                                   th:href="@{/user/mypage/notice}">더보기</a>
-                            </div>
+                        </form>
 
 
 

@@ -26,7 +26,7 @@ public class BoardService {
 
     public Page<Board> getList(int page, String keyword) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
+        sorts.add(Sort.Order.asc("id"));
         Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
         Specification<Board> spec = searchBoard(keyword);
         return boardRepository.findAll(spec, pageable);

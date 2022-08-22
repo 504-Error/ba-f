@@ -1,5 +1,6 @@
 package com.error504.baf.model;
 
+import com.error504.baf.Time;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +27,7 @@ public class Review {
     @Column(length = 200)
     private String subject;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT" )
     private String date;
 
     @Column(columnDefinition = "TEXT")
@@ -63,4 +64,9 @@ public class Review {
 
     @ManyToMany
     Set<SiteUser> accuser;
+
+    public String getDate( LocalDateTime time){
+        date = Time.convertLocaldatetimeToTime(time);
+        return date;
+    }
 }

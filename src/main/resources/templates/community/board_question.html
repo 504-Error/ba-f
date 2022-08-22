@@ -33,11 +33,27 @@
         </div>
     </nav>
 
-    <a th:href="@{/question/create/}+${board.id}" class="btn btn-primary" style="float:right;">질문 등록하기</a>
+    <div>
+        <div class="review-main-container mt-5" style="padding-bottom: 5%">
+            <div class="review-header-content">
+                <div id="review-search-input-group">
+                    <form th:action="@{|/board/question_list/${boardId}|}" method="get" id="searchForm">
+                        <div class="input-group mb-3 me-sm-3">
+                            <input type="text" name="keyword" id="search-input" th:value="${keyword}"
+                                   class="form-control" placeholder="글 제목, 내용 등을 검색해주세요" aria-label="review search"
+                                   aria-describedby="button-addon2">
+                            <input type="hidden" id="page" name="page" th:value="${questionList.number}">
+                            <button class="btn btn-outline-orange" type="submit" id="button-search">검색</button>
+                        </div>
+                    </form>
+                </div>
+                <a th:href="@{|/question/create/${board.id}|}" class="btn btn-primary float-end">질문 등록하기</a>
+            </div>
+        </div>
+    </div>
+
     <h5 class="border-bottom py-2" th:text="${board.boardName}"></h5>
 
-    <h1> </h1>
-    <h1> </h1>
     <div th:each="question : ${questionList}">
         <a style="text-decoration:none; color:inherit"th:href="@{/question/detail/} + ${question.id} + @{/}">
             <div class="card my-3">
@@ -85,7 +101,21 @@
             </li>
         </ul>
     </div>
-
 </div>
+
+<script layout:fragment="script" type='text/javascript'>
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+    const btn_search = document.getElementById("button-search");
+    btn_search.addEventListener('click', function() {
+        document.getElementById('page').value = 0;
+        document.getElementById('searchForm').submit();
+    });
+</script>
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.error504.baf.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 import java.util.Date;
@@ -39,6 +40,8 @@ public class UserCreateForm {
     private int type;
 
     private int getWheel;
+
+    private MultipartFile certifyFile;
 
 }
 

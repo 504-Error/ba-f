@@ -11,21 +11,30 @@
 </head>
 <body>
 
+// 수빈
 <div  layout:fragment="content" class="container">
-    <div class="col-8">
+    <div class="col-9">
         <div class="container" style="padding-top: 5%">
             <div class="row">
                 <div class="col-md-3 col-sm-4">
                     <div class="list-group" style="padding-top:31%">
                         <a th:href="@{/user/mypage}" class="list-group-item list-group-item-action">내 정보</a>
-                        <a th:href="@{/user/mypage/email}" class="list-group-item list-group-item-action">이메일 변경</a>
-                        <a th:href="@{/user/mypage/pwd}" class="list-group-item list-group-item-action">패스워드 변경</a>
-                        <a th:href="@{/user/mypage/delete}" class="list-group-item list-group-item-action">회원 탈퇴</a>
+                        <a th:href="@{/user/mypage/write}" class="list-group-item list-group-item-action">사용자 작성글 조회</a>
+                        <a th:href="@{/answer/mypage/comment}" class="list-group-item list-group-item-action">댓글 모아보기</a>
+                        <a th:href="@{/user/whatIsBaf}" class="list-group-item list-group-item-action">Ba-f 소개</a>
+                        <a th:href="@{/user/mypage/notice}" class="list-group-item list-group-item-action">공지사항</a>
                     </div>
 
                 </div>
                 <div class="col-9 col-sm-9" style="padding-left:10%" >
                     <h4 class="col-sm-12">사용자 작성글</h4>
+                    <div class="hstack gap-3" style="clear: left">
+                        <div class="ms-auto">
+                            <a th:href="@{/user/mypage/write}">커뮤니티</a></div>
+                        <div class="vr"></div>
+                        <div class=""><a th:href="@{/review/user/mypage/write}">방문 후기</a></div>
+                        </a>
+                    </div>
                     <div th:each="question : ${questionList}">
                         <a style="text-decoration:none; color:inherit"th:href="@{/question/detail/} + ${question.id} + @{/}">
                             <div class="card my-3">

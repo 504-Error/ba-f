@@ -4,48 +4,42 @@ import com.error504.baf.Time;
 import com.error504.baf.exception.DataNotFoundException;
 import com.error504.baf.model.*;
 import com.error504.baf.repository.BoardRepository;
+import com.error504.baf.repository.QuestionImageRepository;
 import com.error504.baf.repository.QuestionRepository;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
+import java.util.*;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 
 @Service
 public class QuestionService {
     private QuestionRepository questionRepository;
+    private QuestionImageRepository questionImageRepository;
     private BoardRepository boardRepository;
 
 
     @Autowired
-    public QuestionService(QuestionRepository questionRepository, BoardRepository boardRepository){
+    public QuestionService(QuestionRepository questionRepository, QuestionImageRepository questionImageRepository){
         this.questionRepository = questionRepository;
+        this.questionImageRepository = questionImageRepository;
     }
 
 
-
-    public Page<Question> getAllQuestion(int page, String keyword, int boardId){
+    @Transactional
+    public Page<Question> getAllQuestion(int page, String keyword, Long boardId){
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
@@ -64,8 +58,18 @@ public class QuestionService {
                 }
             }
         }
+
+        Collections.reverse(hotList);
+        if (hotList.size()>3){
+            hotList=hotList.subList(0,4);
+            return hotList;
+        }
         return hotList;
     }
+
+//    public void deleteVoterById(Long id) {
+//
+//    }
 
 
     public List<Question> getWeeklyHotList(){
@@ -76,9 +80,14 @@ public class QuestionService {
             if((question.getVoter()).size()>2){ //하트 개수 정하기
                 if(Time.getWeekOfYear(question.getCreateDate().toLocalDate().toString())==Time.getWeekOfYear(LocalDate.now().toString())){
                     weeklyList.add(question);
-                }
 
+                }
             }
+        }
+        Collections.reverse(weeklyList);
+        if (weeklyList.size()>3){
+            weeklyList=weeklyList.subList(0,4);
+            return weeklyList;
         }
         return weeklyList;
     }
@@ -123,19 +132,15 @@ public class QuestionService {
     }
 
     @Transactional
-    public Page<Question> getQuestionResult(Long id, int page ) {
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return questionRepository.findQuestionByBoardId(pageable, id);
-    }
-
-    @Transactional
     public Page<Question> getQuestionResultByUser(Long id, int page){
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return questionRepository.findQuestionByAuthorId(pageable, id);
+    }
+
+    public List<Question> getQuestionByAuthor(Long id){
+        return questionRepository.findQuestionByAuthorId(id);
     }
 
     public Question getQuestion(Long id){
@@ -147,15 +152,24 @@ public class QuestionService {
         }
     }
 
-
-    public void create(String subject, String content, SiteUser user, Board board)
+    public Long create(String subject, String content, SiteUser user, Board board, Boolean isAnonymous)
     { Question q = new Question();
         q.setSubject(subject);
         q.setContent(content);
         q.setCreateDate(LocalDateTime.now());
         q.setAuthor(user);
         q.setBoard(board);
-        questionRepository.save(q);
+        q.setIsAnonymous(isAnonymous);
+        questionRepository.saveAndFlush(q);
+
+        return q.getId();
+    }
+
+    public void uploadImage(Question question, String path) {
+        QuestionImage questionImage = new QuestionImage();
+        questionImage.setImage(path);
+        questionImage.setQuestion(question);
+        questionImageRepository.save(questionImage);
     }
 
     public void vote(Question question, SiteUser siteUser){
@@ -171,7 +185,14 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
-    private Specification searchQuestion(String keyword, int boardId) {
+    public void deleteByAuthor(List<Question> questionList) {
+        for (Question question : questionList) {
+            question.setAuthor(null);
+            this.questionRepository.save(question);
+        }
+    }
+
+    private Specification searchQuestion(String keyword, Long boardId) {
         return (question, query, criteriaBuilder) -> {
             query.distinct(true);
 

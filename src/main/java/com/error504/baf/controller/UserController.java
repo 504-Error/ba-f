@@ -13,11 +13,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -31,7 +43,7 @@ public class UserController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder){
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -52,7 +64,7 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+    public String signup(@Valid UserCreateForm userCreateForm, @RequestParam("certifyFile") MultipartFile file, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "account/signup_form";
         }
@@ -63,16 +75,51 @@ public class UserController {
             return "account/signup_form";
         }
 
+        SiteUser adduser;
         try {
-            userService.create(userCreateForm.getUsername(),
+            adduser = userService.create(userCreateForm.getUsername(), userCreateForm.getName(), userCreateForm.getGender(), userCreateForm.getBirthday(),
                     userCreateForm.getEmail(), userCreateForm.getPassword1(), userCreateForm.getType(), userCreateForm.getGetWheel());
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e){
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "account/signup_form";
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signedFailed", e.getMessage());
+            return "account/signup_form";
+        }
+
+        if (!file.isEmpty()) {
+            logger.info("file : " + file);
+
+            Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
+
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
+            stringBuilder.append(file.getOriginalFilename());
+            String filename = StringUtils.cleanPath(String.valueOf(stringBuilder)); // org.springframework.util
+            filename = StringUtils.getFilename(filename);
+            filename = filename.replace(":", "-");
+            filename = filename.replace(" ", "_");
+            logger.info("file name : " + filename);
+
+            Path uploadPath = uploadRoot.resolve(filename);
+
+            logger.info("uploadPath : " + uploadPath);
+
+            try (InputStream inputFile = file.getInputStream()) {
+                Files.copy(inputFile, uploadPath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                throw new IllegalStateException("업로드 실패...", e);
+            }
+
+            SiteUser siteUser = this.userService.getUser(adduser.getId());
+            this.userService.uploadCertifyFile(siteUser, uploadPath.toString());
+
+        } else {
+            // required나 이거 둘 중 하나로 하기
+            bindingResult.rejectValue("certifyFile", "certifyFileEmpty",
+                    "인증 파일을 첨부해주시길 바랍니다.");
             return "account/signup_form";
         }
 
@@ -113,6 +160,16 @@ public class UserController {
         return "account/member_delete";
 
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/wheelchair")
+    public String changeWheelchair(Model model, Principal principal) {
+        SiteUser siteUser = userService.getUser(principal.getName());
+        model.addAttribute("siteUser", siteUser);
+        return "account/my_page_wheelchair";
+
+    }
+
 
 
 //    @PreAuthorize("isAuthenticated()")

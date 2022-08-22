@@ -25,6 +25,7 @@
     </div>
 </nav>
 
+<!-- //수빈 small 추가-->
 <div layout:fragment="content" class="container my-3">
 
     <div class="my-3 border-bottom">
@@ -33,57 +34,53 @@
         </div>
     </div>
 
-    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data">
         <div style="width:40%">
-        <div th:replace="form_errors :: formErrorsFragment">
-        </div>
+            <div th:replace="form_errors :: formErrorsFragment"></div>
 
-        <div class="mb-3">
-            <label class="form-label">사용자ID</label>
-            <input type="text" th:field="*{username}" class="form-control">
-        </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">사용자ID</label><small style="color: red"> *</small>
+                <input type="text" id="username" th:field="*{username}" class="form-control">
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">비밀번호</label>
-            <input type="password" th:field="*{password1}" class="form-control">
-        </div>
+            <div class="mb-3">
+                <label for="password1" class="form-label">비밀번호</label><small style="color: red"> *</small>
+                <input type="password" id="password1" th:field="*{password1}" class="form-control">
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">비밀번호 확인</label>
-            <input type="password" th:field="*{password2}" class="form-control">
-        </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">비밀번호 확인</label><small style="color: red"> *</small>
+                <input type="password" id="password2" th:field="*{password2}" class="form-control">
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">이름</label>
-            <input type="text" th:field="*{name}" class="form-control">
-        </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">이름</label><small style="color: red"> *</small>
+                <input type="text" id="name" th:field="*{name}" class="form-control">
+            </div>
 
-        <div class="row mb-3">
-            <label for="inputBirthday" class="col-sm-2 col-form-label">생년월일</label>
-            <div class="col-sm-5">
+            <div class="mb-3">
+                <label for="inputBirthday" class="col-form-label">생년월일</label><small style="color: red"> *</small>
                 <input type="date" th:field="*{birthday}" class="form-control" id="inputBirthday" max="9999-12-31">
             </div>
-        </div>
 
-        <div class="row mb-3">
-            <label for="inputGender" class="col-sm-2 col-form-label">성별</label>
-            <div class="gender_code">
-                <select class="form-select" id="inputGender" th:field="*{gender}">
-                    <option value="0" selected>성별 선택</option>
-                    <option value="1">남자</option>
-                    <option value="2">여자</option>
-                </select>
+            <div class="mb-3">
+                <label for="inputGender" class="col-form-label">성별</label><small style="color: red"> *</small>
+                <div class="gender_code">
+                    <select class="form-select" id="inputGender" th:field="*{gender}">
+                        <option value="0" selected>성별 선택</option>
+                        <option value="1">남자</option>
+                        <option value="2">여자</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3">
-            <label class="form-label">이메일</label>
-            <input type="email" th:field="*{email}" class="form-control">
-        </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">이메일</label><small style="color: red"> *</small>
+                <input type="email" id="email" th:field="*{email}" class="form-control">
+            </div>
 
-        <div class="row mb-3">
-            <label for="inputType" class="col-sm-2 col-form-label">장애 유형</label>
-            <div class="col-sm-5">
+            <div class="mb-3">
+                <label for="inputType" class="col-form-label">장애 유형</label><small style="color: red"> *</small>
                 <select class="form-select" id="inputType" th:field="*{type}">
                     <option selected value="0">유형 선택</option>
                     <option value="1">지체 장애</option>
@@ -103,18 +100,23 @@
                     <option value="15">간질장애</option>
                 </select>
             </div>
-        </div>
-        <div class="row mb-3">
-            <label for="inputType" class="col-sm-2 col-form-label">휠체어 탑승 여부</label>
-            <div class="col-sm-7">
+
+            <div class="mb-3">
+                <label for="getWheel" class="col-form-label">휠체어 탑승 여부</label>
                 <select class="form-select" id="getWheel" th:field="*{getWheel}">
                     <option selected value="0">탑승 여부 선택</option>
                     <option value="1">탑승</option>
                     <option value="2">미탑승</option>
                 </select>
             </div>
-        </div>
-        <button type="submit" class="btn btn-primary">회원가입</button>
+
+            <div class="mb-3">
+                <label for="certifyFile" class="col-form-label">장애인등록증 인증</label><small style="color: red"> *</small>
+                <span></span>
+                <input type="file" accept="image/*, .pdf" id="certifyFile" class="form-control border" th:field="*{certifyFile}" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">회원가입</button>
 
         </div>
     </form>
