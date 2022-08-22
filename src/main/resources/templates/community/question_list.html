@@ -59,17 +59,20 @@
         <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
             <div class="card my-3">
                 <div class="card-body">
-                    <div class="review-content-area mt-0 mb-4">
+                    <small th:text="${question.board.boardName}"></small>
+                    <div style="padding-top: 1%" class="review-content-area mt-0 mb-4">
                         <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
                         <div class="ms-5">
-                            <span class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></span>
-                            <span class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></span>
+                            <p class="fw-bolder mb-0 content-nickname" th:if="${question.isAnonymous == true}" th:text="익명"></p>
+                            <p class="fw-bolder mb-0 content-nickname" th:unless="${question.isAnonymous == true}" th:text="${question.author.username}"></p>
+                            <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
                         </div>
 
-                        <div class="card-text" style="white-space: pre-line;">
-                            <div th:text="${question.subject}"></div>
-                            <small th:text="${question.content}"></small>
+                        <div class="card-text">
+                            <div class="strong mt-2" th:text="${question.subject}"></div>
+                            <div class="mt-1"  style="font-size: 14px" th:text="${question.content}"> </div>
                         </div>
+
 
                         <div class="mb-4">
                             <ul class="content-info">
@@ -92,17 +95,20 @@
         <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
             <div class="card my-3">
                 <div class="card-body">
-                    <div class="review-content-area mt-0 mb-4">
+                    <small th:text="${question.board.boardName}"></small>
+                    <div style="padding-top: 1%" class="review-content-area mt-0 mb-4">
                         <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
                         <div class="ms-5">
-                            <span class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></span>
-                            <span class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></span>
+                            <p class="fw-bolder mb-0 content-nickname" th:if="${question.isAnonymous == true}" th:text="익명"></p>
+                            <p class="fw-bolder mb-0 content-nickname" th:unless="${question.isAnonymous == true}" th:text="${question.author.username}"></p>
+                            <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
                         </div>
 
-                        <div class="card-text" style="white-space: pre-line;">
-                            <div th:text="${question.subject}" style="padding-bottom: -2%"></div>
-                            <small th:text="${question.content}"></small>
+                        <div class="card-text">
+                            <div class="strong mt-2" th:text="${question.subject}"></div>
+                            <div class="mt-1"  style="font-size: 14px" th:text="${question.content}"> </div>
                         </div>
+
 
                         <div class="mb-4"  style="padding-bottom: -2%">
                             <ul class="content-info">

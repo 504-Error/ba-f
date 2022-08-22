@@ -58,8 +58,7 @@
     <div class="card my-3" th:each="board : ${paging}">
         <div class="card-body">
             <a style="text-decoration:none; color:inherit" th:href="@{|/board/question_list/${board.id}|}">
-                <div class="card-text" style="white-space: pre-line;margin-top:-1.8%;margin-bottom: 1.5%">
-                    <span style="float:left;display: flex">🔈</span>
+                <div class="card-text" style="white-space: pre-line;margin-bottom: 1.5%">
                     <h6 style="margin-top: -1.2%;margin-bottom: -1.5%; " th:text="${board.boardName}"></h6>
                     <span style="font-size: 12px" th:text="${board.boardIntro}"></span>
                 </div>
