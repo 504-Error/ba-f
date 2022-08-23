@@ -224,16 +224,10 @@ function uploadReview() {
 
     formData.append("reviewData", new Blob([ JSON.stringify(loadFormDataToJson()) ], {type : "application/json"}));
 
-    for (let key of formData.keys()) {
-        console.log(key, ":", formData.get(key));
-    }
     for (let i = 0; i < inputFileList.length; i++) {
         formData.append("images", inputFileList[i]);  // 배열에서 이미지들을 꺼내 폼 객체에 담는다.
     }
 
-    for (let key of formData.keys()) {
-        console.log(key, ":", formData.get(key));
-    }
     // document.getElementById('reviewForm').submit();
     // return false;
 
@@ -251,6 +245,9 @@ function uploadReview() {
             jqXHR.setRequestHeader(header, token);
         },
         success: function(data) {
+            if (data == "/review/content") {
+                location.reload();
+            }
             sessionStorage.removeItem("form_data");
             sessionStorage.removeItem("selectPlaceData");
             sessionStorage.removeItem("selectPerformData");
@@ -285,20 +282,6 @@ function loadFormDataToJson() {
     } else {
         place = $('#inputPlace').val();
     }
-
-
-    // if (sessionStorage.getItem('selectPlaceData')) {
-    //     const selectPlace = JSON.parse(sessionStorage.getItem('selectPlaceData'));
-    //     console.log("selectPlaceData : ", selectPlace);
-    //     placeAddress = selectPlace["address"];
-    // } else if(sessionStorage.getItem('selectPerformData')) {
-    //     const selectPerformData = JSON.parse(sessionStorage.getItem('selectPerformData'));
-    //     console.log("selectPerformData : ", selectPerformData);
-    //     placeAddress = selectPerformData["address"];
-    // } else if(sessionStorage.getItem('selectAddressData')) {
-    //
-    // }
-
 
     let form_data = {
         "genre" : $("#inputGenre option:selected").val(),

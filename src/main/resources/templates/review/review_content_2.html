@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Ba-f : 방문 리뷰 내용</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/kakaomap.css}">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <nav class="sub-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="/review">전체</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="restaurant" href="/review/restaurant/list">음식점</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/review/cafe/list">카페</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/review/perform/list">공연</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/review/etc/list">기타</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <h5 class="my-3 border-bottom pb-2">리뷰 내용</h5>
+    <div class="review-content-area mt-0 mb-4">
+        <a href="javascript:void(0);" th:data-uri="@{|/review/delete/${review.id}|}"
+           class="delete btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"
+           th:if="${review.author != null and #authentication.getPrincipal().getUsername() == review.author.username}"
+           th:text="삭제"></a>
+        <a href="javascript:void(0);" th:data-uri="@{|/review/accuser/${review.id}|}"
+           class="accuse btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"
+           th:unless="${review.author != null and #authentication.getPrincipal().getUsername() == review.author.username}"
+           th:text="신고"></a>
+        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+        <div class="ms-5">
+            <p class="fw-bolder mb-0 content-nickname" th:if="${review.isAnonymous == true}" th:text="익명"></p>
+            <p class="fw-bolder mb-0 content-nickname" th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></p>
+            <time class="fw-normal content-time" th:text="${#temporals.format(review.createDate, 'yy/MM/dd HH:mm')}"></time>
+        </div>
+    </div>
+    <table class="review-content-table">
+        <tbody>
+        <tr>
+            <th scope="row">장르</th>
+            <td th:text="${review.genre}"></td>
+        </tr>
+        <tr>
+            <th scope="row">리뷰명</th>
+            <td>
+                [[${review.subject}]]
+                <a th:href="@{|/review/${category}?keyword=${review.subject}|}">
+                    <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 주제 리뷰 </span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">일자</th>
+            <td th:text="${review.date}"></td>
+        </tr>
+        <tr>
+            <th scope="row">장소</th>
+            <td>
+                [[${review.place}]]
+                <a th:href="@{|/review/${category}?keyword=${review.place}|}">
+                    <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 장소 리뷰 </span>
+                </a>
+                <div id="map" style="width:200px;height:150px;" th:value="${review.placeAddress}"></div>
+
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">평점</th>
+            <td>
+                <span class="star">
+                    <span class="star-on" th:style="'width: ' + ${review.grade} * 20 + '%'">
+                        <span class="blind" th:text="'평점' + ${review.grade}"></span>
+                    </span>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="review-content-area">
+        <label class="review-content-label mb-3">편의 시설</label>
+        <div class="row ms-1">
+            <div th:if="${#strings.contains(review.amenities,'0')}" class="card btn-outline-amenities-select me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_elevator_select" src="/static/image/amenities_elevator_select.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>승강기</span>
+                </div>
+            </div>
+            <div th:unless="${#strings.contains(review.amenities,'0')}" class="card btn-outline-amenities me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_elevator" src="/static/image/amenities_elevator.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>승강기</span>
+                </div>
+            </div>
+
+            <div th:if="${#strings.contains(review.amenities,'1')}" class="card btn-outline-amenities-select me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_incline_select" src="/static/image/amenities_incline_select.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>경사로</span>
+                </div>
+            </div>
+            <div th:unless="${#strings.contains(review.amenities,'1')}" class="card btn-outline-amenities me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_incline" src="/static/image/amenities_incline.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>경사로</span>
+                </div>
+            </div>
+
+            <div th:if="${#strings.contains(review.amenities,'2')}" class="card btn-outline-amenities-select me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_parking_select" src="/static/image/amenities_parking_select.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>주차장</span>
+                </div>
+            </div>
+            <div th:unless="${#strings.contains(review.amenities,'2')}" class="card btn-outline-amenities me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_parking" src="/static/image/amenities_parking.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>주차장</span>
+                </div>
+            </div>
+
+            <div th:if="${#strings.contains(review.amenities,'3')}" class="card btn-outline-amenities-select me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_table_select" src="/static/image/amenities_table_select.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>테이블석</span>
+                </div>
+            </div>
+            <div th:unless="${#strings.contains(review.amenities,'3')}" class="card btn-outline-amenities me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_table" src="/static/image/amenities_table.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>테이블석</span>
+                </div>
+            </div>
+
+            <div th:if="${#strings.contains(review.amenities,'4')}" class="card btn-outline-amenities-select me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_rest-room_select" src="/static/image/amenities_rest-room_select.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>장애인 화장실</span>
+                </div>
+            </div>
+            <div th:unless="${#strings.contains(review.amenities,'4')}" class="card btn-outline-amenities me-1">
+                <span class="amenities-img">
+                    <img id="img_amenities_rest-room" src="/static/image/amenities_rest-room.png" height="50" width="50" />
+                </span>
+                <div class="review-card-body">
+                    <span>장애인 화장실</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="review-content-area">
+        <label class="review-content-label mb-3">장소 리뷰</label>
+        <div class="card text-dark bg-light mb-4">
+            <div class="card-body">
+                <p class="card-text" th:text="${review.placeReview}"></p>
+            </div>
+        </div>
+    </div>
+    <div class="review-content-area">
+        <label class="review-content-label mb-3">추가 리뷰</label>
+        <div class="card text-dark bg-light mb-4">
+            <div class="card-body">
+                <p class="card-text" th:text="${review.additionalReview}"></p>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${#lists.size(review.reviewImages)} > 0" class="review-content-area">
+        <label class="review-content-label mb-3">이미지</label>
+        <div class="col-12">
+            <div class="board-preview-add-img" th:each="imgPath : ${review.reviewImages}">
+                <img class="btn preview-img float-start" th:src="@{|/display?filePath=${imgPath.getImage()}|}">
+            </div>
+        </div>
+    </div>
+
+    <div class="review-content-area" style="clear:both;">
+        <div class="float-start">
+            <a href="javascript:void(0)" class="btn btn-light recommend-btn"
+               th:data-uri="@{|/review/vote/${review.id}|}">
+                <span class="recommend-disable ps-4" style="color:#7F7F7F">좋아요</span>
+            </a>
+        </div>
+        <ul class="content-info">
+            <li class="recommend" th:text="${#lists.size(review.voter)}"></li>
+            <li class="comment" th:text="${#lists.size(review.reviewCommentsList)}"></li>
+        </ul>
+    </div>
+
+    <!--    div 겹침 방지-->
+    <div style="clear:both;"></div>
+    <h5 class="my-3 border-top border-bottom pt-4 pb-2">댓글</h5>
+    <div class="review-content-area mb-5">
+        <form th:action="@{|/review/comment/create/${review.id}|}" th:object="${reviewCommentForm}" method="post">
+            <div th:replace="form_errors :: formErrorsFragment"></div>
+            <div class="input-group mb-4">
+                <input type="text" th:field="*{content}" class="form-control border-end-0" placeholder="댓글을 남겨주세요." aria-label="Recipient's username with two button addons">
+                <div class="input-group-text border-start-0" style="background-color: white">
+                    <input class="form-check-input mt-0" id="check-anonym" type="checkbox" th:field="*{isAnonymous}" value=false aria-label="Checkbox for following text input">
+                    <label class="form-check-label" id="check-anonym-text" for="check-anonym">익명</label>
+                </div>
+                <button class="btn btn-outline-orange" type="submit">등록</button>
+            </div>
+        </form>
+
+        <div id="comments-list ">
+            <ol class="list-group">
+                <li th:each="comment : ${review.reviewCommentsList}" class="list-group-item  justify-content-between align-items-start comment-item">
+                    <div class="d-flex">
+                        <div class="ms-2 me-auto">
+                            <div class="mb-2">
+                                <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
+                                <span class="fw-bolder content-nickname" th:if="${comment.isAnonymous == true}" th:text="익명"></span>
+                                <span class="fw-bolder content-nickname" th:unless="${comment.isAnonymous == true}" th:text="${comment.author.getUsername()}"></span>
+                            </div>
+                            [[${comment.content}]]
+                            <div class="mt-2">
+                                <time class="fw-normal me-3 content-time" th:text="${#temporals.format(comment.createDate, 'yy/MM/dd HH:mm')}"></time>
+                                <span class="recommend ps-4 content-nickname" th:text="${#lists.size(comment.voter)}"></span>
+                            </div>
+                        </div>
+                        <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-decoration:none;">
+                            <span class="btn-child-comment">대댓글</span>
+                        </a>
+                        <!--                        <form th:action="@{|/review/childCommend/create/${comment.id}|}" th:object="${reviewChildCommentForm}" method="post">-->
+                        <!--                            <div th:replace="form_errors :: formErrorsFragment"></div>-->
+                        <!--                            <div class="input-group mb-4">-->
+                        <!--                                <input type="text" th:field="*{content}" class="form-control border-end-0" placeholder="댓글을 남겨주세요." aria-label="Recipient's username with two button addons">-->
+                        <!--                                <div class="input-group-text border-start-0" style="background-color: white">-->
+                        <!--                                    <input class="form-check-input mt-0 check-anonym-text" type="checkbox" th:field="*{isAnonymous}" value=false aria-label="Checkbox for following text input">-->
+                        <!--                                    <label class="form-check-label" for="check-anonym-text">익명</label>-->
+                        <!--                                </div>-->
+                        <!--                                <button class="btn btn-outline-orange" type="submit">등록</button>-->
+                        <!--                            </div>-->
+                        <!--                        </form>-->
+                    </div>
+                    <div class="child-comment-group">
+                        <!--                        <form th:action="@{|/review/childCommend/create/${reviewComment.id}|}" th:object="${reviewChildCommentForm}" method="post">-->
+                        <!--                            <div th:replace="form_errors :: formErrorsFragment"></div>-->
+                        <!--                            <div class="input-group">-->
+                        <!--                                <input type="text" th:field="*{content}" class="form-control border-end-0" placeholder="댓글을 남겨주세요." aria-label="Recipient's username with two button addons">-->
+                        <!--                                <div class="input-group-text border-start-0" style="background-color: white">-->
+                        <!--                                    <input class="form-check-input mt-0" id="check-anonym" type="checkbox" th:field="*{isAnonymous}" value=false aria-label="Checkbox for following text input">-->
+                        <!--                                    <label class="form-check-label" id="check-anonym-text" for="check-anonym">익명</label>-->
+                        <!--                                </div>-->
+                        <!--                                <button class="btn btn-outline-orange" type="submit">등록</button>-->
+                        <!--                            </div>-->
+                        <!--                        </form>-->
+                        <ol class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start comment-item child-comment">
+                                <div class="ms-2 me-auto">
+                                    <div class="mb-2">
+                                        <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
+                                        <span class="fw-bolder content-nickname">익명1</span>
+                                    </div>
+                                    어쩌구 저쩌구
+                                    <div class="mt-2">
+                                        <time class="fw-normal me-3 content-time">22/08/01 01:33</time>
+                                        <span class="recommend ps-4 content-nickname">0</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start comment-item child-comment">
+                                <div class="ms-2 me-auto">
+                                    <div class="mb-2">
+                                        <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
+                                        <span class="fw-bolder content-nickname">익명1</span>
+                                    </div>
+                                    어쩌구 저쩌구
+                                    <div class="mt-2">
+                                        <time class="fw-normal me-3 content-time">22/08/01 01:33</time>
+                                        <span class="recommend ps-4 content-nickname">0</span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
+<script>
+    console.log("map script");
+
+    var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+    console.log("mapcontatiner : ", mapContainer);
+
+    var mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+
+    // 지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 주소-좌표 변환 객체를 생성합니다
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    // 주소로 좌표를 검색합니다
+    geocoder.addressSearch(mapContainer.value, function(result, status) {
+        console.log("map value - address : ", mapContainer.value);
+
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+            // 결과값으로 받은 위치를 마커로 표시합니다
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
+
+            // 인포윈도우로 장소에 대한 설명을 표시합니다
+            var infowindow = new kakao.maps.InfoWindow({
+                content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
+            });
+            infowindow.open(map, marker);
+
+            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+            map.setCenter(coords);
+        }
+    });
+</script>
+<script layout:fragment="script" type="text/javascript">
+    $("#check-anonym").change(function() {
+        if(this.checked) {
+            $(this).attr('value', true);
+        }
+        else
+        {
+            $(this).attr('value', false);
+        }
+    });
+
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+
+    const accuse_elements = document.getElementsByClassName("accuse");
+    Array.from(accuse_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 신고하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+
+    const recommend_elements = document.getElementsByClassName("recommend-btn");
+    Array.from(recommend_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 추천하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -24,7 +24,6 @@ public class ReviewForm {
     @Size(max=200)
     private String subject;
 
-    @NotNull(message="일자 입력은 필수항목입니다.")
     @Past
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;

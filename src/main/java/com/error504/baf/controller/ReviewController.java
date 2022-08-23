@@ -68,14 +68,16 @@ public class ReviewController {
         return "review/review_main";
     }
 
-    @RequestMapping("/{category}")
+    @RequestMapping("/{category}/{type}")
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword,
-                             @PathVariable("category") String category) {
+                             @PathVariable("category") String category,
+                             @PathVariable("type") String type) {
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
         model.addAttribute("reviewPage", reviewPage);
         model.addAttribute("keyword", keyword);
         model.addAttribute("category", category);
+        model.addAttribute("type", type);
         return "review/review_list";
     }
 
@@ -100,7 +102,7 @@ public class ReviewController {
                 model.addAttribute("category", "");
 
         }
-        return "review/review_content";
+        return "review/review_content_2";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -135,24 +137,11 @@ public class ReviewController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/upload")
     @ResponseBody
-    public Long reviewUpload(
+    public String reviewUpload(
             @Valid @RequestPart(name = "reviewData") ReviewForm reviewForm,
             @RequestPart(name = "images", required = false) List<MultipartFile> imageList,
             BindingResult bindingResult, Principal principal, HttpServletRequest request) throws IOException {
-//        if (bindingResult.hasErrors()) {
-//            logger.info("bindingResult.hasErrors()");
-//            return "review/review_form";
-//        }
 
-//        logger.info("no binding error");
-//        logger.info("reviewForm : " + reviewForm);
-//        logger.info("reviewForm.getGenre() : " + reviewForm.getGenre());
-//        if (imageList.size() > 0) {
-//            logger.info("imageList : " + imageList.get(0));
-//        }
-
-//        logger.info("imgUrl ArrayList : ", reviewForm.getImageUrl());
-//
         SiteUser siteUser = userService.getUser(principal.getName());
         logger.info(siteUser.toString());
 
@@ -207,7 +196,7 @@ public class ReviewController {
             }
         }
 
-        return id;
+        return id.toString();
     }
 
     @PreAuthorize("isAuthenticated()")

@@ -8,7 +8,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
 </head>
 
 <body>
@@ -17,19 +16,19 @@
         <div class="container-fluid">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link-select" href="/review">전체</a>
+                    <a class="nav-link" href="/review">전체</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/restaurant">음식점</a>
+                    <a class="nav-link" id="restaurant" href="/review/restaurant/list">음식점</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/cafe">카페</a>
+                    <a class="nav-link" href="/review/cafe/list">카페</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/perform">공연</a>
+                    <a class="nav-link" href="/review/perform/list">공연</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/etc">기타</a>
+                    <a class="nav-link" href="/review/etc/list">기타</a>
                 </li>
             </ul>
         </div>
@@ -38,12 +37,14 @@
     <div class="review-main-container mt-5">
         <div class="review-header-content">
             <div id="review-search-input-group">
-                <form th:action="@{/review/all}" method="get" id="searchForm">
+                <form th:action="@{/review/all/list}" method="get" id="searchForm">
                     <div class="input-group mb-3 me-sm-3">
                         <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
-                        <input type="hidden" id="page" name="page" th:value="${reviewPage.number}">
                         <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
                     </div>
+                </form>
+                <form th:action="@{|/review|}" method="get" id="pageForm">
+                        <input type="hidden" id="page" name="page" th:value="${reviewPage.number}">
                 </form>
             </div>
 
@@ -80,53 +81,6 @@
                             </ul>
                         </a>
                     </li>
-
-<!--                        <li class="list-group-item">-->
-<!--                            <a class="review-rate" href="#">-->
-<!--                            <span class="star">-->
-<!--                                <span class="star-on" style="width: 80%">-->
-<!--                                    <span class="blind">평점 4점</span>-->
-<!--                                </span>-->
-<!--                            </span>-->
-<!--                                <h4>[뮤지컬] 아이다</h4>-->
-<!--                                <ul class="content-info">-->
-<!--                                    <li class="recommend">5</li>-->
-<!--                                    <li class="comment">3</li>-->
-<!--                                </ul>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="list-group-item">-->
-<!--                            <a class="review-rate" href="#">-->
-<!--                            <span class="star">-->
-<!--                                <span class="star-on" style="width: 100%">-->
-<!--                                    <span class="blind">평점 5점</span>-->
-<!--                                </span>-->
-<!--                            </span>-->
-<!--                                <h4>[뮤지컬] 킹키부츠</h4>-->
-<!--                                <ul class="content-info">-->
-<!--                                    <li class="recommend">7</li>-->
-<!--                                    <li class="comment">10</li>-->
-<!--                                </ul>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="list-group-item">-->
-<!--                            <a class="review-rate" href="#">-->
-<!--                            <span class="star">-->
-<!--                                <span class="star-on" style="width: 20%">-->
-<!--                                    <span class="blind">평점 1점</span>-->
-<!--                                </span>-->
-<!--                            </span>-->
-<!--                                <h4>[음식점] B 한식집</h4>-->
-<!--                                <ul class="content-info">-->
-<!--                                    <li class="recommend">10</li>-->
-<!--                                    <li class="comment">3</li>-->
-<!--                                </ul>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </div>-->
-
                 </ul>
             </div>
         </div>
@@ -143,9 +97,10 @@
             <div class="container mb-4">
                 <div class="row row-cols-1 row-cols-md-4">
                     <div class="col" th:each="review : ${reviewPage}">
-                        <a href="#">
+                        <a th:href="@{|/review/content/${review.id}|}">
                             <div class="card review-card">
-                                <img src="/static/image/review_test_image/test_img_1.png" class="card-img-top" alt="...">
+                                <img th:if="${#lists.size(review.reviewImages)} > 0" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}" class="card-img-top" style="height: 266px">
+                                <img th:unless="${#lists.size(review.reviewImages)} > 0" src="/static/image/no-image-thumbnail.png" class="card-img-top" alt="..." style="height: 266px">
                                 <div class="card-body">
                                     <h5 class="card-title" th:text="'[' + ${review.genre} + '] ' + ${review.subject}"></h5>
                                     <div class="card-status">
@@ -191,7 +146,7 @@
     Array.from(page_elements).forEach(function(element) {
         element.addEventListener('click', function() {
             document.getElementById('page').value = this.dataset.page;
-            document.getElementById('searchForm').submit();
+            document.getElementById('pageForm').submit();
         });
     });
     const btn_search = document.getElementById("review-button-search");
