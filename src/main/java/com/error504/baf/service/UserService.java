@@ -90,6 +90,20 @@ public class UserService {
         userRepository.save(siteUser);
     }
 
+    //수빈
+    public void updateWheelchair(SiteUser siteUser){
+        if(siteUser.getGetWheel()==1)
+        {
+            siteUser.updateGetWheel(2);
+        }
+        else {
+            siteUser.updateGetWheel(1);
+        }
+        userRepository.save(siteUser);
+
+    }
+
+
     public void updateMemberAuth(SiteUser siteUser, int updateAuth) {
         siteUser.upadteAuth(updateAuth);
         userRepository.save(siteUser);

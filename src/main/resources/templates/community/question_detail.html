@@ -6,7 +6,7 @@
         layout:decorate="~{layout}">
 
 <div layout:fragment="content" class="container my-3">
-    <div th:if="${message}" class="alert alert-danger" role="alert">
+    <div id="hide" th:if="${message}" class="alert alert-danger" role="alert">
         <p th:text="${message}">message fail</p>
     </div>
     <h5 class="my-3 border-bottom pb-2" th:text="${question.subject}">리뷰 내용</h5>
@@ -101,11 +101,17 @@
                 </li>
             </ol>
         </div>
+        <a  th:href="@{|/board/question_list/${question.board.id}|}" class="btn btn-primary" style="float:right;">글목록</a>
     </div>
 </div>
 
 
 <script layout:fragment="script" type='text/javascript'>
+
+    function hideDiv (){
+        document.getElementById("hide").style.display="none";
+    }
+    self.setTimeout("hideDiv()",3000); // 초 지정
 
     const delete_elements = document.getElementsByClassName("delete");
     Array.from(delete_elements).forEach(function (element) {

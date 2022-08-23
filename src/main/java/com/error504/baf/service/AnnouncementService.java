@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class AnnouncementService {
         Specification<Announcement> spec = searchAnnouncement(keyword);
         return this.announcementRepository.findAll(spec, pageable);
     }
+
 
     public Long create(String subject, String content) {
         Announcement announcement = new Announcement();

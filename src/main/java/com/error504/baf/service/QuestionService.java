@@ -3,6 +3,7 @@ package com.error504.baf.service;
 import com.error504.baf.Time;
 import com.error504.baf.exception.DataNotFoundException;
 import com.error504.baf.model.*;
+import com.error504.baf.repository.AnnouncementRepository;
 import com.error504.baf.repository.BoardRepository;
 import com.error504.baf.repository.QuestionImageRepository;
 import com.error504.baf.repository.QuestionRepository;
@@ -29,7 +30,7 @@ public class QuestionService {
     private QuestionRepository questionRepository;
     private QuestionImageRepository questionImageRepository;
     private BoardRepository boardRepository;
-
+    private AnnouncementRepository announcementRepository;
 
     @Autowired
     public QuestionService(QuestionRepository questionRepository, QuestionImageRepository questionImageRepository){
@@ -138,6 +139,8 @@ public class QuestionService {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return questionRepository.findQuestionByAuthorId(pageable, id);
     }
+
+
 
     public List<Question> getQuestionByAuthor(Long id){
         return questionRepository.findQuestionByAuthorId(id);

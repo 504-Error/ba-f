@@ -62,6 +62,10 @@ public class SiteUser {
     public void updateEmail(String newEmail) {
         this.email = newEmail;
     }
+    //수빈
+    public void updateGetWheel(int newWheel) {
+        this.getWheel = newWheel;
+    }
     public void upadteAuth(int newAuth){
         this.getAuth = newAuth;
     }

@@ -8,6 +8,25 @@
     <meta charset="UTF-8">
     <title>Ba-f Community</title>
     <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <style>
+        .switch { position: relative;   display: inline-block;
+            width: 60px;   height: 34px;   vertical-align:middle; }
+        /* Hide default HTML checkbox */
+        .switch input {display:none;} /* The slider */
+        .slider {   position: absolute;   cursor: pointer;   top: 0;   left: 0;   right: 0;   bottom: 0;   background-color: #ccc;
+            -webkit-transition: .4s;   transition: .4s; }
+        .slider:before {   position: absolute;   content: "";   height: 26px;   width: 26px;
+            left: 4px;   bottom: 4px;   background-color: white;   -webkit-transition: .4s;   transition: .4s; }
+        input:checked + .slider {   background-color: #2196F3; }
+        input:focus + .slider {   box-shadow: 0 0 1px #2196F3; }
+        input:checked + .slider:before {   -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px); }
+        /* Rounded sliders */
+        .slider.round {   border-radius: 34px; }
+        .slider.round:before {   border-radius: 50%; }
+
+    </style>
 </head>
 <body>
 
@@ -42,35 +61,41 @@
                                     <small th:unless="${siteUser.getAuth == 1}"> 본인 인증 미완료</small>
                                 </div>
                             </div>
+
                             <div  class="border-bottom py-2">
                                 <span style="font-size:16px"> 휠체어 탑승 여부 변경</span>
-                                <div class="btn_switch" style="float: right">
-                                    <input type="checkbox" id="regionIp" class="switch_checkbox">
-                                    <label for="regionIp" class="switch_btn">
-                                    <span id="regionIp_toggle_switch_on" class="switch_on" role="checkbox"
-                                  aria-checked="false">ON</span>
-                                        <span id="regionIp_toggle_switch_off" class="switch_off" role="checkbox"
-                                              aria-checked="true">OFF</span>
-                                    </label>
+                                <div style="float: right">
+                                    <a href="javascript:void(0);" th:data-uri="@{/user/mypage/wheelchair}"
+                                       class="changeWheel btn btn-secondary btn-sm">수정</a>
                                 </div>
+                                <small style="float: right; margin-right: 2%"  class="form-text text-muted float-right" th:if="${siteUser.getWheel==0}">미선택</small>
+                                <small style="float: right; margin-right: 2%"  class="form-text text-muted  float-right"  th:if="${siteUser.getWheel==1}">휠체어 탑승</small>
+                                <small style="float: right; margin-right: 2%"   class="form-text text-muted  float-right" th:if="${siteUser.getWheel==2}">휠체어 미탑승</small>
                             </div>
                             <br>
                             <div  class="border-bottom py-2">
                                 <span style="font-size:16px"> 이메일 변경</span>
-                                <a class="form-text text-muted" style="float:right"
-                                   th:href="@{/user/mypage/email}">바로 가기</a>
+                                <div style="float: right">
+                                <a class="standBy btn btn-secondary btn-sm"
+                                   th:href="@{/user/mypage/email}">수정</a>
+                                </div>
+                                <small style="float: right; margin-right: 2%"   class="form-text text-muted" th:text="${siteUser.email}"></small>
                             </div>
                             <br>
                             <div  class="border-bottom py-2">
-                                 <span style="font-size:16px"> 비밀번호 변경</span>
-                                <a class="form-text text-muted" style="float:right"
-                                   th:href="@{/user/mypage/pwd}">바로 가기</a>
+                                 <span style="font-size:16px;">비밀번호 변경</span>
+                                <div style="float: right">
+                                <a class="btn btn-secondary btn-sm"
+                                   th:href="@{/user/mypage/pwd}">수정</a>
+                                </div>
                             </div>
                             <br>
                             <div  class="border-bottom py-2">
                                 <span style="font-size:16px"> 회원 탈퇴</span>
-                                <a class="form-text text-muted" style="float:right"
-                                   th:href="@{/user/mypage/delete}">바로 가기</a>
+                                <div style="float: right">
+                                <a class="standBy btn btn-secondary btn-sm"
+                                   th:href="@{/user/mypage/delete}">탈퇴</a>
+                                </div>
                             </div>
                         </form>
 
@@ -84,5 +109,17 @@
     </div>
 </div>
 </div>
+
+
+<script layout:fragment="script" type='text/javascript'>
+    const delete_elements = document.getElementsByClassName("changeWheel");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function () {
+            if (confirm("휠체어 탑승 여부를 변경하겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+</script>
 </body>
 </html>

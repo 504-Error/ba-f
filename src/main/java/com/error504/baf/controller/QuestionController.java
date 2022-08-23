@@ -1,6 +1,7 @@
 package com.error504.baf.controller;
 
 import com.error504.baf.model.*;
+import com.error504.baf.service.AnnouncementService;
 import com.error504.baf.service.BoardService;
 import com.error504.baf.service.QuestionService;
 import com.error504.baf.service.UserService;
@@ -41,12 +42,14 @@ public class QuestionController {
     private QuestionService questionService;
     private BoardService boardService;
     private UserService userService;
+    private AnnouncementService announcementService;
 
     @Autowired
-    public QuestionController(QuestionService questionService, UserService userService, BoardService boardService) {
+    public QuestionController(QuestionService questionService, UserService userService, BoardService boardService, AnnouncementService announcementService) {
         this.questionService = questionService;
         this.userService = userService;
         this.boardService = boardService;
+        this.announcementService = announcementService;
     }
 
     @RequestMapping("/question/list")
@@ -70,6 +73,16 @@ public class QuestionController {
         model.addAttribute("keyword", keyword);
         return "community/question_search";
     }
+
+
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping(value = "/question/hotList")
+//    public String viewHotList(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+//        Page<Question> questionList = questionService.getHotQuestion(page);
+//        model.addAttribute("questionList", questionList);
+//        return "community/hot_board";
+//    }
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/hotList")
@@ -114,6 +127,7 @@ public class QuestionController {
         return "community/question_form";
 
     }
+
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/question/create/upload")
@@ -274,4 +288,8 @@ public class QuestionController {
 //        model.addAttribute("questionList", questionList);
 //        return "account/my_page_like";
 //    }
+
+    //
+
+
 }

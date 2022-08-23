@@ -2,12 +2,14 @@ package com.error504.baf.controller;
 
 
 import com.error504.baf.model.*;
+import com.error504.baf.service.AnnouncementService;
 import com.error504.baf.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,12 +40,14 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
+    private AnnouncementService announcementService;
     private UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, AnnouncementService announcementService) {
+        this.announcementService = announcementService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -161,14 +165,7 @@ public class UserController {
 
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/mypage/wheelchair")
-    public String changeWheelchair(Model model, Principal principal) {
-        SiteUser siteUser = userService.getUser(principal.getName());
-        model.addAttribute("siteUser", siteUser);
-        return "account/my_page_wheelchair";
 
-    }
 
 
 
@@ -179,6 +176,16 @@ public class UserController {
 //        model.addAttribute("siteUser", siteUser);
 //        return "account/my_page_comment";
 //    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping("/mypage/wheelchair")
+    public String changeWheelchair(Principal principal) {
+        SiteUser siteUser = userService.getUser(principal.getName());
+        logger.info(String.valueOf(siteUser.getGetWheel()));
+        userService.updateWheelchair(siteUser);
+        return  "redirect:/user/mypage";
+
+    }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/settings/email")
@@ -232,13 +239,13 @@ public class UserController {
     }
 
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/mypage/notice")
-    public String myPageNotice(Model model, Principal principal){
-        SiteUser siteUser = userService.getUser(principal.getName());
-        model.addAttribute("siteUser", siteUser);
-        return "account/my_page_notice";
-    }
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/mypage/notice")
+//    public String myPageNotice(Model model, Principal principal){
+//        SiteUser siteUser = userService.getUser(principal.getName());
+//        model.addAttribute("siteUser", siteUser);
+//        return "account/my_page_notice";
+//    }
 
 
     @PreAuthorize("isAuthenticated()")
@@ -248,5 +255,26 @@ public class UserController {
         model.addAttribute("siteUser", siteUser);
         return "what_is_baf";
     }
+
+
+    @RequestMapping("/mypage/notice")
+    public String userAnnounce(Model model, @RequestParam(value="page", defaultValue="0") int page,
+                                @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+
+        Page<Announcement> announcementPage = announcementService.getList(page, keyword);
+        model.addAttribute("announcementPage", announcementPage);
+        model.addAttribute("keyword", keyword);
+
+        return  "announcement_board";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/mypage/notice/{id}")
+    public String viewNotice(@PathVariable Long id, Model model) {
+        Announcement announcement = announcementService.getAnnouncement(id);
+        model.addAttribute("announcement", announcement);
+        return "announcement_detail";
+    }
+
 
 }
