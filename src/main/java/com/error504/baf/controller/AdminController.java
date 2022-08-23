@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +33,7 @@ public class AdminController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("")
     public String adminMain(Model model) {
         model.addAttribute("template", "admin/admin_user_management");
@@ -39,6 +41,7 @@ public class AdminController {
         return "admin/admin_main";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/account/{getAuth}")
     public String adminRegistration(Model model, @PathVariable("getAuth") int getAuth,
                                     @RequestParam(value="page", defaultValue="0") int page,
@@ -51,6 +54,7 @@ public class AdminController {
         return "admin/admin_user_management";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/account/{getAuth}/accept/{id}")
     public String adminAccountAccept(Principal principal, @PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
         SiteUser siteUser = this.userService.getUser(id);
@@ -64,6 +68,7 @@ public class AdminController {
         return String.format("redirect:/management/account/%s", getAuth);
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/account/{getAuth}/standBy/{id}")
     public String adminAccountStandBy(Principal principal, @PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
         SiteUser siteUser = this.userService.getUser(id);
@@ -77,6 +82,7 @@ public class AdminController {
         return String.format("redirect:/management/account/%s", getAuth);
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/account/{getAuth}/delete/{id}")
     public String adminAccountRefuse(Principal principal, @PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
         SiteUser siteUser = this.userService.getUser(id);
@@ -105,29 +111,33 @@ public class AdminController {
         return String.format("redirect:/management/account/%s", getAuth);
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/content/{kindOfContent}")
     public String adminManagementContent(Model model,
                                          @PathVariable("kindOfContent") int kindOfContent,
                                          @RequestParam(value="page", defaultValue="0") int page,
                                          @RequestParam(value = "keyword", defaultValue = "") String keyword,
-                                         @RequestParam(value = "boardId", defaultValue = "0") Long boardId) {
+                                         @RequestParam(value = "boardId", defaultValue = "0") Long boardId,
+                                         @RequestParam(value = "sortType", defaultValue = "0") int sortType) {
         if (kindOfContent == 0) {
-            Page<Question> questionPage = this.questionService.getAllQuestion(page, keyword, boardId);
+            Page<Question> questionPage = this.questionService.getAllQuestion(page, keyword, boardId, sortType);
             List<Board> board = boardService.findAll();
             model.addAttribute("contentPage", questionPage);
             model.addAttribute("board", board);
         } if (kindOfContent == 1) {
-            Page<Review> reviewPage = this.reviewService.getListWithUsername(page, keyword, boardId.intValue());
+            Page<Review> reviewPage = this.reviewService.getListWithUsername(page, keyword, boardId.intValue(), sortType);
             model.addAttribute("contentPage", reviewPage);
         }
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("boardId", boardId);
+        model.addAttribute("sortType", sortType);
         model.addAttribute("kindOfContent", kindOfContent);
 
         return "admin/admin_content_management";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/content/{kindOfContent}/delete/{id}")
     public String adminContentDelete(Principal principal, @PathVariable("kindOfContent") int kindOfContent,
                                      @PathVariable("id") Long id) {
@@ -147,6 +157,7 @@ public class AdminController {
         return String.format("redirect:/management/content/%s", kindOfContent);
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/content/{kindOfContent}/detail/{id}")
     public String adminContentDetail(Model model, ReviewCommentForm reviewCommentForm, AnswerForm answerForm,
                                      @PathVariable("kindOfContent") int kindOfContent, @PathVariable("id") Long id) {
@@ -178,12 +189,13 @@ public class AdminController {
                     model.addAttribute("category", "");
 
             }
-            returnValue = "review/review_content";
+            returnValue = "review/review_content_2";
         }
 
         return returnValue;
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/board")
     public String adminBoard(Model model, @RequestParam(value="page", defaultValue="0") int page,
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
@@ -195,15 +207,17 @@ public class AdminController {
         return "admin/admin_board_management";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/board/delete/{id}")
     public String adminBoardDelete(Model model, @PathVariable("id") Long id) {
 
         Board board = this.boardService.getBoard(id);
         this.boardService.delete(board);
 
-        return "admin/admin_board_management";
+        return "redirect:/admin/board";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/announce")
     public String adminAnnounce(Model model, @RequestParam(value="page", defaultValue="0") int page,
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword) {
@@ -215,6 +229,7 @@ public class AdminController {
         return "admin/admin_announcement_management";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/announce/create")
     public String adminAnnounceCreate(@Valid AnnouncementForm announcementForm, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
@@ -226,6 +241,7 @@ public class AdminController {
         return String.format("redirect:/management/announce/%s", id);
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/announce/{id}")
     public String detail(Model model, @PathVariable("id") Long id, AnnouncementForm announcementForm) {
         Announcement announcement = this.announcementService.getAnnouncement(id);

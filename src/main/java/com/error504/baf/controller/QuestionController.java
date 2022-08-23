@@ -65,7 +65,7 @@ public class QuestionController {
     public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page,
                              @RequestParam(value="keyword", defaultValue = "") String keyword){
         logger.info("keyword : " + keyword);
-        Page<Question> questionList = questionService.getAllQuestion(page, keyword, 0L);
+        Page<Question> questionList = questionService.getAllQuestion(page, keyword, 0L, 0);
         model.addAttribute("questionList", questionList);
         model.addAttribute("keyword", keyword);
         return "community/question_search";
@@ -118,7 +118,7 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/question/create/upload")
     @ResponseBody
-    public Long questionCreate(@Valid @RequestPart(name = "contentData") QuestionForm questionForm,
+    public String questionCreate(@Valid @RequestPart(name = "contentData") QuestionForm questionForm,
                                  @RequestPart(name = "images", required = false) List<MultipartFile> imageList,
                                  BindingResult bindingResult, Principal principal, HttpServletRequest request) throws IOException {
 
@@ -158,7 +158,7 @@ public class QuestionController {
             }
         }
 
-        return boardId;
+        return boardId.toString();
     }
 
 
@@ -232,7 +232,7 @@ public class QuestionController {
     @GetMapping(value = "/board/question_list/{id}")
     public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value="page", defaultValue="0") int page,
                                    @RequestParam(value = "keyword", defaultValue = "") String keyword) {
-        Page<Question> questionList = questionService.getAllQuestion(page, keyword, id);
+        Page<Question> questionList = questionService.getAllQuestion(page, keyword, id, 0);
         Board board = boardService.getBoard(id);
         model.addAttribute("questionList", questionList);
         model.addAttribute("board", board);

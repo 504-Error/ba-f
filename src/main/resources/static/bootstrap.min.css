@@ -12224,6 +12224,7 @@ textarea.form-control-lg {
 .admin-nav-menu li a:hover {
     background-color:yellowgreen;
     color:white;
+    color:white;
 }
 
 .admin-main {
@@ -12231,3 +12232,12 @@ textarea.form-control-lg {
     padding: 1rem 3rem;
 }
 
+.list-type {
+    color: black;
+    text-decoration: none;
+}
+
+.list-type-select {
+    color: #4472C4;
+    text-decoration: none;
+}

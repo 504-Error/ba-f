@@ -12,7 +12,14 @@
     <h5 class="my-3 border-bottom pb-2" th:if="${kindOfContent == 1}">리뷰 글 관리</h5>
 
     <div>
+
         <form th:action="@{|/management/content/${kindOfContent}|}" method="get" id="searchForm">
+            <select class="form-select float-start me-3" th:value="${sortType}" name="sortType" id="inputSortType" style="width: 13%">
+                <option value="0" th:selected="${sortType} == '0'">최신순</option>
+                <option value="1" th:selected="${sortType} == '1'">인기순</option>
+                <option value="2" th:selected="${sortType} == '2'">신고수순</option>
+            </select>
+
             <div class="input-group mb-3 me-sm-3 float-end" style="width: 30%">
                 <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control" placeholder="사용자 ID 혹은 글 검색" aria-label="review search" aria-describedby="button-addon2">
                 <input type="hidden" id="page" name="page" th:value="${contentPage.number}">
@@ -67,7 +74,6 @@
             <td th:text="${#lists.size(content.accuser)}"></td>
 
             <td>
-                <!--                관리자 권한 확인 필요!-->
                 <a th:if="${#lists.size(content.accuser) >= 3}" href="javascript:void(0);" th:data-uri="@{|/management/content/${kindOfContent}/delete/${content.id}|}"
                    class="delete btn btn-danger">삭제</a>
 
@@ -114,10 +120,16 @@
         document.getElementById('page').value = 0;
         document.getElementById('searchForm').submit();
     });
+    const btn_sortType = document.getElementById("inputSortType");
+    btn_sortType.addEventListener('change', function() {
+        console.log("change sort type : ", btn_sortType.value);
+        document.getElementById('page').value = 0;
+        document.getElementById('searchForm').submit();
+    });
 
     const delete_elements = document.getElementsByClassName("delete");
     Array.from(delete_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
+        element.addEventListener('change', function() {
             if(confirm("정말로 삭제하시겠습니까?")) {
                 location.href = this.dataset.uri;
             };

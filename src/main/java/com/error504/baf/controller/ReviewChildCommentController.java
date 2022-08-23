@@ -35,7 +35,7 @@ public class ReviewChildCommentController {
         SiteUser siteUser = userService.getUser(principal.getName());
         if (bindingResult.hasErrors()) {
             model.addAttribute("review", review);
-            return "review/review_content"; }
+            return "review/review_content_2"; }
 
         reviewChildCommentService.create(reviewComment, reviewChildCommentForm.getContent(), reviewChildCommentForm.getIsAnonymous(), siteUser);
         return String.format("redirect:/review/content/%s", id);

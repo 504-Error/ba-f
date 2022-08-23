@@ -81,9 +81,20 @@ public class ReviewService {
 
 
 
-    public Page<Review> getListWithUsername(int page, String keyword, int categoryId) {
+    public Page<Review> getListWithUsername(int page, String keyword, int categoryId, int sortType) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
+        switch (sortType) {
+            case 1:
+                sorts.add(Sort.Order.desc("voterCount"));
+                sorts.add(Sort.Order.desc("createDate"));
+                break;
+            case 2:
+                sorts.add(Sort.Order.desc("accuserCount"));
+                sorts.add(Sort.Order.desc("createDate"));
+                break;
+            default:
+                sorts.add(Sort.Order.desc("createDate"));
+        }
         Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
         Specification<Review> spec = searchReviewWithUsername(keyword, categoryId);
         return this.reviewRepository.findAll(spec, pageable);

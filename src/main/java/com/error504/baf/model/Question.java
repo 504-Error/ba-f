@@ -3,6 +3,7 @@ package com.error504.baf.model;
 import com.error504.baf.Time;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,8 +39,14 @@ public class Question {
     @ManyToMany
     Set<SiteUser> voter;
 
+    @Formula("(select count(*) from question_voter where question_voter.question_id=id)")
+    private int voterCount;
+
     @ManyToMany
     Set<SiteUser> accuser;
+
+    @Formula("(select count(*) from question_accuser where question_accuser.question_id=id)")
+    private int accuserCount;
 
     @ManyToOne
     private Board board;
