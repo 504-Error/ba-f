@@ -22,6 +22,7 @@ public class TaxiController {
 
 //    @PreAuthorize("isAuthenticated()")
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/taxi")
     public String setTaxiPage(Model model, Principal principal){
         if (principal != null) {
