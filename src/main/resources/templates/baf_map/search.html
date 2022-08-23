@@ -15,7 +15,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/map/icon/icon-page.css">
+<!--    <link rel="stylesheet" type="text/css" href="//t1.daumcdn.net/kakaomapweb/place/jscss/pc.87ba63dd.css">-->
+    <style>
+        .list_evaluation li{position:relative;min-height:52px;padding:10px 0 18px 10px;border-top:1px solid #f2f2f2}
+        .list_evaluation .profile_info{position:absolute;top:30px;left:0;width:48px;height:48px;background:url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/bg_profile.png) no-repeat;background-size:100% 100%}
+        .list_evaluation .profile_info:after{overflow:hidden;position:absolute;top:0;left:0;z-index:10;width:48px;height:48px;background:url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/frame_squircle_54.png) no-repeat;background-size:100% auto;content:""}
+        .list_evaluation .profile_info .ico_comm{position:absolute;right:-8px;bottom:-2px;z-index:20;width:24px;height:24px}
+        .list_evaluation .profile_info .ico_user{background-position:-240px -370px}
+        .list_evaluation .txt_user{float:left;margin-top:13px;font-weight:700;font-size:15px;color:#444;vertical-align:top}
+        .list_evaluation .thumb_g{display:block;width:48px;height:48px}
+        .list_evaluation .unit_info{overflow:hidden}
+        .list_evaluation .unit_info .txt_item{float:left;font-size:14px;color:#666}
+        .list_evaluation .unit_info .txt_item~.txt_item{padding-left:6px}
+        .list_evaluation .unit_info .txt_desc{float:left;padding-left:3px;font-weight:700;font-size:14px;color:#666}
+        .list_evaluation .unit_info .time_write{font-size:14px;color:#959595}
+        .os_mac .list_evaluation .unit_info .time_write{line-height:21px}
+        .list_evaluation .unit_info .ico_ownerpic{display:inline-block;width:64px;height:18px;margin-left:8px;vertical-align:top;background-position:-190px -520px}
+        .list_evaluation .star_info{overflow:hidden;padding-right:12px}
+        .list_evaluation .grade_star{overflow:hidden}
+        .list_evaluation .size_s .star_rate{float:left;width:88px;height:16px;background-position:0 -60px}
+        .list_evaluation .size_s .star_rate .inner_star{background-position:0 -80px}
+        .list_evaluation .num_rate{float:left;height:16px;padding:0 6px;font-family:Arial,sans-serif;font-size:15px;line-height:18px;letter-spacing:0}
+        .list_evaluation .star_user{overflow:hidden;float:left}
+        .list_evaluation .link_user{overflow:hidden;float:left;max-width:185px;font-weight:700;font-size:14px;color:#333;text-overflow:ellipsis;white-space:nowrap}
+        .list_evaluation .type_report .link_user{color:#666}
+        .list_evaluation .platform_damap .link_user,.list_evaluation .platform_place .link_user{pointer-events:none}
+        .list_evaluation .time_write{float:left;font-family:arial;line-height:21px;color:#888;letter-spacing:0}
+        .list_evaluation .blind_grade .time_write{color:#aaa}
+        .list_evaluation .comment_info{overflow:hidden;padding:9px 12px 0 0}
+        .list_evaluation .blind_grade .comment_info{pointer-events:none;opacity:.4}
+        .list_evaluation .box_blind{width:528px;padding:14px 14px 15px 18px;font-size:13px;color:#666;background-color:#f5f5f5;clear:both}
+        .list_evaluation .box_blind .link_blind{padding-left:5px;text-decoration:underline;font-size:13px;color:#999}
+        .os_mac .list_evaluation .box_blind,.os_mac .list_evaluation .box_blind .link_blind{font-size:14px}
+        .list_evaluation .comment_reply{padding:14px 0 0;clear:both}
+        .comment_reply .inner_reply{border:1px solid #efefef;background-color:#f7f8fa}
+        .comment_reply .box_reply{padding:17px 55px 16px 29px}
+        .comment_reply .reply_head{overflow:hidden}
+        .comment_reply .reply_head .txt_name{float:left;font-weight:700;font-size:13px}
+        .os_mac .comment_reply .reply_head .txt_name{font-size:14px}
+        .list_evaluation .comment_reply .time_write{font-size:12px}
+        .os_mac .list_evaluation .comment_reply .time_write{font-size:13px;line-height:19px}
+        .comment_reply .link_function{font-size:12px;margin-top:1px}
+        .os_mac .comment_reply .link_function{margin-top:0;font-size:13px;line-height:21px}
+        .comment_reply .desc_reply{padding-top:13px;line-height:22px;color:#444}
+        .comment_reply .desc_reply .txt_g{display:block;display:-webkit-box;overflow:hidden;font-size:15px;line-height:22px;-webkit-box-orient:vertical;-webkit-line-clamp:4;max-height:88px;white-space:pre-wrap;word-break:break-all}
+        .comment_reply .desc_reply.txt_unfold .txt_g{display:inline;max-height:none}
+        .comment_reply .btn_fold{display:none;margin-top:1px;font-size:13px;line-height:20px;color:#888;vertical-align:top}
+        .comment_reply .desc_reply.txt_fold .btn_fold,.comment_reply .desc_reply.txt_unfold .btn_fold{display:inline}
+        .os_mac .comment_reply .btn_fold{font-size:14px}
+        .comment_reply .btn_fold.disabled{pointer-events:none}
+        .comment_reply .btn_fold:after{content:"";display:inline-block;width:11px;height:5px;margin:8px 5px 0;background:url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/ico_detail_190605.png) no-repeat -200px -460px;vertical-align:top}
+        .os_mac .comment_reply .btn_fold:after{margin-top:6px}
+        .comment_reply .desc_reply.txt_unfold .btn_fold:after{background-position:-200px -450px}
+        .comment_reply .box_blind{width:100%;margin-left:0;padding-top:0;padding-left:29px;background:none;box-sizing:border-box}
+        .comment_reply.disabled .desc_reply{opacity:.4}
+        .list_evaluation .txt_comment{overflow:hidden;color:#444;line-height:21px}
+        .list_evaluation .txt_comment span{display:block;display:-webkit-box;overflow:hidden;font-size:15px;line-height:22px;-webkit-box-orient:vertical;-webkit-line-clamp:4;max-height:88px;white-space:pre-wrap;word-break:break-all}
+        .list_evaluation .txt_comment.txt_unfold span{display:inline;max-height:none}
+        .list_evaluation .blind_grade .txt_comment{color:#aaa}
+        .list_evaluation .txt_comment.txt_unfold{max-height:none}
+        .list_evaluation .txt_comment .btn_fold{display:none;font-size:13px;color:#999}
+        .list_evaluation .txt_comment.txt_fold .btn_fold:after{content:"";display:inline-block;width:11px;height:5px;margin:9px 5px 0;background:url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/ico_detail_190605.png) no-repeat -200px -460px;vertical-align:top}
+        .os_mac .list_evaluation .txt_comment.txt_fold .btn_fold:after{margin-top:8px}
+        .list_evaluation .txt_comment.txt_unfold .btn_fold:after{content:"";display:inline-block;width:11px;height:5px;margin:8px 5px 0;background:url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/ico_detail_190605.png) no-repeat -200px -450px;vertical-align:top}
+        .os_mac .list_evaluation .txt_comment.txt_unfold .btn_fold:after{margin-top:7px}
+        .os_mac .list_evaluation .txt_comment .btn_fold{font-size:14px}
+        .list_evaluation .txt_comment.txt_fold .btn_fold,.list_evaluation .txt_comment.txt_unfold .btn_fold{display:inline;margin-top:1px;vertical-align:top}
+        .os_mac .list_evaluation .txt_comment.txt_unfold .btn_fold{margin-top:0}
+        .list_evaluation .txt_comment.txt_unfold .btn_fold{padding-left:10px}
+        .list_evaluation .append_item{overflow:hidden;height:20px;padding:1px 0 0 2px;font-size:13px}
+        .list_evaluation .txt_comment+.append_item{overflow:hidden;height:20px;padding:6px 0 0 2px;font-size:13px}
+        .list_evaluation .blind_grade .append_item{padding-bottom:10px}
+        .list_evaluation .blind_grade .link_photo{position:relative;z-index:10;padding-bottom:10px;pointer-events:none}
+        .list_evaluation .blind_grade .frame_blind{display:block;position:absolute;top:0;left:0;z-index:20;width:78px;height:78px;opacity:.7;filter:alpha(opacity=70);background:#fff}
+        .list_evaluation .bg_bar,.list_evaluation .link_function,.list_evaluation .link_like{float:left}
+        .list_evaluation .link_like{overflow:hidden;line-height:22px;color:#444}
+        .list_evaluation .blind_grade .link_like{color:#999}
+        .list_evaluation .link_like .ico_like{float:left;width:13px;height:13px;margin:5px 4px 0 0;background-position:-150px -500px}
+        .list_evaluation .link_like .num_g{display:inline-block;font-family:Arial,sans-serif;line-height:20px;letter-spacing:0}
+        .list_evaluation .like_on,.list_evaluation .like_on .num_g{color:#1f8cff}
+        .list_evaluation .blind_grade .like_on,.list_evaluation .blind_grade .like_on .num_g{color:#aaa}
+        .list_evaluation .like_on .ico_like{background-position:-150px -520px}
+        .list_evaluation .blind_grade .ico_like,.list_evaluation .blind_grade .like_on .ico_like{background-position:-180px -450px}
+        .list_evaluation .bg_bar{height:11px;margin:6px 6px 0;background:#e2e2e2}
+        .list_evaluation .link_function{color:#888}
+        .list_evaluation .blind_grade .link_function{color:#aaa;pointer-events:auto}
+        .list_evaluation .wrap_likepoint{padding-top:7px}
+        .list_evaluation .wrap_likepoint .ico_like2{float:left;width:13px;height:13px;margin:9px 6px 0 0;background-position:-80px -50px}
+        .list_evaluation .group_likepoint{overflow:hidden;max-height:58px}
+        .list_evaluation .group_likepoint .chip_likepoint{float:left;height:24px;margin:3px 1px 0 2px;padding:0 14px;border:1px solid rgba(51,150,255,.08);border-radius:24px;font-size:13px;line-height:24px;color:#1787ff;background-color:rgba(51,150,255,.15)}
+        .list_evaluation .group_photo{padding-top:10px}
+        .list_evaluation .blind_grade .group_photo{opacity:.4}
+        .list_evaluation .group_photo .list_photo{white-space:nowrap;font-size:0}
+        .list_evaluation .group_photo .list_photo li{display:inline-block;padding:0;border-top:0 none}
+        .list_evaluation .group_photo .list_photo li+li{margin-left:2px}
+        .list_evaluation .group_photo .box_photo{display:block;position:relative;width:139px;height:139px}
+        .list_evaluation .group_photo .box_photo:after{content:"";position:absolute;top:0;left:0;bottom:0;right:0;z-index:10;border:1px solid rgba(0,0,0,.06)}
+        .list_evaluation .group_photo .box_photo .ico_near{position:absolute;top:5px;left:5px;z-index:20;width:15px;height:21px;background-position:-220px -450px}
+        .list_evaluation .group_photo .list_photo li.lst .box_photo:after{background-color:rgba(0,0,0,.5)}
+        .list_evaluation .group_photo .list_photo .info_photonum{position:absolute;top:50%;left:50%;z-index:20;transform:translate(-50%,-50%)}
+        .list_evaluation .group_photo .list_photo .info_photonum .txt_num{font-size:18px;color:#fff}
+        .list_evaluation .group_photo .img_thumb{height:100%}
+        .list_evaluation .wrap_util{position:absolute;top:30px;right:0}
+        .list_evaluation .wrap_util .btn_util{width:33px;height:33px}
+        .list_evaluation .wrap_util .ico_more{width:3px;height:17px;margin:0 auto;background-position:-240px -450px}
+        .list_evaluation .wrap_util .layer_util{display:none;position:absolute;top:30px;right:0;z-index:10;width:51px;padding:4px 0;border:1px solid rgba(0,0,0,.05);border-radius:3px;background-color:#fff}
+        .list_evaluation .btn_util.util_on~.layer_util{display:block}
+        .list_evaluation .layer_util .list_opt li{min-height:auto;padding:0;border-top:0 none}
+        .list_evaluation .layer_util .link_util{display:block;font-size:13px;line-height:30px;text-align:center;text-decoration:none;color:#444}
+        .list_evaluation .layer_util .link_util:hover{background-color:#f5f5f5}
+    </style>
+    <style>
+        /* global */
+        .screen_out{overflow:hidden;position:absolute;width:0;height:0;line-height:0;text-indent:-9999px}
+        .show{display:block}
+        .hide{display:none}
 
+        /* PC Social Share */
+        /* 2018-04-25 수정 시작 */
+        .social_comm_p{position:absolute;z-index:1000;}
+        .social_comm_p .img_social{display:block;overflow:hidden;font-size:0;background:url(//t1.daumcdn.net/daumtop_deco/images/common/social/img_social_200414.png) no-repeat 0 0;text-indent:-9999px}
+        .social_comm_p .sns_comm_p{overflow:hidden;position:relative;border:1px solid #e2e2e2;font-size:11px;color:#222;background-color:#fff;letter-spacing:-0.025em}
+        .social_comm_p .btn_close{position:absolute;top:5px;right:5px;width:24px;height:24px}
+        .social_comm_p .ico_close{width:15px;height:16px;margin:5px;background-position:-150px 0}
+        .social_comm_p .share_layer{position:relative;width:260px;min-height:228px}
+        .social_comm_p .list_sns{overflow:hidden;margin:26px 14px 0}
+        .social_comm_p .list_sns li{float:left;width:77px;height:78px}
+        .social_comm_p .list_sns .link_sns{display:block;text-align:center;text-decoration:none}
+        .social_comm_p .list_sns .link_sns .img_social{width:43px;height:43px;margin:0 auto 4px}
+        .social_comm_p .list_sns .tit_sns{display:block;margin-top:7px;font-weight:normal;line-height:16px}
+        .social_comm_p .list_sns .ico_sns_ks{background-position:-50px 0}
+        .social_comm_p .list_sns .ico_sns_fb{background-position:-100px 0}
+        .social_comm_p .list_sns .ico_sns_tw{background-position:0 -50px}
+        .social_comm_p .list_sns .ico_sns_cafe{background-position:-100px -50px}
+        .social_comm_p .list_sns .ico_sns_mail{background-position:-50px -50px}
+        .social_comm_p .list_sns .ico_sns_kt{background-position:0 0}
+        .social_comm_p .sns_copyurl{margin:-1px 26px 0;padding-bottom:23px}
+        .social_comm_p .sns_copyurl .link_copyurl{display:block;overflow:hidden;position:relative;height:23px;line-height:23px;border:1px solid #d0d0d0;background-color:#f8f8f8;text-decoration:none}
+        .social_comm_p .sns_copyurl .txt_url{display:block;overflow:hidden;padding:0 64px 0 7px;color:#2695f8;white-space:nowrap;text-overflow:ellipsis}
+        .social_comm_p .sns_copyurl .txt_copy{position:absolute;top:0;right:0;width:47px;height:25px;border-left:1px solid #d0d0d0;background-color:#fff;text-align:center}
+        .social_comm_p .copyurl_layer{width:254px;height:78px;text-align:center}
+        .social_comm_p .inner_copyurl{display:table;width:100%;height:100%}
+        .social_comm_p .inner_copyurl .desc_copyurl{display:table-cell;padding:18px 0 17px;line-height:19px;vertical-align:middle}
+        .social_comm_p .sns_copyurl_type2 .tf_url{display:block;width:210px;height:25px;padding:0 10px;border:0 none;color:#2695f8;background-color:transparent}
+        .social_comm_p .sns_copyurl_type2 .desc_tip{padding:13px 0;line-height:18px;color:#888;text-align:center;letter-spacing:0}
+
+        @media
+        only screen and (-webkit-min-device-pixel-ratio: 1.5),
+        only screen and (min-device-pixel-ratio: 1.5),
+        only screen and (min-resolution: 144dpi),
+        only screen and (min-resolution: 1.5dppx) {
+            .social_comm_p .img_social{background-image:url(//t1.daumcdn.net/daumtop_deco/images/common/social/rtn/img_social_200414.png);background-size:170px 100px}
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="content">

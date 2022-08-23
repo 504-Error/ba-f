@@ -181,8 +181,58 @@ function storeInfo(place){
     let str = '<div class="wrap">'+
     '<iframe class="frame" src="'+ place.place_url +'" id = "chat_iframe"></iframe>'+
     '</div>'+
-    '<div></div>';
-
+    '<ul class="list_evaluation">\n' +
+        '        <li>\n' +
+        '            <div class="unit_info">\n' +
+        '                <em class="screen_out">작성자 : </em>\n' +
+        '                <a href="#none" class="link_user">어쩌구</a>\n' +
+        '                <span class="bg_bar"></span>\n' +
+        '                <span class="screen_out">글 작성일 : </span>\n' +
+        '                <span class="time_write">2022.01.01</span>\n' +
+        '            </div>\n' +
+        '            <div class="star_info">\n' +
+        '                <div class="grade_star size_s">\n' +
+        '\t\t\t\t      <span class="ico_star star_rate">\n' +
+        '\t\t\t\t        <span class="ico_star inner_star" style="width:100%;"></span>\n' +
+        '\t\t\t\t      </span>\n' +
+        '                </div>\n' +
+        '            </div>\n' +
+        '            <div class="comment_info">\n' +
+        '                <p class="txt_comment"><span>리뷰 텍스트</span>\n' +
+        '                    <button type="button" class="btn_fold">더보기</button></p>\n' +
+        '            </div>\n' +
+        '            <div class="group_photo">\n' +
+        '                <strong class="screen_out">편의사항 이미지</strong>\n' +
+        '                <ul class="list_photo">\n' +
+        '                    <li>\n' +
+        '                        <a href="#none" data-basis="5742999" data-pidx="0" data-type="kakaomapcomment">\n' +
+        '                            <img src="/static/image/amenities_elevator_select.png" width="80" height="80" alt="후기사진">\n' +
+        '                        </a>\n' +
+        '                    </li>\n' +
+        '                    <li>\n' +
+        '                        <a href="#none" data-basis="5742999" data-pidx="1" data-type="kakaomapcomment">\n' +
+        '                            <img src="/static/image/amenities_incline_select.png" width="80" height="80" alt="후기사진">\n' +
+        '                        </a>\n' +
+        '                    </li>\n' +
+        '                    <li>\n' +
+        '                        <a href="#none" data-basis="5742999" data-pidx="2" data-type="kakaomapcomment">\n' +
+        '                            <img src="/static/image/amenities_parking_select.png" width="100" height="100" alt="후기사진">\n' +
+        '                        </a>\n' +
+        '                    </li>\n' +
+        '                    <li>\n' +
+        '                        <a href="#none" data-basis="5742999" data-pidx="3" data-type="kakaomapcomment">\n' +
+        '                            <img src="/static/image/amenities_rest-room_select.png" width="80" height="80" alt="후기사진">\n' +
+        '                        </a>\n' +
+        '                    </li>\n' +
+        '                    <li>\n' +
+        '                        <a href="#none" data-basis="5742999" data-pidx="4" data-type="kakaomapcomment">\n' +
+        '                            <img src="/static/image/amenities_table_select.png" width="80" height="80" alt="후기사진">\n' +
+        '                        </a>\n' +
+        '                    </li>\n' +
+        '                </ul>\n' +
+        '            </div>\n' +
+        '        </li>\n' +
+        '    </ul>'
 
     info.setAttribute("id", "menu_info_wrap");
     info.className='bg_white';

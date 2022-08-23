@@ -78,7 +78,7 @@
     margin-left: -120px;
     margin-top: -70px;
     width: 1000px;
-    height: 2000px;
+    height: auto;
     border: 0;
     -ms-transform: scale(0.75);
     -moz-transform: scale(0.75);
