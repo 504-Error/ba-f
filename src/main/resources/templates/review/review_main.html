@@ -48,9 +48,7 @@
                 </form>
             </div>
 
-            <a th:href="@{/review/create}">
-                <button id="review-btn-write" type="button" class="btn btn-primary float-end">리뷰 작성</button>
-            </a>
+            <button id="review-btn-write" type="button" class="btn btn-primary float-end">리뷰 작성</button>
         </div>
     </div>
 
@@ -153,6 +151,16 @@
     btn_search.addEventListener('click', function() {
         document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
         document.getElementById('searchForm').submit();
+    });
+
+    const btn_write = document.getElementById("review-btn-write");
+    btn_write.addEventListener('click', function() {
+        sessionStorage.removeItem('form_data');
+        sessionStorage.removeItem('selectPlaceData');
+        sessionStorage.removeItem('selectPerformData');
+        sessionStorage.removeItem('selectAddressData');
+
+        location.href = "/review/create";
     });
 </script>
 </body>

@@ -115,7 +115,7 @@ public class ReviewController {
                 model.addAttribute("category", "etc");
                 break;
             default:
-                model.addAttribute("category", "");
+                model.addAttribute("category", "all");
 
         }
 
@@ -157,17 +157,32 @@ public class ReviewController {
     @PostMapping("/create/upload")
     @ResponseBody
     public String reviewUpload(
-            @Valid @RequestPart(name = "reviewData") ReviewForm reviewForm,
+            @RequestPart(name = "reviewData") ReviewForm reviewForm,
             @RequestPart(name = "images", required = false) List<MultipartFile> imageList,
             BindingResult bindingResult, Principal principal, HttpServletRequest request) throws IOException {
+
+        if (reviewForm.getGenre().equals("0")){
+            return "genreIsNull";
+        } else if (reviewForm.getSubject().equals("")) {
+            return "subjectIsNull";
+        } else if (reviewForm.getPlace().equals("")) {
+            return "placeIsNull";
+        } else if (reviewForm.getGrade() == 0) {
+            return "gradeIsNull";
+        } else if (reviewForm.getPlaceReview().equals("")) {
+            return "placeReviewIsNull";
+        }
 
         SiteUser siteUser = userService.getUser(principal.getName());
         logger.info(siteUser.toString());
 
         String amenitiesList = String.join(",", reviewForm.getAmenities());
 
-        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String dateToString = transFormat.format(reviewForm.getDate());
+        String dateToString = "알 수 없음";
+        if (reviewForm.getDate() != null) {
+            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateToString = transFormat.format(reviewForm.getDate());
+        }
 
         Long id = reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(), reviewForm.getPlaceAddress(),
                 reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
@@ -205,7 +220,23 @@ public class ReviewController {
             }
         }
 
-        return id.toString();
+        String category = "";
+        switch (reviewForm.getGenre()) {
+            case "음식점":
+                category = "restaurant";
+                break;
+            case "카페":
+                category = "cafe";
+                break;
+            case "뮤지컬": case "연극": case "기타 공연":
+                category = "perform";
+                break;
+            case "기타":
+                category = "etc";
+                break;
+        }
+
+        return "/review/" + category + "/list";
     }
 
     @PreAuthorize("isAuthenticated()")

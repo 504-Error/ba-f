@@ -132,9 +132,18 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/question/create/upload")
     @ResponseBody
-    public String questionCreate(@Valid @RequestPart(name = "contentData") QuestionForm questionForm,
+    public String questionCreate(@RequestPart(name = "contentData") QuestionForm questionForm,
                                  @RequestPart(name = "images", required = false) List<MultipartFile> imageList,
                                  BindingResult bindingResult, Principal principal, HttpServletRequest request) throws IOException {
+
+        if (questionForm.getBoardId() == 0){
+            return "boardIdIsNull";
+        } else if (questionForm.getSubject().equals("")){
+            return "subjectIsNull";
+        } else if (questionForm.getContent().equals("")){
+            return "contentIsNull";
+        }
+
 
         SiteUser siteUser = userService.getUser(principal.getName());
         logger.info(questionForm.getBoardId().toString());
@@ -172,7 +181,7 @@ public class QuestionController {
             }
         }
 
-        return boardId.toString();
+        return "/board/question_list/" + boardId;
     }
 
 

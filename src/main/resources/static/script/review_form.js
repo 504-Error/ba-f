@@ -50,7 +50,12 @@ if (sessionStorage.getItem('selectPlaceData')) {
     const inputPlace = document.getElementById("inputPlace");
 
     inputTitle.value = selectPlace["placeName"];
-    inputPlace.value = selectPlace["placeName"] + " (" + selectPlace["address"] + ")";
+    if (selectPlace["placeName"] != "") {
+        inputPlace.value = selectPlace["placeName"] + " (" + selectPlace["address"] + ")";
+    } else {
+        inputPlace.value = selectPlace["placeName"] + " (주소를 검색 혹은 직접 입력해주세요.)";
+    }
+
 
 } else if (sessionStorage.getItem('selectPerformData')) {
     const selectPerform = JSON.parse(sessionStorage.getItem('selectPerformData'));
@@ -59,7 +64,11 @@ if (sessionStorage.getItem('selectPlaceData')) {
     const inputPlace = document.getElementById("inputPlace");
 
     inputTitle.value = selectPerform["title"];
-    inputPlace.value = selectPerform["place"] + " (" + selectPerform["address"] + ")";
+    if (selectPerform["address"] != "") {
+        inputPlace.value = selectPerform["place"] + " (" + selectPerform["address"] + ")";
+    } else {
+        inputPlace.value = selectPerform["place"] + " (주소를 검색 혹은 직접 입력해주세요.)";
+    }
 }
 
 if (sessionStorage.getItem('selectAddressData')) {
@@ -69,7 +78,7 @@ if (sessionStorage.getItem('selectAddressData')) {
     const inputPlace = document.getElementById("inputPlace");
 
     if (inputTitle.value === "") {
-        inputTitle.value = selectAddressData["placeName"];
+        inputTitle.value = selectAddressData["placeName"] + " (주소를 검색 혹은 직접 입력해주세요.)";
     }
     inputPlace.value = selectAddressData["placeName"] + " (" + selectAddressData["address"] + ")";
 }
@@ -262,14 +271,27 @@ function uploadReview() {
             jqXHR.setRequestHeader(header, token);
         },
         success: function(data) {
-            if (data == "/review/content") {
-                location.reload();
+            if (data === "genreIsNull") {
+                alert("장르를 입력해주세요.");
+                return;
+            } else if (data === "subjectIsNull") {
+                alert("리뷰명을 입력해주세요.");
+                return;
+            } else if (data === "placeIsNull") {
+                alert("장소를 입력해주세요.");
+                return;
+            } else if (data === "gradeIsNull") {
+                alert("별점을 입력해주세요.");
+                return;
+            } else if (data === "placeReviewIsNull") {
+                alert("장소 리뷰를 입력해주세요.");
+                return;
             }
             sessionStorage.removeItem("form_data");
             sessionStorage.removeItem("selectPlaceData");
             sessionStorage.removeItem("selectPerformData");
             sessionStorage.removeItem("selectAddressData");
-            location.href = "/review/content/" + data;
+            location.href = data;
         },
         error : function(error) {
             alert("code : " + error.status + "\n" + "message : " + error.responseText + "\n" + "error : " + error);
@@ -296,6 +318,9 @@ function loadFormDataToJson() {
     if ($('#inputPlace').val().indexOf(" (") !== -1 && $('#inputPlace').val().indexOf(")") === ($('#inputPlace').val().length - 1)) {
         place = $('#inputPlace').val().split(' (')[0];
         placeAddress = $('#inputPlace').val().split(' (')[1].replace(")", "");
+        if (placeAddress === "주소를 검색 혹은 직접 입력해주세요.") {
+            placeAddress = "";
+        }
     } else {
         place = $('#inputPlace').val();
     }

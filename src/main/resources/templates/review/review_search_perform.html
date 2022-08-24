@@ -79,6 +79,8 @@
         function placesSearchCB (data, status, pagination) {
             let address = "";
 
+            console.log("data : ", data[0]);
+
             if (data[0]) {
                 if (data[0].road_address_name) {
                     address = data[0].road_address_name.toString();
@@ -86,7 +88,6 @@
                     address = data[0].address_name.toString();
                 }
             }
-
 
             let selectPerformInfo = JSON.parse(sessionStorage.getItem("selectPerformInfo"));
 
@@ -99,7 +100,7 @@
             sessionStorage.removeItem("selectPerformInfo");
             sessionStorage.setItem("selectPerformData", JSON.stringify(selectPerformData));
 
-            location.href = "/review/create";
+            // location.href = "/review/create";
         }
     </script>
 

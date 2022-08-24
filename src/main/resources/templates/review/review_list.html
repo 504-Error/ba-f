@@ -45,9 +45,7 @@
                 </form>
             </div>
 
-            <a th:href="@{|/review/create|}">
-                <button id="review-btn-write" type="button" class="btn btn-primary float-end">리뷰 작성</button>
-            </a>
+            <button id="review-btn-write" type="button" class="btn btn-primary float-end">리뷰 작성</button>
         </div>
     </div>
 
@@ -67,9 +65,13 @@
             <div class="card-body">
                 <div class="review-content-area mt-0 mb-3">
                     <img class="img-profile-content float-start me-1" src="/static/image/anonymous_profile.png" style="width: 30px; height: 30px;" alt="익명의 프로필 이미지">
-                    <div style="height: 30px;line-height:30px;">
+                    <div style="height: 30px;line-height:30px;" th:if="${review.author != null}">
                         <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:if="${review.isAnonymous == true}" th:text="익명"></span>
                         <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></span>
+                        <span class="fw-normal content-time" th:text="${review.getDate(review.createDate)}"></span>
+                    </div>
+                    <div style="height: 30px;line-height:30px;" th:unless="${review.author != null}">
+                        <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:if="${review.isAnonymous == true}">(알 수 없음)</span>
                         <span class="fw-normal content-time" th:text="${review.getDate(review.createDate)}"></span>
                     </div>
                 </div>
@@ -188,6 +190,18 @@
         document.getElementById('page').value = 0;
         document.getElementById('searchForm').submit();
     });
+
+
+    const btn_write = document.getElementById("review-btn-write");
+    btn_write.addEventListener('click', function() {
+        sessionStorage.removeItem('form_data');
+        sessionStorage.removeItem('selectPlaceData');
+        sessionStorage.removeItem('selectPerformData');
+        sessionStorage.removeItem('selectAddressData');
+
+        location.href = "/review/create";
+    });
+
 
     // 나중에 수정해야 됨 - 카테고리 색 바꾸기
     const categoryStr = "${category}";
