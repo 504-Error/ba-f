@@ -84,7 +84,7 @@
                 <a th:href="@{|/review/${category}?keyword=${review.place}|}">
                     <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 장소 리뷰 </span>
                 </a>
-                <div id="map" style="width:200px;height:150px;" th:value="${review.placeAddress}"></div>
+                <div id="map" style="width:300px;height:200px;" th:value="${review.placeAddress}"></div>
                 <a id="reviewPlace" th:value="${review.placeAddress}"></a>
 
             </td>
@@ -290,14 +290,16 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6f5ee4dc680406f1dbe36437ebafb94f&libraries=services"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
     <script>
         console.log("map script");
 
         var mapContainer = document.getElementById('map'); // 지도를 표시할 div
-        var valueElement = document.getElementById("reviewPlace");
-        console.log("1",valueElement.outerHTML.value);
-        console.log("2",mapContainer);
+        var valueElement = document.getElementById("reviewPlace").outerHTML;
+        var place = valueElement.split('"');
+        console.log("1",valueElement);
+        console.log("2",place);
         console.log("mapcontatiner : ", $('#map').val());
 
         var mapOption = {
@@ -313,9 +315,9 @@
         var geocoder = new kakao.maps.services.Geocoder();
 
         // 주소로 좌표를 검색합니다
-        geocoder.addressSearch(mapContainer.value, function (result, status) {
+        geocoder.addressSearch(place[3], function (result, status) {
 
-            console.log("map value - address : ", mapContainer.value);
+            console.log("map value - address : ", place[3]);
 
             // 정상적으로 검색이 완료됐으면
             if (status === kakao.maps.services.Status.OK) {
@@ -330,7 +332,7 @@
 
                 // 인포윈도우로 장소에 대한 설명을 표시합니다
                 var infowindow = new kakao.maps.InfoWindow({
-                    content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
+                    content: '<div style="width:150px;text-align:center;padding:6px 0;">[[${review.place}]]</div>'
                 });
                 infowindow.open(map, marker);
 
