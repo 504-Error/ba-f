@@ -7,11 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰 내용</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/static/kakaomap.css}">
-
-    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
+<link rel="stylesheet" type="text/css" th:href="@{/static/kakaomap.css}">
 <div layout:fragment="content" class="container">
     <nav class="sub-navbar navbar-expand-lg">
         <div class="container-fluid">
@@ -87,6 +85,7 @@
                     <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 장소 리뷰 </span>
                 </a>
                 <div id="map" style="width:200px;height:150px;" th:value="${review.placeAddress}"></div>
+                <a id="reviewPlace" th:value="${review.placeAddress}"></a>
 
             </td>
         </tr>
@@ -288,94 +287,97 @@
             </ol>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
+    <script>
+        console.log("map script");
+
+        var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+        var valueElement = document.getElementById("reviewPlace");
+        console.log("1",valueElement.outerHTML.value);
+        console.log("2",mapContainer);
+        console.log("mapcontatiner : ", $('#map').val());
+
+        var mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level : 3 // 지도의 확대 레벨
+        };
+
+
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        // 주소로 좌표를 검색합니다
+        geocoder.addressSearch(mapContainer.value, function (result, status) {
+
+            console.log("map value - address : ", mapContainer.value);
+
+            // 정상적으로 검색이 완료됐으면
+            if (status === kakao.maps.services.Status.OK) {
+
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new kakao.maps.Marker({
+                    map     : map,
+                    position: coords
+                });
+
+                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
+                });
+                infowindow.open(map, marker);
+
+                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                map.setCenter(coords);
+            }
+        });
+    </script>
+    <script layout:fragment="script" type="text/javascript">
+        $("#check-anonym").change(function () {
+            if (this.checked) {
+                $(this).attr('value', true);
+            } else {
+                $(this).attr('value', false);
+            }
+        });
+
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                }
+                ;
+            });
+        });
+
+        const accuse_elements = document.getElementsByClassName("accuse");
+        Array.from(accuse_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (confirm("정말로 신고하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                }
+                ;
+            });
+        });
+
+        const recommend_elements = document.getElementsByClassName("recommend-btn");
+        Array.from(recommend_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (confirm("정말로 추천하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                }
+                ;
+            });
+        });
+    </script>
 </div>
-
-
-<script type="text/javascript"
-        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
-<script>
-    console.log("map script");
-
-    var mapContainer = document.getElementById('map'); // 지도를 표시할 div
-    console.log("mapcontatiner : ", mapContainer);
-
-    var mapOption = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-        level : 3 // 지도의 확대 레벨
-    };
-
-
-    // 지도를 생성합니다
-    var map = new kakao.maps.Map(mapContainer, mapOption);
-
-    // 주소-좌표 변환 객체를 생성합니다
-    var geocoder = new kakao.maps.services.Geocoder();
-
-    // 주소로 좌표를 검색합니다
-    geocoder.addressSearch(mapContainer.value, function (result, status) {
-        console.log("map value - address : ", mapContainer.value);
-
-        // 정상적으로 검색이 완료됐으면
-        if (status === kakao.maps.services.Status.OK) {
-
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-            // 결과값으로 받은 위치를 마커로 표시합니다
-            var marker = new kakao.maps.Marker({
-                map     : map,
-                position: coords
-            });
-
-            // 인포윈도우로 장소에 대한 설명을 표시합니다
-            var infowindow = new kakao.maps.InfoWindow({
-                content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
-            });
-            infowindow.open(map, marker);
-
-            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-            map.setCenter(coords);
-        }
-    });
-</script>
-<script layout:fragment="script" type="text/javascript">
-    $("#check-anonym").change(function () {
-        if (this.checked) {
-            $(this).attr('value', true);
-        } else {
-            $(this).attr('value', false);
-        }
-    });
-
-    const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 삭제하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-            ;
-        });
-    });
-
-    const accuse_elements = document.getElementsByClassName("accuse");
-    Array.from(accuse_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 신고하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-            ;
-        });
-    });
-
-    const recommend_elements = document.getElementsByClassName("recommend-btn");
-    Array.from(recommend_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 추천하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-            ;
-        });
-    });
-</script>
-
 </body>
 </html>
