@@ -62,11 +62,11 @@
     <div th:if="${type} eq 'list'" class="card my-3" th:each="review : ${reviewPage}" style="clear: both">
         <a th:href="@{|/review/content/${review.id}|}" style="text-decoration:none; color:inherit">
             <div class="image-box float-start me-3" th:if="${#lists.size(review.reviewImages)} > 0">
-                <img class="image-thumbnail" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}">
+                <img class="image-thumbnail" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}" alt="글 이미지 썸네일">
             </div>
             <div class="card-body">
                 <div class="review-content-area mt-0 mb-3">
-                    <img class="img-profile-content float-start me-1" src="/static/image/anonymous_profile.png" style="width: 30px; height: 30px;">
+                    <img class="img-profile-content float-start me-1" src="/static/image/anonymous_profile.png" style="width: 30px; height: 30px;" alt="익명의 프로필 이미지">
                     <div style="height: 30px;line-height:30px;">
                         <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:if="${review.isAnonymous == true}" th:text="익명"></span>
                         <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></span>
@@ -96,19 +96,19 @@
                             <th colspan="2">
                                 <div class="ms-1">
                                     <span th:if="${#strings.contains(review.amenities,'0')}" class="amenities-img float-start me-2">
-                                        <img id="img_amenities_elevator_select" src="/static/image/amenities_elevator_select.png" height="30" width="30" />
+                                        <img id="img_amenities_elevator_select" src="/static/image/amenities_elevator_select.png" height="30" width="30" alt="승강기 있음" />
                                     </span>
                                     <span th:if="${#strings.contains(review.amenities,'1')}" class="amenities-img float-start me-2">
-                                        <img id="img_amenities_incline_select" src="/static/image/amenities_incline_select.png" height="30" width="30" />
+                                        <img id="img_amenities_incline_select" src="/static/image/amenities_incline_select.png" height="30" width="30" alt="경사로 있음" />
                                     </span>
                                     <span th:if="${#strings.contains(review.amenities,'2')}" class="amenities-img float-start me-2">
-                                        <img id="img_amenities_parking_select" src="/static/image/amenities_parking_select.png" height="30" width="30" />
+                                        <img id="img_amenities_parking_select" src="/static/image/amenities_parking_select.png" height="30" width="30" alt="주차장 있음" />
                                     </span>
                                     <span th:if="${#strings.contains(review.amenities,'3')}" class="amenities-img float-start me-2">
-                                        <img id="img_amenities_table_select" src="/static/image/amenities_table_select.png" height="30" width="30" />
+                                        <img id="img_amenities_table_select" src="/static/image/amenities_table_select.png" height="30" width="30" alt="테이블석 있음" />
                                     </span>
                                     <span th:if="${#strings.contains(review.amenities,'4')}" class="amenities-img float-start me-2">
-                                        <img id="img_amenities_rest-room_select" src="/static/image/amenities_rest-room_select.png" height="30" width="30" />
+                                        <img id="img_amenities_rest-room_select" src="/static/image/amenities_rest-room_select.png" height="30" width="30" alt="화장실 있음" />
                                     </span>
                                 </div>
                             </th>
@@ -133,8 +133,8 @@
                 <div class="col" th:each="review : ${reviewPage}">
                     <a th:href="@{|/review/content/${review.id}|}">
                         <div class="card review-card">
-                            <img th:if="${#lists.size(review.reviewImages)} > 0" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}" class="card-img-top" style="height: 266px">
-                            <img th:unless="${#lists.size(review.reviewImages)} > 0" src="/static/image/no-image-thumbnail.png" class="card-img-top" alt="..." style="height: 266px">
+                            <img th:if="${#lists.size(review.reviewImages)} > 0" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}" class="card-img-top" style="height: 266px" alt="글 이미지 썸네일">
+                            <img th:unless="${#lists.size(review.reviewImages)} > 0" src="/static/image/no-image-thumbnail.png" class="card-img-top" style="height: 266px" alt="글 이미지 썸네일">
                             <div class="card-body">
                                 <h5 class="card-title" th:text="'[' + ${review.genre} + '] ' + ${review.subject}"></h5>
                                 <div class="card-status">

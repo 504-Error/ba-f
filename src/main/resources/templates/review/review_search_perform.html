@@ -43,7 +43,7 @@
         <div class="row row-cols-1 row-cols-md-4">
             <div class="col" th:each="performInfo : ${performInfoList}">
                 <div class="card review-card">
-                    <img th:src="${performInfo.posterUrl}" class="card-img-top" alt="..." height="400px">
+                    <img th:src="${performInfo.posterUrl}" class="card-img-top" height="400px" th:alt="${performInfo.title} + ' 공연 포스터'">
                     <div class="card-body">
                         <h6 class="card-title" th:text="${performInfo.title}"></h6>
                         <div class="card-status">
