@@ -2,8 +2,6 @@ package com.error504.baf.service;
 
 import com.error504.baf.exception.DataNotFoundException;
 import com.error504.baf.model.SiteUser;
-import com.error504.baf.model.UserCertifyFile;
-import com.error504.baf.repository.UserCertifyFileRepository;
 import com.error504.baf.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +12,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,13 +21,11 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final UserCertifyFileRepository userCertifyFileRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserCertifyFileRepository userCertifyFileRepository, PasswordEncoder passwordEncoder){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
-        this.userCertifyFileRepository = userCertifyFileRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -75,10 +70,8 @@ public class UserService {
     }
 
     public void uploadCertifyFile(SiteUser siteUser, String path) {
-        UserCertifyFile userCertifyFile = new UserCertifyFile();
-        userCertifyFile.setFilePath(path);
-        userCertifyFile.setSiteUser(siteUser);
-        this.userCertifyFileRepository.save(userCertifyFile);
+        siteUser.setCertifyFilePath(path);
+        this.userRepository.save(siteUser);
     }
 
     public void updatePassword(SiteUser siteUser, String newPassword) {

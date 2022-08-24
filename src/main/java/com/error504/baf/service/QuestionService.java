@@ -40,9 +40,20 @@ public class QuestionService {
 
 
     @Transactional
-    public Page<Question> getAllQuestion(int page, String keyword, Long boardId){
+    public Page<Question> getAllQuestion(int page, String keyword, Long boardId, int sortType){
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
+        switch (sortType) {
+            case 1:
+                sorts.add(Sort.Order.desc("voterCount"));
+                sorts.add(Sort.Order.desc("createDate"));
+                break;
+            case 2:
+                sorts.add(Sort.Order.desc("accuserCount"));
+                sorts.add(Sort.Order.desc("createDate"));
+                break;
+            default:
+                sorts.add(Sort.Order.desc("createDate"));
+        }
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         Specification<Question> spec = searchQuestion(keyword, boardId);
         return questionRepository.findAll(spec, pageable);

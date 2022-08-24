@@ -33,6 +33,8 @@ public class SecurityConfig {
                 .antMatchers("/question/**").authenticated()
                 .antMatchers("/review/create").authenticated()
 
+                .antMatchers("/management/**").hasAuthority("ROLE_ADMIN")
+
                 .and()
                 .formLogin()
                 .loginPage("/user/login")

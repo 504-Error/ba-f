@@ -31,9 +31,6 @@ public class ReviewComment {
     @ManyToOne
     private SiteUser author;
 
-    @OneToMany(mappedBy = "reviewComment", cascade = CascadeType.REMOVE)
-    private List<ReviewChildComment> reviewChildCommentsList;
-
     @ManyToMany
     Set<SiteUser> voter;
 
