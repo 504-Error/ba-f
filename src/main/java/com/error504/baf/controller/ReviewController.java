@@ -24,10 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -72,8 +73,19 @@ public class ReviewController {
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword,
                              @PathVariable("category") String category,
-                             @PathVariable("type") String type) {
+                             @PathVariable("type") String type,
+                             HttpServletResponse response) throws IOException {
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
+
+        logger.info("reivewpage.getsize() : " + reviewPage.getSize());
+
+        if (reviewPage.getSize() == 0) {
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('검색 결과가 없습니다.'); history.go(-1);</script>");
+            out.flush();
+        }
+
         model.addAttribute("reviewPage", reviewPage);
         model.addAttribute("keyword", keyword);
         model.addAttribute("category", category);
@@ -179,16 +191,6 @@ public class ReviewController {
                 } catch (IOException e) {
                     throw new IllegalStateException("업로드 실패...", e);
                 }
-
-
-//                try {
-////                    imageList.get(i).transferTo(path);
-////                    Files.copy(path, imageList.get(i));
-//                } catch (IllegalStateException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
 
                 Review review = this.reviewService.getReview(id);
                 logger.info("path.toString : " + uploadPath.toString());
