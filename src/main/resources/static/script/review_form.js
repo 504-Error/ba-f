@@ -75,9 +75,9 @@ if (sessionStorage.getItem('selectAddressData')) {
 }
 
 function isChecked(category) {
-    const imgId = "img_amenities_" + category
+    const imgId = "img_amenities_" + category;
     const checkbox_id = "amenities-" + category;
-    const checkbox = document.getElementById(checkbox_id)
+    const checkbox = document.getElementById(checkbox_id);
     const isChecked = checkbox.checked;
     var changeImgName;
     if (!isChecked){
@@ -87,6 +87,23 @@ function isChecked(category) {
     }
 
     document.getElementById(imgId).src = changeImgName;
+}
+
+function isCheckedSpace(category) {
+    const checkbox_id = "amenities-" + category;
+    const checkbox = document.getElementById(checkbox_id);
+    isChecked(category);
+
+    checkbox.checked = !checkbox.checked;
+}
+
+function isCheckedRadioSpace(grade) {
+    document.getElementById(grade + "-stars-btn").checked = true;
+}
+
+function addFileToSpace() {
+    let newImage = document.getElementById("formFileMultiple");
+    newImage.click();
 }
 
 var inputFileList = new Array();
