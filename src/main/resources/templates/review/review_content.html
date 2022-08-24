@@ -44,7 +44,7 @@
            class="accuse btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"
            th:unless="${review.author != null and #authentication.getPrincipal().getUsername() == review.author.username}"
            th:text="신고"></a>
-        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
         <div class="ms-5">
             <p class="fw-bolder mb-0 content-nickname" th:if="${review.isAnonymous == true}" th:text="익명"></p>
             <p class="fw-bolder mb-0 content-nickname" th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></p>

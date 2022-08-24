@@ -19,7 +19,7 @@
            class="accuse btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"
            th:unless="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
            th:text="신고"></a>
-        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
         <div class="ms-5">
             <p class="fw-bolder mb-0 content-nickname" th:if="${question.isAnonymous == true}" th:text="익명"></p>
             <p class="fw-bolder mb-0 content-nickname" th:unless="${question.isAnonymous == true}" th:text="${question.author.username}"></p>

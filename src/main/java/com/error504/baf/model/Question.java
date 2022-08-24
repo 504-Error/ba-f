@@ -39,6 +39,10 @@ public class Question {
     @ManyToMany
     Set<SiteUser> voter;
 
+//    @ManyToMany
+//    @JoinTable(name = "question_voter", joinColumns = @JoinColumn(name = "voter_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
+//    Set<Question> questionVoter;
+
     @Formula("(select count(*) from question_voter where question_voter.question_id=id)")
     private int voterCount;
 

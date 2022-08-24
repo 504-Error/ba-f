@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import javax.persistence.criteria.Join;
@@ -58,6 +59,31 @@ public class QuestionService {
         Specification<Question> spec = searchQuestion(keyword, boardId);
         return questionRepository.findAll(spec, pageable);
     }
+
+
+    public Page<Question> getHotQuestion(int page){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        LocalDateTime start = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0));
+        LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59,59));
+        return questionRepository.findQuestionByVoterCountIsGreaterThanAndCreateDateBetween(pageable,2,start,end);
+
+    }
+
+
+    public Page<Question> getWeeklyQuestion(int page){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        LocalDateTime start = LocalDateTime.of(LocalDate.now().minusDays(7), LocalTime.of(0, 0, 0));
+        LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59,59));
+        return questionRepository.findQuestionByVoterCountIsGreaterThanAndCreateDateBetween(pageable,2,start,end);
+
+    }
+
+
+
 
     public List<Question> getHotList(){
         List<Question> questionList = new ArrayList<>();

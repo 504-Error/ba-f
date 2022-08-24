@@ -84,19 +84,27 @@ public class QuestionController {
 //    }
 
 
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/question/hotList")
+//    public String hotList(Model model) {
+//        List<Question> hotList = questionService.getHotList();
+//        model.addAttribute("hotList", hotList);
+//        return "community/hot_board";
+//    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/hotList")
-    public String hotList(Model model) {
-        List<Question> hotList = questionService.getHotList();
-        model.addAttribute("hotList", hotList);
+    public String viewHotList(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<Question> hotList = questionService.getHotQuestion(page);
+        model.addAttribute("questionList", hotList);
         return "community/hot_board";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/weeklyHotList")
-    public String weeklyHotList(Model model) {
-        List<Question> weeklyList = questionService.getWeeklyHotList();
-        model.addAttribute("weeklyList", weeklyList);
+    public String viewWeeklyList(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<Question> weeklyList = questionService.getWeeklyQuestion(page);
+        model.addAttribute("questionList", weeklyList);
         return "community/weekly_board";
     }
 

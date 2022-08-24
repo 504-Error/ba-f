@@ -6,7 +6,7 @@
         layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Ba-f Community</title>
+    <title>Ba-f : HOT 게시물</title>
     <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
 </head>
 <body>
@@ -37,13 +37,13 @@
     <h1> </h1>
     <h1> </h1>
 
-    <div th:each="question : ${hotList}">
+    <div th:each="question : ${questionList}">
         <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
             <div class="card my-3">
                 <div class="card-body">
                     <small th:text="${question.board.boardName}"></small>
                     <div style="padding-top: 1%" class="review-content-area mt-0 mb-4">
-                        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+                        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
                         <div class="ms-5">
                             <p class="fw-bolder mb-0 content-nickname" th:if="${question.isAnonymous == true}" th:text="익명"></p>
                             <p class="fw-bolder mb-0 content-nickname" th:unless="${question.isAnonymous == true}" th:text="${question.author.username}"></p>
@@ -67,10 +67,34 @@
             </div>
         </a>
                 </div>
+
+
+    <div th:if="${!questionList.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!questionList.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{|?page=${questionList.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, questionList.totalPages-1)}"
+                th:if="${page >= questionList.number-5 and page <= questionList.number+5}"
+                th:classappend="${page == questionList.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!questionList.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${questionList.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
     </div>
     </div>
         </a>
     </div>
+
 
 
 
