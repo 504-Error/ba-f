@@ -84,19 +84,27 @@ public class QuestionController {
 //    }
 
 
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/question/hotList")
+//    public String hotList(Model model) {
+//        List<Question> hotList = questionService.getHotList();
+//        model.addAttribute("hotList", hotList);
+//        return "community/hot_board";
+//    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/hotList")
-    public String hotList(Model model) {
-        List<Question> hotList = questionService.getHotList();
-        model.addAttribute("hotList", hotList);
+    public String viewHotList(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<Question> hotList = questionService.getHotQuestion(page);
+        model.addAttribute("questionList", hotList);
         return "community/hot_board";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/weeklyHotList")
-    public String weeklyHotList(Model model) {
-        List<Question> weeklyList = questionService.getWeeklyHotList();
-        model.addAttribute("weeklyList", weeklyList);
+    public String viewWeeklyList(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<Question> weeklyList = questionService.getWeeklyQuestion(page);
+        model.addAttribute("questionList", weeklyList);
         return "community/weekly_board";
     }
 
@@ -132,9 +140,18 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/question/create/upload")
     @ResponseBody
-    public String questionCreate(@Valid @RequestPart(name = "contentData") QuestionForm questionForm,
+    public String questionCreate(@RequestPart(name = "contentData") QuestionForm questionForm,
                                  @RequestPart(name = "images", required = false) List<MultipartFile> imageList,
                                  BindingResult bindingResult, Principal principal, HttpServletRequest request) throws IOException {
+
+        if (questionForm.getBoardId() == 0){
+            return "boardIdIsNull";
+        } else if (questionForm.getSubject().equals("")){
+            return "subjectIsNull";
+        } else if (questionForm.getContent().equals("")){
+            return "contentIsNull";
+        }
+
 
         SiteUser siteUser = userService.getUser(principal.getName());
         logger.info(questionForm.getBoardId().toString());
@@ -172,7 +189,7 @@ public class QuestionController {
             }
         }
 
-        return boardId.toString();
+        return "/board/question_list/" + boardId;
     }
 
 

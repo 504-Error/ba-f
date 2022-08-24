@@ -6,7 +6,7 @@
         layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Ba-f Community</title>
+    <title>Ba-f : 마이 페이지</title>
     <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
 </head>
 <body>
@@ -31,7 +31,7 @@
                             <div class="card my-3">
                                 <div class="card-body" >
                                     <div class="review-content-area mt-0 mb-4">
-                                        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png">
+                                        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
                                         <div class="ms-5">
                                             <p class="fw-bolder mb-0 content-nickname" th:if="${question.author != null}" th:text="${question.author.username}"></p>
                                             <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
