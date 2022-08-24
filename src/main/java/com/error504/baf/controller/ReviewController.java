@@ -63,8 +63,11 @@ public class ReviewController {
         // 카테고리 없이 카테고리 자체도 검색 키워드가 될 수 있도록...!
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, "");
         List<Review> reviewList = this.reviewService.getReviewList();
+
+        model.addAttribute("tab", "review");
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("reviewPage", reviewPage);
+        model.addAttribute("category", "all");
         model.addAttribute("keyword", keyword);
         return "review/review_main";
     }
@@ -86,6 +89,7 @@ public class ReviewController {
             out.flush();
         }
 
+        model.addAttribute("tab", "review");
         model.addAttribute("reviewPage", reviewPage);
         model.addAttribute("keyword", keyword);
         model.addAttribute("category", category);
@@ -114,6 +118,9 @@ public class ReviewController {
                 model.addAttribute("category", "");
 
         }
+
+        model.addAttribute("tab", "review");
+
         return "review/review_content_2";
     }
 
@@ -275,6 +282,8 @@ public class ReviewController {
     public String myPageWriteReview(Model model, Principal principal, @RequestParam(value="page", defaultValue="0") int page){
         SiteUser siteUser = userService.getUser(principal.getName());
         Page<Review> reviewPage = reviewService.getReviewResult(siteUser.getId(), page);
+
+        model.addAttribute("tab", "mypage");
         model.addAttribute("siteUser", siteUser);
         model.addAttribute("reviewPage", reviewPage);
         return "account/my_page_write_review";

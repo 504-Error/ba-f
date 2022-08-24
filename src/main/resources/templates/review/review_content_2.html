@@ -17,19 +17,19 @@
         <div class="container-fluid">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="/review">전체</a>
+                    <a href="/review" th:attr="class=${category == 'all' ? 'nav-link-select' : 'nav-link'}">전체</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="restaurant" href="/review/restaurant/list">음식점</a>
+                    <a href="/review/restaurant/list" th:attr="class=${category == 'restaurant' ? 'nav-link-select' : 'nav-link'}">음식점</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/cafe/list">카페</a>
+                    <a class="nav-link" href="/review/cafe/list" th:attr="class=${category == 'cafe' ? 'nav-link-select' : 'nav-link'}">카페</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/perform/list">공연</a>
+                    <a class="nav-link" href="/review/perform/list" th:attr="class=${category == 'perform' ? 'nav-link-select' : 'nav-link'}">공연</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/etc/list">기타</a>
+                    <a class="nav-link" href="/review/etc/list" th:attr="class=${category == 'etc' ? 'nav-link-select' : 'nav-link'}">기타</a>
                 </li>
             </ul>
         </div>
