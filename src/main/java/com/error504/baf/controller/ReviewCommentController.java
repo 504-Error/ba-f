@@ -54,6 +54,7 @@ public class ReviewCommentController {
         Page<ReviewComment> reviewCommentList = reviewCommentService.getReviewCommentResultByUser(siteUser.getId(), page);
         model.addAttribute("siteUser", siteUser);
         model.addAttribute("answerList", reviewCommentList);
+        model.addAttribute("tab", "mypage");
         return "account/my_page_comment_review";
     }
 

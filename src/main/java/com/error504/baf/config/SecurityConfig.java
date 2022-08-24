@@ -30,15 +30,20 @@ public class SecurityConfig {
                 .antMatchers("/user/login").permitAll()
                 .antMatchers("/user/signup").permitAll()
                 .antMatchers(staticResources).permitAll()
-                .antMatchers("/question/**").authenticated()
+                .antMatchers("/question/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/board/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/question/**").hasAuthority("USER_AUTH")
+                .antMatchers("/board/**").hasAuthority("USER_AUTH")
                 .antMatchers("/review/create").authenticated()
+                .antMatchers("/community/home").authenticated()
+
 
                 .antMatchers("/management/**").hasAuthority("ROLE_ADMIN")
 
                 .and()
                 .formLogin()
                 .loginPage("/user/login")
-                .defaultSuccessUrl("/question/list")
+                .defaultSuccessUrl("/review")
 
                 .and()
                 .logout()

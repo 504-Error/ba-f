@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Ba-f : HOME</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+</head>
+<body>
+<div layout:fragment="content" class="container">
+
+  <a style="text-decoration:none; color:inherit" th:href="@{/eventInfo}">
+    <h5 class="border-bottom py-2">추천 정보</h5>
+  </a>
+  <div class="card my-5" style="float:left;width:50%; ">
+    <img src="/static/image/summer.png" height="400">
+    <div class="card-body">
+      7월의 전시 추천
+    </div>
+  </div>
+  <div class="card my-5" style="float:left;width:50%; ">
+    <img src="/static/image/art_logo.png" height="400">
+    <div class="card-body">
+      K 현대 미술관 오즈의 미술관 초대 이벤트
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+</body>
+</html>

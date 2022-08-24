@@ -35,6 +35,7 @@ public class BoardController {
         Page<Board> paging = boardService.getList(page, keyword);
         model.addAttribute("paging", paging);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("tab", "community");
         return "community/board_list";
     }
 

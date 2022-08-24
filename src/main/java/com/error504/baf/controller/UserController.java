@@ -137,6 +137,7 @@ public class UserController {
     public String myPage(Model model,  Principal principal){
         SiteUser siteUser = userService.getUser(principal.getName());
         model.addAttribute("siteUser", siteUser);
+        model.addAttribute("tab", "mypage");
         return "account/my_page";
     }
 
@@ -145,6 +146,7 @@ public class UserController {
     @GetMapping("/mypage/pwd")
     public String passwordFormCreateNull(PasswordForm passwordForm, Model model){
         model.addAttribute("passwordForm", passwordForm);
+        model.addAttribute("tab", "mypage");
         return "account/my_page_pw";
 
     }
@@ -153,6 +155,7 @@ public class UserController {
     @GetMapping("/mypage/email")
     public String emailFormCreateNull(EmailForm emailForm, Model model){
         model.addAttribute("emailForm", emailForm);
+        model.addAttribute("tab", "mypage");
         return "account/my_page_email";
 
     }
@@ -161,6 +164,7 @@ public class UserController {
     @GetMapping("/mypage/delete")
     public String deleteFormCreateNull(PasswordForm passwordForm, Model model){
         model.addAttribute("passwordForm", passwordForm);
+        model.addAttribute("tab", "mypage");
         return "account/member_delete";
 
     }
@@ -253,6 +257,7 @@ public class UserController {
     public String whatIsBaf(Model model, Principal principal){
         SiteUser siteUser = userService.getUser(principal.getName());
         model.addAttribute("siteUser", siteUser);
+        model.addAttribute("tab", "mypage");
         return "what_is_baf";
     }
 
@@ -264,6 +269,7 @@ public class UserController {
         Page<Announcement> announcementPage = announcementService.getList(page, keyword);
         model.addAttribute("announcementPage", announcementPage);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("tab", "mypage");
 
         return  "announcement_board";
     }
@@ -273,6 +279,7 @@ public class UserController {
     public String viewNotice(@PathVariable Long id, Model model) {
         Announcement announcement = announcementService.getAnnouncement(id);
         model.addAttribute("announcement", announcement);
+        model.addAttribute("tab", "mypage");
         return "announcement_detail";
     }
 

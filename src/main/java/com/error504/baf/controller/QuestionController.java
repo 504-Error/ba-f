@@ -52,17 +52,25 @@ public class QuestionController {
         this.announcementService = announcementService;
     }
 
-    @RequestMapping("/question/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
+
+    @RequestMapping("/community/home")
+    public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page, Principal principal){
+        SiteUser siteUser = userService.getUser(principal.getName());
+        if(siteUser.getGetAuth()==1 || siteUser.getUsername().equals("admin")){
         Page<Question> questionList = questionService.getQuestion(page);
         model.addAttribute("questionList", questionList);
         List<Question> weeklyList=questionService.getWeeklyHotList();
         model.addAttribute("weeklyList", weeklyList);
         List<Question> hotList=questionService.getHotList();
         model.addAttribute("hotList", hotList);
+        model.addAttribute("tab", "community");
 
         return "community/question_list";
     }
+
+    return "community/community_error";
+    }
+
 
     @RequestMapping("/question/search")
     public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page,
@@ -71,6 +79,7 @@ public class QuestionController {
         Page<Question> questionList = questionService.getAllQuestion(page, keyword, 0L, 0);
         model.addAttribute("questionList", questionList);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("tab", "community");
         return "community/question_search";
     }
 
@@ -92,11 +101,22 @@ public class QuestionController {
 //        return "community/hot_board";
 //    }
 
+
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/question/*")
+//    public String communityView(Model model) {
+//        Page<Question> hotList = questionService.getHotQuestion(page);
+//        model.addAttribute("questionList", hotList);
+//        model.addAttribute("tab", "community");
+//        return "community/hot_board";
+//    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/hotList")
     public String viewHotList(Model model, @RequestParam(value="page", defaultValue="0") int page) {
         Page<Question> hotList = questionService.getHotQuestion(page);
         model.addAttribute("questionList", hotList);
+        model.addAttribute("tab", "community");
         return "community/hot_board";
     }
 
@@ -105,6 +125,7 @@ public class QuestionController {
     public String viewWeeklyList(Model model, @RequestParam(value="page", defaultValue="0") int page) {
         Page<Question> weeklyList = questionService.getWeeklyQuestion(page);
         model.addAttribute("questionList", weeklyList);
+        model.addAttribute("tab", "community");
         return "community/weekly_board";
     }
 
@@ -113,6 +134,7 @@ public class QuestionController {
         logger.info("Viewing Question detail: " + id);
         Question question = questionService.getQuestion(id);
         model.addAttribute("question", question);
+        model.addAttribute("tab", "community");
 
         return "community/question_detail";
     }
@@ -123,6 +145,7 @@ public class QuestionController {
         List<Board> board = boardService.findAll();
         model.addAttribute("boardId", boardId);
         model.addAttribute("board", board);
+        model.addAttribute("tab", "community");
         return "community/question_form";
 
     }
@@ -132,6 +155,7 @@ public class QuestionController {
     public String questionCreateNull(QuestionForm questionForm, Model model) {
         List<Board> board = boardService.findAll();
         model.addAttribute("board", board);
+        model.addAttribute("tab", "community");
         return "community/question_form";
 
     }
@@ -232,7 +256,7 @@ public class QuestionController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
         this.questionService.delete(question);
-        return "redirect:/question/list";
+        return "redirect:/community/home";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -251,8 +275,11 @@ public class QuestionController {
 
     }
     @RequestMapping("/eventInfo")
-    public String index() {
+    public String index(Model model) {
+        model.addAttribute("tab", "community");
+
         return "community/event_info";
+
     }
 
 
@@ -269,6 +296,8 @@ public class QuestionController {
         model.addAttribute("board", board);
         model.addAttribute("keyword", keyword);
         model.addAttribute("boardId", id);
+        model.addAttribute("tab", "community");
+
         return "community/board_question";
     }
 
@@ -280,6 +309,8 @@ public class QuestionController {
         Page<Question> questionList = questionService.getQuestionResultByUser(siteUser.getId(), page);
         model.addAttribute("siteUser", siteUser);
         model.addAttribute("questionList", questionList);
+        model.addAttribute("tab", "mypage");
+
         return "account/my_page_write";
     }
 

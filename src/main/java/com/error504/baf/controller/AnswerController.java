@@ -77,6 +77,7 @@ public class AnswerController {
         Page<Answer> answerList = answerService.getAnswerResultByUser(siteUser.getId(), page);
         model.addAttribute("siteUser", siteUser);
         model.addAttribute("answerList", answerList);
+        model.addAttribute("tab", "mypage");
         return "account/my_page_comment";
     }
 
