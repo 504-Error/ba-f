@@ -44,7 +44,5 @@ public class ReviewForm {
 
     private String additionalReview;
 
-//    private List<MultipartFile> images = new ArrayList<>();
-
     private Boolean isAnonymous;
 }

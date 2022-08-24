@@ -17,19 +17,19 @@
         <div class="container-fluid">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="/review">전체</a>
+                    <a href="/review" th:attr="class=${category == 'all' ? 'nav-link-select' : 'nav-link'}">전체</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="restaurant" href="/review/restaurant/list">음식점</a>
+                    <a href="/review/restaurant/list" th:attr="class=${category == 'restaurant' ? 'nav-link-select' : 'nav-link'}">음식점</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/cafe/list">카페</a>
+                    <a class="nav-link" href="/review/cafe/list" th:attr="class=${category == 'cafe' ? 'nav-link-select' : 'nav-link'}">카페</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/perform/list">공연</a>
+                    <a class="nav-link" href="/review/perform/list" th:attr="class=${category == 'perform' ? 'nav-link-select' : 'nav-link'}">공연</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/etc/list">기타</a>
+                    <a class="nav-link" href="/review/etc/list" th:attr="class=${category == 'etc' ? 'nav-link-select' : 'nav-link'}">기타</a>
                 </li>
             </ul>
         </div>
@@ -70,7 +70,7 @@
             <th scope="row">리뷰명</th>
             <td>
                 [[${review.subject}]]
-                <a th:href="@{|/review/${category}?keyword=${review.subject}|}">
+                <a th:href="@{|/review/all/list?keyword=${review.subject}|}">
                     <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 주제 리뷰 </span>
                 </a>
             </td>
@@ -83,7 +83,7 @@
             <th scope="row">장소</th>
             <td>
                 [[${review.place}]]
-                <a th:href="@{|/review/${category}?keyword=${review.place}|}">
+                <a th:href="@{|/review/all/list?keyword=${review.place}|}">
                     <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 장소 리뷰 </span>
                 </a>
                 <div id="map" style="width:200px;height:150px;" th:value="${review.placeAddress}"></div>
@@ -107,7 +107,7 @@
         <div class="row ms-1">
             <div th:if="${#strings.contains(review.amenities,'0')}" class="card btn-outline-amenities-select me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_elevator_select" src="/static/image/amenities_elevator_select.png"
+                    <img id="img_amenities_elevator_select" src="/static/image/amenities_elevator_select.png" alt="승강기 알 수 없음"
                          height="50" width="50"/>
                 </span>
                 <div class="review-card-body">
@@ -116,7 +116,7 @@
             </div>
             <div th:unless="${#strings.contains(review.amenities,'0')}" class="card btn-outline-amenities me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_elevator" src="/static/image/amenities_elevator.png" height="50" width="50"/>
+                    <img id="img_amenities_elevator" src="/static/image/amenities_elevator.png" alt="승강기 있음" height="50" width="50"/>
                 </span>
                 <div class="review-card-body">
                     <span>승강기</span>
@@ -125,8 +125,8 @@
 
             <div th:if="${#strings.contains(review.amenities,'1')}" class="card btn-outline-amenities-select me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_incline_select" src="/static/image/amenities_incline_select.png" height="50"
-                         width="50"/>
+                    <img id="img_amenities_incline_select" src="/static/image/amenities_incline_select.png" alt="경사로 알 수 없음"
+                         height="50" width="50"/>
                 </span>
                 <div class="review-card-body">
                     <span>경사로</span>
@@ -134,7 +134,7 @@
             </div>
             <div th:unless="${#strings.contains(review.amenities,'1')}" class="card btn-outline-amenities me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_incline" src="/static/image/amenities_incline.png" height="50" width="50"/>
+                    <img id="img_amenities_incline" src="/static/image/amenities_incline.png" alt="경사로 있음" height="50" width="50"/>
                 </span>
                 <div class="review-card-body">
                     <span>경사로</span>
@@ -143,8 +143,8 @@
 
             <div th:if="${#strings.contains(review.amenities,'2')}" class="card btn-outline-amenities-select me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_parking_select" src="/static/image/amenities_parking_select.png" height="50"
-                         width="50"/>
+                    <img id="img_amenities_parking_select" src="/static/image/amenities_parking_select.png" alt="주차장 알 수 없음"
+                         height="50" width="50"/>
                 </span>
                 <div class="review-card-body">
                     <span>주차장</span>
@@ -152,7 +152,7 @@
             </div>
             <div th:unless="${#strings.contains(review.amenities,'2')}" class="card btn-outline-amenities me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_parking" src="/static/image/amenities_parking.png" height="50" width="50"/>
+                    <img id="img_amenities_parking" src="/static/image/amenities_parking.png" alt="주차장 있음" height="50" width="50"/>
                 </span>
                 <div class="review-card-body">
                     <span>주차장</span>
@@ -161,8 +161,8 @@
 
             <div th:if="${#strings.contains(review.amenities,'3')}" class="card btn-outline-amenities-select me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_table_select" src="/static/image/amenities_table_select.png" height="50"
-                         width="50"/>
+                    <img id="img_amenities_table_select" src="/static/image/amenities_table_select.png" alt="테이블석 알 수 없음"
+                         height="50" width="50"/>
                 </span>
                 <div class="review-card-body">
                     <span>테이블석</span>
@@ -170,7 +170,7 @@
             </div>
             <div th:unless="${#strings.contains(review.amenities,'3')}" class="card btn-outline-amenities me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_table" src="/static/image/amenities_table.png" height="50" width="50"/>
+                    <img id="img_amenities_table" src="/static/image/amenities_table.png" alt="테이블석 있음" height="50" width="50"/>
                 </span>
                 <div class="review-card-body">
                     <span>테이블석</span>
@@ -179,7 +179,7 @@
 
             <div th:if="${#strings.contains(review.amenities,'4')}" class="card btn-outline-amenities-select me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_rest-room_select" src="/static/image/amenities_rest-room_select.png"
+                    <img id="img_amenities_rest-room_select" src="/static/image/amenities_rest-room_select.png" alt="장애인 화장실 알 수 없음"
                          height="50" width="50"/>
                 </span>
                 <div class="review-card-body">
@@ -188,8 +188,8 @@
             </div>
             <div th:unless="${#strings.contains(review.amenities,'4')}" class="card btn-outline-amenities me-1">
                 <span class="amenities-img">
-                    <img id="img_amenities_rest-room" src="/static/image/amenities_rest-room.png" height="50"
-                         width="50"/>
+                    <img id="img_amenities_rest-room" src="/static/image/amenities_rest-room.png" alt="장애인 화장실 있음"
+                         height="50" width="50"/>
                 </span>
                 <div class="review-card-body">
                     <span>장애인 화장실</span>
@@ -218,7 +218,7 @@
         <label class="review-content-label mb-3">이미지</label>
         <div class="col-12">
             <div class="board-preview-add-img" th:each="imgPath : ${review.reviewImages}">
-                <img class="btn preview-img float-start" th:src="@{|/display?filePath=${imgPath.getImage()}|}">
+                <img class="btn preview-img float-start" th:src="@{|/display?filePath=${imgPath.getImage()}|}" alt="사용자 리뷰 첨부 이미지">
             </div>
         </div>
     </div>
@@ -254,14 +254,14 @@
             </div>
         </form>
 
-        <div id="comments-list ">
+        <div id="comments-list">
             <ol class="list-group">
                 <li th:each="comment : ${review.reviewCommentsList}"
                     class="list-group-item  justify-content-between align-items-start comment-item">
                     <div class="d-flex">
                         <div class="ms-2 me-auto">
                             <div class="mb-2" th:if="${comment.author != null}">
-                                <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
+                                <img class="img-profile-comment" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
                                 <span class="fw-bolder content-nickname" th:if="${comment.author == review.author and comment.isAnonymous == true}"
                                       text="익명 (글쓴이)"></span>
                                 <span class="fw-bolder content-nickname" th:if ="${comment.author == review.author and comment.isAnonymous != true}"
@@ -272,7 +272,7 @@
                                       th:text="${comment.author.getUsername()}"></span>
                             </div>
                             <div class="mb-2" th:if="${comment.author == null}">
-                                <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
+                                <img class="img-profile-comment" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
                                 <span class="fw-bolder content-nickname">(알 수 없음)</span>
                             </div>
                             [[${comment.content}]]
@@ -288,6 +288,10 @@
             </ol>
         </div>
     </div>
+
+    <a th:href="@{|/review/${category}/list|}">
+        <button id="review-btn-write" type="button" class="btn btn-primary float-end mb-4">글 목록으로</button>
+    </a>
 </div>
 
 

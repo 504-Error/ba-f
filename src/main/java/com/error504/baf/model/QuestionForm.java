@@ -12,7 +12,7 @@ public class QuestionForm {
     @Size(max=200)
     private String subject;
 
-    @NotEmpty(message="내용은 필수항목입니다.")
+    @NotEmpty(message="을 필수항목입니다.")
     private String content;
 
     private Long boardId;

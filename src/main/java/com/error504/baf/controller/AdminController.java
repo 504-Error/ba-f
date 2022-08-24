@@ -33,13 +33,14 @@ public class AdminController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Secured("ROLE_ADMIN")
-    @RequestMapping("")
-    public String adminMain(Model model) {
-        model.addAttribute("template", "admin/admin_user_management");
-
-        return "admin/admin_main";
-    }
+//    @Secured("ROLE_ADMIN")
+//    @RequestMapping("")
+//    public String adminMain(Model model) {
+//
+//        model.addAttribute("template", "admin/admin_user_management");
+//
+//        return "admin/admin_main";
+//    }
 
     @Secured("ROLE_ADMIN")
     @RequestMapping("/account/{getAuth}")
@@ -47,6 +48,8 @@ public class AdminController {
                                     @RequestParam(value="page", defaultValue="0") int page,
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         Page<SiteUser> userPage = this.userService.getList(page, keyword, getAuth);
+
+        model.addAttribute("tab", "management");
         model.addAttribute("userPage", userPage);
         model.addAttribute("keyword", keyword);
         model.addAttribute("getAuth", getAuth);
@@ -103,9 +106,6 @@ public class AdminController {
         List<ReviewComment> reviewCommentList = this.reviewCommentService.getReviewCommentByAuthor(id);
         this.reviewCommentService.deleteByAuthor(reviewCommentList);
 
-
-
-
         this.userService.deleteMember(siteUser);
 
         return String.format("redirect:/management/account/%s", getAuth);
@@ -129,6 +129,7 @@ public class AdminController {
             model.addAttribute("contentPage", reviewPage);
         }
 
+        model.addAttribute("tab", "management");
         model.addAttribute("keyword", keyword);
         model.addAttribute("boardId", boardId);
         model.addAttribute("sortType", sortType);
@@ -192,6 +193,8 @@ public class AdminController {
             returnValue = "review/review_content_2";
         }
 
+        model.addAttribute("tab", "management");
+
         return returnValue;
     }
 
@@ -201,6 +204,8 @@ public class AdminController {
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
         Page<Board> boardPage = boardService.getList(page, keyword);
+
+        model.addAttribute("tab", "management");
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("keyword", keyword);
 
@@ -223,6 +228,8 @@ public class AdminController {
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
         Page<Announcement> announcementPage = announcementService.getList(page, keyword);
+
+        model.addAttribute("tab", "management");
         model.addAttribute("announcementPage", announcementPage);
         model.addAttribute("keyword", keyword);
 
@@ -245,6 +252,8 @@ public class AdminController {
     @RequestMapping(value = "/announce/{id}")
     public String detail(Model model, @PathVariable("id") Long id, AnnouncementForm announcementForm) {
         Announcement announcement = this.announcementService.getAnnouncement(id);
+
+        model.addAttribute("tab", "management");
         model.addAttribute("announcement", announcement);
 
         return "admin/admin_announcement_detail";

@@ -20,7 +20,10 @@
         <div class="row mb-3">
             <div class="col-sm-2">
                 <label for="inputGenre" class="col-form-label">장르</label>
-                <small style="color: red"> *</small>
+                <small style="color: red">
+                    <span class="blind">필수</span>
+                    *
+                </small>
             </div>
             <div class="col-sm-5">
                 <select class="form-select" id="inputGenre" th:field="*{genre}" onchange="changeGenre(this)" required>
@@ -37,7 +40,10 @@
         <div class="row mb-3">
             <div class="col-sm-2">
                 <label for="inputTitle" class="col-form-label">리뷰명</label>
-                <small style="color: red"> *</small>
+                <small style="color: red">
+                    <span class="blind">필수</span>
+                    *
+                </small>
             </div>
             <div class="col-sm-5">
                 <input type="text" th:field="*{subject}" class="form-control" id="inputTitle" placeholder="장르에 따른 리뷰 제목을 입력 혹은 검색해주세요." >
@@ -55,7 +61,10 @@
         <div class="row mb-3">
             <div class="col-sm-2">
                 <label for="inputPlace" class="col-form-label">장소</label>
-                <small style="color: red"> *</small>
+                <small style="color: red">
+                    <span class="blind">필수</span>
+                    *
+                </small>
             </div>
             <div class="col-sm-5">
                 <input type="text" th:field="*{place}" class="form-control" id="inputPlace" placeholder="방문 장소를 입력 혹은 검색해주세요." >
@@ -67,20 +76,23 @@
         <div class="row mb-3">
             <div class="col-sm-2">
                 <label class="col-form-label">별점</label>
-                <small style="color: red"> *</small>
+                <small style="color: red">
+                    <span class="blind">필수</span>
+                    *
+                </small>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-5">
                 <div class="star-rating-btn">
-                    <input type="radio" id="1-stars-btn" th:field="*{grade}" value=1 />
-                    <label for="1-stars-btn" class="star-btn">1점</label>
+                    <input type="radio" id="1-stars-btn" class="star-btn" th:field="*{grade}" value=1 />
+                    <label for="1-stars-btn" class="star-btn" tabindex="0" onkeypress="if (event.keyCode===32) {isCheckedRadioSpace(1);}">1점</label>
                     <input type="radio" id="2-stars-btn" th:field="*{grade}" value=2 />
-                    <label for="2-stars-btn" class="star-btn">2점</label>
+                    <label for="2-stars-btn" class="star-btn" tabindex="0" onkeypress="if (event.keyCode===32) {isCheckedRadioSpace(2);}">2점</label>
                     <input type="radio" id="3-stars-btn" th:field="*{grade}" value=3 />
-                    <label for="3-stars-btn" class="star-btn">3점</label>
+                    <label for="3-stars-btn" class="star-btn" tabindex="0" onkeypress="if (event.keyCode===32) {isCheckedRadioSpace(3);}">3점</label>
                     <input type="radio" id="4-stars-btn" th:field="*{grade}" value=4 />
-                    <label for="4-stars-btn" class="star-btn">4점</label>
+                    <label for="4-stars-btn" class="star-btn" tabindex="0" onkeypress="if (event.keyCode===32) {isCheckedRadioSpace(4);}">4점</label>
                     <input type="radio" id="5-stars-btn" th:field="*{grade}" value=5 />
-                    <label for="5-stars-btn" class="star-btn">5점</label>
+                    <label for="5-stars-btn" class="star-btn" tabindex="0" onkeypress="if (event.keyCode===32) {isCheckedRadioSpace(5);}">5점</label>
                 </div>
             </div>
         </div>
@@ -91,35 +103,35 @@
             <div class="col-12">
                 <div class="amenities-check">
                     <input type="checkbox" id="amenities-elevator" th:field="*{amenities}" value="0" required/>
-                    <label for="amenities-elevator" class="btn-outline-amenities" onclick="isChecked('elevator')">
+                    <label for="amenities-elevator" class="btn-outline-amenities" tabindex="0" onclick="isChecked('elevator')" onkeypress="if (event.keyCode===32) {isCheckedSpace('elevator');}">
                         <span class="amenities-img">
                             <img id="img_amenities_elevator" src="/static/image/amenities_elevator.png" height ="50" width="50" />
                         </span>
                         승강기
                     </label>
                     <input type="checkbox" id="amenities-incline" th:field="*{amenities}" value="1" />
-                    <label for="amenities-incline" class="btn-outline-amenities" onclick="isChecked('incline')">
+                    <label for="amenities-incline" class="btn-outline-amenities" tabindex="0" onclick="isChecked('incline')" onkeypress="if (event.keyCode===32) {isCheckedSpace('incline');}">
                         <span class="amenities-img">
                             <img id="img_amenities_incline" src="/static/image/amenities_incline.png" height ="50" width="50" />
                         </span>
                         경사로
                     </label>
                     <input type="checkbox" id="amenities-parking" th:field="*{amenities}" value="2" />
-                    <label for="amenities-parking" class="btn-outline-amenities" onclick="isChecked('parking')">
+                    <label for="amenities-parking" class="btn-outline-amenities" tabindex="0" onclick="isChecked('parking')" onkeypress="if (event.keyCode===32) {isCheckedSpace('parking');}">
                         <span class="amenities-img">
                             <img id="img_amenities_parking" src="/static/image/amenities_parking.png" height ="50" width="50" />
                         </span>
                         주차장
                     </label>
                     <input type="checkbox" id="amenities-table" th:field="*{amenities}" value="3" />
-                    <label for="amenities-table" class="btn-outline-amenities" onclick="isChecked('table')">
+                    <label for="amenities-table" class="btn-outline-amenities" tabindex="0" onclick="isChecked('table')" onkeypress="if (event.keyCode===32) {isCheckedSpace('table');}">
                         <span class="amenities-img">
                             <img id="img_amenities_table" src="/static/image/amenities_table.png" height ="50" width="50" />
                         </span>
                         테이블석
                     </label>
                     <input type="checkbox" id="amenities-rest-room" th:field="*{amenities}" value="4" />
-                    <label for="amenities-rest-room" class="btn-outline-amenities" onclick="isChecked('rest-room')">
+                    <label for="amenities-rest-room" class="btn-outline-amenities" tabindex="0" onclick="isChecked('rest-room')" onkeypress="if (event.keyCode===32) {isCheckedSpace('rest-room');}">
                         <span class="amenities-img">
                             <img id="img_amenities_rest-room" src="/static/image/amenities_rest-room.png" height ="50" width="50" />
                         </span>
@@ -131,7 +143,10 @@
         <div class="row mb-3">
             <div>
                 <label for="inputPlaceReview" class="col-form-label">장소 리뷰</label>
-                <small style="color: red"> *</small>
+                <small style="color: red">
+                    <span class="blind">필수</span>
+                    *
+                </small>
             </div>
             <div class="col-12">
                 <textarea class="form-control" id="inputPlaceReview" rows="3" th:field="*{placeReview}" placeholder="장소에 대한 후기를 남겨주세요."></textarea>
@@ -147,7 +162,7 @@
             <label class="form-label">이미지 추가</label>
             <div class="col-12">
                 <input class="form-control d-none" type="file" accept="image/*" id="formFileMultiple" onchange="inputImgFile()" multiple>
-                <label for="formFileMultiple" class="btn new-img">
+                <label for="formFileMultiple" class="btn new-img" tabindex="0" onkeypress="if (event.keyCode===32) {addFileToSpace();}">
                     <img src="/static/image/new_img.png">
                 </label>
                 <div id="board-preview-add-img"></div>

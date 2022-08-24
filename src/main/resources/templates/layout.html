@@ -10,24 +10,23 @@
 <body>
 <header class="navbar navbar-expand-lg navbar-fix">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/question/list}">
-            <img src="/static/image/ba-f_logo.png" alt="ba-f 로고 이미지" width="90" height="40">
-        </a>
+        <a class="navbar-brand" th:href="@{/review}">
+            <img src="/static/image/ba-f_logo.png" width="90" height="40" alt="ba-f 로고 이미지">
         <ul class="nav justify-content-center">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/question/list}">커뮤니티</a>
+                <a class="nav-link" th:href="@{/question/list}" th:attr="class=${tab == 'community' ? 'nav-link-select' : 'nav-link'}">커뮤니티</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/icon}">Ba-f 맵</a>
+                <a class="nav-link" th:href="@{/icon}" th:attr="class=${tab == 'map' ? 'nav-link-select' : 'nav-link'}">Ba-f 맵</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/review}">방문 후기</a>
+                <a th:href="@{/review}" th:attr="class=${tab == 'review' ? 'nav-link-select' : 'nav-link'}">방문 후기</a>
             </li>
             <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
-                <a class="nav-link" th:href="@{/management/account/0}">관리자 페이지</a>
+                <a class="nav-link" th:href="@{/management/account/0}" th:attr="class=${tab == 'management' ? 'nav-link-select' : 'nav-link'}">관리자 페이지</a>
             </li>
             <li class="nav-item" sec:authorize="hasRole('ROLE_USER')">
-                <a class="nav-link" th:href="@{/user/mypage}">My Page</a>
+                <a class="nav-link" th:href="@{/user/mypage}" th:attr="class=${tab == 'mypage' ? 'nav-link-select' : 'nav-link'}">My Page</a>
             </li>
         </ul>
         <div class="d-flex">
