@@ -25,6 +25,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import static com.error504.baf.SecureFiltering.XssCheck;
+
 @RequestMapping("/management")
 @RequiredArgsConstructor
 @Controller
@@ -260,7 +262,7 @@ public class AdminController {
             return "admin/admin_announcement_form";
         }
 
-        Long id = announcementService.create(announcementForm.getSubject(), announcementForm.getSubject());
+        Long id = announcementService.create(XssCheck(announcementForm.getSubject()), XssCheck(announcementForm.getSubject()));
 
         if (id == -1) {
             // alert 띄울 수 있으면 띄우기

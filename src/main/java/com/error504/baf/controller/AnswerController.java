@@ -22,6 +22,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.security.Principal;
 
+import static com.error504.baf.SecureFiltering.XssCheck;
+
 @RequestMapping("/answer")
 
 @RequiredArgsConstructor
@@ -48,7 +50,7 @@ public class AnswerController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("question", question);
             return "community/question_detail"; }
-        answerService.create(question, answerForm.getContent(), answerForm.getIsAnonymous(), siteUser);
+        answerService.create(question, XssCheck(answerForm.getContent()), answerForm.getIsAnonymous(), siteUser);
         return String.format("redirect:/question/detail/" + id); }
 
 

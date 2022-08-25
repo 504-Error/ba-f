@@ -26,6 +26,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.error504.baf.SecureFiltering.XssCheck;
+
 @Controller
 public class QuestionController {
     private final QuestionService questionService;
@@ -157,7 +159,7 @@ public class QuestionController {
         Board board = boardService.getBoard(questionForm.getBoardId());
         Long boardId = questionForm.getBoardId();
 
-        Long id = questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board, questionForm.getIsAnonymous());
+        Long id = questionService.create(XssCheck(questionForm.getSubject()), XssCheck(questionForm.getContent()), siteUser, board, questionForm.getIsAnonymous());
 
         Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
         Path uploadPath;

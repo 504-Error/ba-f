@@ -3,7 +3,7 @@ package com.error504.baf;
 import java.util.Calendar;
 
 public class SecureFiltering {
-        public static String XssCheck(String info) {
+        public static String XssCheck(String info) { //보안 4.1.4
                 info = info.replaceAll("&", "&amp");
                 info = info.replaceAll("<", "&lt;");
                 info = info.replaceAll(">", "&gt;");

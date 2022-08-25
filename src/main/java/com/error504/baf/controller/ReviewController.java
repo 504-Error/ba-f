@@ -33,6 +33,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.error504.baf.SecureFiltering.XssCheck;
 import static com.error504.baf.controller.ReviewSearchPerformController.getPerformData;
 
 @RequestMapping("/review")
@@ -164,8 +165,8 @@ public class ReviewController {
             dateToString = transFormat.format(reviewForm.getDate());
         }
 
-        Long id = reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(), reviewForm.getPlaceAddress(),
-                reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
+        Long id = reviewService.create(XssCheck(reviewForm.getGenre()), XssCheck(reviewForm.getSubject()), dateToString, XssCheck(reviewForm.getPlace()),
+                XssCheck(reviewForm.getPlaceAddress()), reviewForm.getGrade(), amenitiesList, XssCheck(reviewForm.getPlaceReview()), XssCheck(reviewForm.getAdditionalReview()), reviewForm.getIsAnonymous(), siteUser);
 
         if (id == -1) {
             return "errorImage";
