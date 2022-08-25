@@ -1,6 +1,6 @@
 package com.error504.baf.model;
 
-import com.error504.baf.Time;
+import com.error504.baf.SetTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,13 +28,13 @@ public class Answer {
     private SiteUser author;
 
     @ManyToMany
-    Set<SiteUser> voter;
+    private Set<SiteUser> voter;
 
     @Column(columnDefinition = "BOOLEAN")
     private Boolean isAnonymous;
     private String date;
     public String getDate( LocalDateTime time){
-        date = Time.convertLocaldatetimeToTime(time);
+        date = SetTime.convertLocaldatetimeToTime(time);
         return date;
     }
 }

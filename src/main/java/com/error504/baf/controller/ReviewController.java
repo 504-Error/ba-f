@@ -4,8 +4,6 @@ import com.error504.baf.model.*;
 import com.error504.baf.service.ReviewService;
 import com.error504.baf.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -277,7 +275,6 @@ public class ReviewController {
 
     @GetMapping(value = "/display")
     public ResponseEntity<Resource> display(@Param("filePath") String filePath) {
-        logger.info("filePath : " + filePath);
         FileSystemResource resource = new FileSystemResource(filePath);
 
         if (!resource.exists()) {

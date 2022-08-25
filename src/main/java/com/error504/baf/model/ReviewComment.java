@@ -1,12 +1,11 @@
 package com.error504.baf.model;
 
-import com.error504.baf.Time;
+import com.error504.baf.SetTime;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -32,14 +31,14 @@ public class ReviewComment {
     private SiteUser author;
 
     @ManyToMany
-    Set<SiteUser> voter;
+    private Set<SiteUser> voter;
 
 
     @Column(columnDefinition = "TEXT" )
     private String date;
 
     public String getDate( LocalDateTime time){
-        date = Time.convertLocaldatetimeToTime(time);
+        date = SetTime.convertLocaldatetimeToTime(time);
         return date;
     }
 }

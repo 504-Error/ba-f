@@ -1,6 +1,6 @@
 package com.error504.baf.model;
 
-import com.error504.baf.Time;
+import com.error504.baf.SetTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
@@ -37,7 +37,7 @@ public class Question {
     private List<Answer> answerList;
 
     @ManyToMany
-    Set<SiteUser> voter;
+    private Set<SiteUser> voter;
 
 //    @ManyToMany
 //    @JoinTable(name = "question_voter", joinColumns = @JoinColumn(name = "voter_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
@@ -47,7 +47,7 @@ public class Question {
     private int voterCount;
 
     @ManyToMany
-    Set<SiteUser> accuser;
+    private Set<SiteUser> accuser;
 
     @Formula("(select count(*) from question_accuser where question_accuser.question_id=id)")
     private int accuserCount;
@@ -60,7 +60,7 @@ public class Question {
     private String date;
 
     public String getDate( LocalDateTime time){
-        date = Time.convertLocaldatetimeToTime(time);
+        date = SetTime.convertLocaldatetimeToTime(time);
         return date;
     }
 }

@@ -1,14 +1,10 @@
 package com.error504.baf;
 
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
-
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
-import java.util.Locale;
 
-public class Time {
+public class SetTime {
 
     private static class TimeMaximum{
         public static final int SEC = 60;
@@ -18,8 +14,6 @@ public class Time {
         public static final int MONTH = 12;
     }
 
-
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
     public static int getWeekOfYear(String date) {
         Calendar calendar = Calendar.getInstance();
         String[] dates = date.split("-");

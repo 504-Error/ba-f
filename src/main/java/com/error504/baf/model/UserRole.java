@@ -8,10 +8,9 @@ public enum UserRole {
     USER_AUTH("USER_AUTH"),
     USER("ROLE_USER");
 
-
+    private String value;
 
     UserRole(String value){
         this.value=value;
     }
-    private String value;
 }

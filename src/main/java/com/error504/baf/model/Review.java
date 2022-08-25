@@ -1,13 +1,12 @@
 package com.error504.baf.model;
 
-import com.error504.baf.Time;
+import com.error504.baf.SetTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -61,19 +60,19 @@ public class Review {
     private List<ReviewImage> reviewImages;
 
     @ManyToMany
-    Set<SiteUser> voter;
+    private Set<SiteUser> voter;
 
     @Formula("(select count(*) from review_voter where review_voter.review_id=id)")
     private int voterCount;
 
     @ManyToMany
-    Set<SiteUser> accuser;
+    private Set<SiteUser> accuser;
 
     @Formula("(select count(*) from review_accuser where review_accuser.review_id=id)")
     private int accuserCount;
 
     public String getDate( LocalDateTime time){
-        date = Time.convertLocaldatetimeToTime(time);
+        date = SetTime.convertLocaldatetimeToTime(time);
         return date;
     }
 }

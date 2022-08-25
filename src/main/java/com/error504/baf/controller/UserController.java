@@ -4,8 +4,6 @@ package com.error504.baf.controller;
 import com.error504.baf.model.*;
 import com.error504.baf.service.*;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -16,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -28,8 +25,6 @@ import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
-
 
 @RequiredArgsConstructor
 @Controller
@@ -39,10 +34,6 @@ public class UserController {
     private AnnouncementService announcementService;
     private UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private QuestionService questionService;
-    private AnswerService answerService;
-    private ReviewCommentService reviewCommentService;
-    private ReviewService reviewService;
 
     @Autowired
     public UserController(UserService userService, PasswordEncoder passwordEncoder, AnnouncementService announcementService
@@ -97,7 +88,7 @@ public class UserController {
             return "account/signup_form";
         }
 
-        if (!userCreateForm.getCertifyFile().isEmpty()) {
+        if (userCreateForm.getCertifyFile() != null) {
             Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
 
             StringBuilder stringBuilder = new StringBuilder();

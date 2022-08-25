@@ -23,7 +23,7 @@ public class SecurityConfig {
 
     private final UserSecurityService userSecurityService;
 
-    String[] staticResources = {"images/**"};
+    private String[] staticResources = {"images/**"};
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()

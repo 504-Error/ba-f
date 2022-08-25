@@ -23,7 +23,7 @@ public class BusController {
     }
 
     @GetMapping("/bus")
-    public String setBusPage() throws IOException {
+    public String setBusPage() {
         return "/baf_map/bus";
     }
 

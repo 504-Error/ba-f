@@ -6,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -42,19 +41,19 @@ public class SiteUser {
 
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "question_voter", joinColumns = @JoinColumn(name = "voter_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
-    Set<Question> questionVoter;
+    private Set<Question> questionVoter;
 
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "question_accuser", joinColumns = @JoinColumn(name = "accuser_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
-    Set<Question> questionAccuser;
+    private Set<Question> questionAccuser;
 
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "review_voter", joinColumns = @JoinColumn(name = "voter_id"), inverseJoinColumns = @JoinColumn(name = "review_id"))
-    Set<Review> reviewVoter;
+    private Set<Review> reviewVoter;
 
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "review_accuser", joinColumns = @JoinColumn(name = "accuser_id"), inverseJoinColumns = @JoinColumn(name = "review_id"))
-    Set<Review> reviewAccuser;
+    private Set<Review> reviewAccuser;
 
     public void updatePassword(String newPassword) {
         this.password = newPassword;

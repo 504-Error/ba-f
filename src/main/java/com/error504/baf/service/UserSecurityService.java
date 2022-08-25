@@ -4,8 +4,6 @@ import com.error504.baf.model.SiteUser;
 import com.error504.baf.model.UserRole;
 import com.error504.baf.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

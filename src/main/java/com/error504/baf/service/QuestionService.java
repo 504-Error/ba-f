@@ -1,10 +1,8 @@
 package com.error504.baf.service;
 
-import com.error504.baf.Time;
+import com.error504.baf.SetTime;
 import com.error504.baf.exception.DataNotFoundException;
 import com.error504.baf.model.*;
-import com.error504.baf.repository.AnnouncementRepository;
-import com.error504.baf.repository.BoardRepository;
 import com.error504.baf.repository.QuestionImageRepository;
 import com.error504.baf.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,8 +82,7 @@ public class QuestionService {
 
 
     public List<Question> getHotList(){
-        List<Question> questionList = new ArrayList<>();
-        questionList = questionRepository.findAll();
+        List<Question> questionList = questionRepository.findAll();
         List<Question> hotList = new ArrayList<>();
         for(Question question:questionList){
             if((question.getVoter()).size()>2){ //하트 개수 정하기
@@ -109,12 +106,11 @@ public class QuestionService {
 
 
     public List<Question> getWeeklyHotList(){
-        List<Question> questionNewList = new ArrayList<>();
-        questionNewList = questionRepository.findAll();
+        List<Question> questionNewList = questionRepository.findAll();
         List<Question> weeklyList = new ArrayList<>();
         for(Question question:questionNewList){
             if((question.getVoter()).size()>2){ //하트 개수 정하기
-                if(Time.getWeekOfYear(question.getCreateDate().toLocalDate().toString())==Time.getWeekOfYear(LocalDate.now().toString())){
+                if(SetTime.getWeekOfYear(question.getCreateDate().toLocalDate().toString())==SetTime.getWeekOfYear(LocalDate.now().toString())){
                     weeklyList.add(question);
 
                 }

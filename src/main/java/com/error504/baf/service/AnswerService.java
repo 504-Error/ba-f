@@ -4,7 +4,6 @@ package com.error504.baf.service;
 import com.error504.baf.exception.DataNotFoundException;
 import com.error504.baf.model.Answer;
 import com.error504.baf.model.Question;
-import com.error504.baf.model.Review;
 import com.error504.baf.model.SiteUser;
 import com.error504.baf.repository.AnswerRepository;
 import lombok.RequiredArgsConstructor;
