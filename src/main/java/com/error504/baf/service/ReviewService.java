@@ -45,6 +45,7 @@ public class ReviewService {
     }
 
     public Page<Review> getReviewByAddress(String address) {
+        System.out.println("address : " + address);
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(0, 4, Sort.by(sorts));
@@ -255,7 +256,9 @@ public class ReviewService {
         return (review, query, criteriaBuilder) -> {
             query.distinct(true);
 
-            return criteriaBuilder.equal(review.get("placeAddress"),  address);
+            System.out.println("placeAddress : " + address);
+
+            return criteriaBuilder.equal(review.get("placeAddress"),  "제주특별자치도 서귀포시 안덕면 산방로 141");
         };
     }
 

@@ -172,8 +172,8 @@ public class ReviewController {
 
                 uploadPath = uploadRoot.resolve(filename);
 
-                try (InputStream file = image.getInputStream()) {
-                    Files.copy(file, uploadPath, StandardCopyOption.REPLACE_EXISTING);
+                try {
+                    image.transferTo(uploadPath);
                 } catch (IOException e) {
                     throw new IllegalStateException("업로드 실패...", e);
                 }
