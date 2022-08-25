@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,8 @@ import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.error504.baf.SecureFiltering.XssCheck;
 
 @RequiredArgsConstructor
 @Controller
@@ -82,9 +85,11 @@ public class UserController {
         }
 
         SiteUser adduser;
+
+
         try {
-            adduser = userService.create(userCreateForm.getUsername(), userCreateForm.getName(), userCreateForm.getGender(), userCreateForm.getBirthday(),
-                    userCreateForm.getEmail(), userCreateForm.getPassword1(), userCreateForm.getType(), userCreateForm.getGetWheel());
+            adduser = userService.create(XssCheck(userCreateForm.getUsername()), XssCheck(userCreateForm.getName()), userCreateForm.getGender(), userCreateForm.getBirthday(),
+                    XssCheck(userCreateForm.getEmail()), userCreateForm.getPassword1(), userCreateForm.getType(), userCreateForm.getGetWheel());
         } catch (DataIntegrityViolationException e){
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
