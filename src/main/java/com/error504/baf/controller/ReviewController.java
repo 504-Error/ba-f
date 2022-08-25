@@ -33,6 +33,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.error504.baf.SecureFiltering.XssCheck;
 import static com.error504.baf.controller.ReviewSearchPerformController.getPerformData;
 
 @RequestMapping("/review")
@@ -53,7 +54,7 @@ public class ReviewController {
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         }
         else {
@@ -78,7 +79,7 @@ public class ReviewController {
 
         //보안 4.1.2
 
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
@@ -164,8 +165,8 @@ public class ReviewController {
             dateToString = transFormat.format(reviewForm.getDate());
         }
 
-        Long id = reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(), reviewForm.getPlaceAddress(),
-                reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
+        Long id = reviewService.create(XssCheck(reviewForm.getGenre()), XssCheck(reviewForm.getSubject()), dateToString, XssCheck(reviewForm.getPlace()),
+                XssCheck(reviewForm.getPlaceAddress()), reviewForm.getGrade(), amenitiesList, XssCheck(reviewForm.getPlaceReview()), XssCheck(reviewForm.getAdditionalReview()), reviewForm.getIsAnonymous(), siteUser);
 
         if (id == -1) {
             return "errorImage";
@@ -260,7 +261,7 @@ public class ReviewController {
     public String searchShow(Model model, @RequestParam(value="genre", defaultValue="0") int genre,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
             ArrayList<ReviewPerformInfo> performInfoList = getPerformData(genre, keyword);

@@ -26,6 +26,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.error504.baf.SecureFiltering.XssCheck;
+
 @Controller
 public class QuestionController {
     private final QuestionService questionService;
@@ -71,7 +73,7 @@ public class QuestionController {
     public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page,
                              @RequestParam(value="keyword", defaultValue = "") String keyword){
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
         Page<Question> questionList = questionService.getAllQuestion(page, keyword, 0L, 0);
@@ -157,7 +159,7 @@ public class QuestionController {
         Board board = boardService.getBoard(questionForm.getBoardId());
         Long boardId = questionForm.getBoardId();
 
-        Long id = questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board, questionForm.getIsAnonymous());
+        Long id = questionService.create(XssCheck(questionForm.getSubject()), XssCheck(questionForm.getContent()), siteUser, board, questionForm.getIsAnonymous());
 
         Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
         Path uploadPath;
@@ -264,7 +266,7 @@ public class QuestionController {
     public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value="page", defaultValue="0") int page,
                                    @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
             Page<Question> questionList = questionService.getAllQuestion(page, keyword, id, 0);

@@ -21,6 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.security.Principal;
 
+import static com.error504.baf.SecureFiltering.XssCheck;
+
 
 @Controller
 public class ReviewCommentController {
@@ -46,7 +48,7 @@ public class ReviewCommentController {
             model.addAttribute("review", review);
             return "review/review_content"; }
 
-        reviewCommentService.create(review, reviewCommentForm.getContent(), reviewCommentForm.getIsAnonymous(), siteUser);
+        reviewCommentService.create(review, XssCheck(reviewCommentForm.getContent()), reviewCommentForm.getIsAnonymous(), siteUser);
         return String.format("redirect:/review/content/%s", id);
     }
 

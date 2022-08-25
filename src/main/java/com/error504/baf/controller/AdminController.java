@@ -25,6 +25,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import static com.error504.baf.SecureFiltering.XssCheck;
+
 @RequestMapping("/management")
 @RequiredArgsConstructor
 @Controller
@@ -44,7 +46,7 @@ public class AdminController {
                                     @RequestParam(value="page", defaultValue="0") int page,
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
             Page<SiteUser> userPage = this.userService.getList(page, keyword, getAuth);
@@ -105,7 +107,7 @@ public class AdminController {
                                          @RequestParam(value = "boardId", defaultValue = "0") Long boardId,
                                          @RequestParam(value = "sortType", defaultValue = "0") int sortType) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else if (kindOfContent == 0) {
             Page<Question> questionPage = this.questionService.getAllQuestion(page, keyword, boardId, sortType);
@@ -205,7 +207,7 @@ public class AdminController {
     public String adminBoard(Model model, @RequestParam(value="page", defaultValue="0") int page,
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
             Page<Board> boardPage = boardService.getList(page, keyword);
@@ -234,7 +236,7 @@ public class AdminController {
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
             Page<Announcement> announcementPage = announcementService.getList(page, keyword);
@@ -260,7 +262,7 @@ public class AdminController {
             return "admin/admin_announcement_form";
         }
 
-        Long id = announcementService.create(announcementForm.getSubject(), announcementForm.getSubject());
+        Long id = announcementService.create(XssCheck(announcementForm.getSubject()), XssCheck(announcementForm.getSubject()));
 
         if (id == -1) {
             // alert 띄울 수 있으면 띄우기

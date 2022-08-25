@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 
+import static com.error504.baf.SecureFiltering.XssCheck;
+
 
 @Controller
 public class BoardController {
@@ -33,7 +35,7 @@ public class BoardController {
     public String bookmarkedList(Model model, @RequestParam(value="page", defaultValue = "0") int page,
                                   @RequestParam(value="keyword", defaultValue="") String keyword){
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
         Page<Board> paging = boardService.getList(page, keyword);
@@ -60,7 +62,7 @@ public class BoardController {
             return "community/board_form";
         }
         SiteUser siteUser = this.userService.getUser(principal.getName());
-        boardService.create(boardForm.getBoardName(), boardForm.getBoardIntro(), siteUser);
+        boardService.create(XssCheck(boardForm.getBoardName()), XssCheck(boardForm.getBoardIntro()), siteUser);
         return "redirect:/board/board_list";
     }
 

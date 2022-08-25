@@ -1,103 +1,14 @@
 <!DOCTYPE html>
-<html
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ba-f : 마이 페이지</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <title>Title</title>
 </head>
 <body>
-
-<div  layout:fragment="content" class="container">
-    <div class="col-9">
-        <div class="container" style="padding-top: 5%">
-            <div class="row">
-                <div class="col-md-3 col-sm-4">
-                    <div class="list-group" style="padding-top:31%">
-                        <a th:href="@{/user/mypage}" class="list-group-item list-group-item-action">내 정보</a>
-                        <a th:href="@{/user/mypage/write}" class="list-group-item list-group-item-action">사용자 작성글 조회</a>
-                        <a th:href="@{/answer/mypage/comment}" class="list-group-item list-group-item-action">댓글 모아보기</a>
-                        <a th:href="@{/user/whatIsBaf}" class="list-group-item list-group-item-action">Ba-f 소개</a>
-                        <a th:href="@{/user/mypage/notice}" class="list-group-item list-group-item-action">공지사항</a>
-                    </div>
-
-                </div>
-                <div class="col-9 col-sm-8" style="padding-left:10%" >
-                    <h2 class="col-sm-12">내 정보</h2>
-                    <div class="row mt-3">
-                        <form class="needs-validation col-12" action="#"
-                              th:object="${siteUser}">
-                            <div style="padding-bottom:20%; padding-top: 5%">
-                                <img class="img-profile-content float-start me-3" alt="익명의 프로필 이미지" style="width: 50px; height: 50px" src="/static/image/anonymous_profile.png">
-                                <div class="ms-5">
-                                    <p class="fw-bolder mb-0" style="font-size: 18px;" th:text="${siteUser.username}"></p>
-                                    <small th:if="${siteUser.getAuth == 1}"> 본인 인증 완료</small>
-                                    <small th:unless="${siteUser.getAuth == 1}"> 본인 인증 미완료</small>
-                                </div>
-                            </div>
-
-                            <div  class="border-bottom py-2">
-                                <span style="font-size:16px"> 휠체어 탑승 여부 변경</span>
-                                <div style="float: right">
-                                    <a href="javascript:void(0);" th:data-uri="@{/user/mypage/wheelchair}"
-                                       th:if="${siteUser.getWheel==1}" class="changeWheel btn btn-secondary btn-sm">미탑승으로 수정</a>
-                                    <a href="javascript:void(0);" th:data-uri="@{/user/mypage/wheelchair}"
-                                       th:unless="${siteUser.getWheel==1}" class="changeWheel btn btn-secondary btn-sm">탑승으로 수정</a>
-                                </div>
-                                <small style="float: right; margin-right: 2%"  class="form-text text-muted float-right" th:if="${siteUser.getWheel==0}">미선택</small>
-                                <small style="float: right; margin-right: 2%"  class="form-text text-muted  float-right"  th:if="${siteUser.getWheel==1}">휠체어 탑승</small>
-                                <small style="float: right; margin-right: 2%"   class="form-text text-muted  float-right" th:if="${siteUser.getWheel==2}">휠체어 미탑승</small>
-                            </div>
-                            <br>
-                            <div  class="border-bottom py-2">
-                                <span style="font-size:16px"> 이메일 변경</span>
-                                <div style="float: right">
-                                <a class="standBy btn btn-secondary btn-sm"
-                                   th:href="@{/user/mypage/email}">수정</a>
-                                </div>
-                                <small style="float: right; margin-right: 2%"   class="form-text text-muted" th:text="${siteUser.email}"></small>
-                            </div>
-                            <br>
-                            <div  class="border-bottom py-2">
-                                 <span style="font-size:16px;">비밀번호 변경</span>
-                                <div style="float: right">
-                                <a class="btn btn-secondary btn-sm"
-                                   th:href="@{/user/mypage/pwd}">수정</a>
-                                </div>
-                            </div>
-                            <br>
-                            <div  class="border-bottom py-2">
-                                <span style="font-size:16px"> 회원 탈퇴</span>
-                                <div style="float: right">
-                                <a class="standBy btn btn-secondary btn-sm"
-                                   th:href="@{/user/mypage/delete}">탈퇴</a>
-                                </div>
-                            </div>
-                        </form>
-
-
-
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-</div>
-
-
-<script layout:fragment="script" type='text/javascript'>
-    const delete_elements = document.getElementsByClassName("changeWheel");
-    Array.from(delete_elements).forEach(function(element) {
-        element.addEventListener('click', function () {
-            if (confirm("휠체어 탑승 여부를 변경하겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-        })
-    });
-</script>
+<button class="searchPlace" id="source" onclick="location.href='test.html'">출발지</button>
+<button class="searchPlace" id="dest" onclick="location.href='test.html'">도착지</button>
+<input type="text" class="form-control form-control-lg" placeholder="출발지를 입력하세요." id="sourceAddress">
+<input type="text" class="form-control form-control-lg" placeholder="도착지를 입력하세요." id="destAddress">
 </body>
+</html>
 </html>
