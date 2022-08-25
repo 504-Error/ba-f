@@ -11,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 
 @RequestMapping("/management")
@@ -44,7 +43,7 @@ public class AdminController {
 
     @Secured("ROLE_ADMIN")
     @RequestMapping("/account/{getAuth}/accept/{id}")
-    public String adminAccountAccept(Principal principal, @PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
+    public String adminAccountAccept(@PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
         SiteUser siteUser = this.userService.getUser(id);
         this.userService.updateMemberAuth(siteUser, 1);
         return String.format("redirect:/management/account/%s", getAuth);
@@ -52,7 +51,7 @@ public class AdminController {
 
     @Secured("ROLE_ADMIN")
     @RequestMapping("/account/{getAuth}/standBy/{id}")
-    public String adminAccountStandBy(Principal principal, @PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
+    public String adminAccountStandBy(@PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
         SiteUser siteUser = this.userService.getUser(id);
         this.userService.updateMemberAuth(siteUser, 0);
         return String.format("redirect:/management/account/%s", getAuth);
@@ -109,7 +108,7 @@ public class AdminController {
 
     @Secured("ROLE_ADMIN")
     @RequestMapping("/content/{kindOfContent}/delete/{id}")
-    public String adminContentDelete(Principal principal, @PathVariable("kindOfContent") int kindOfContent,
+    public String adminContentDelete(@PathVariable("kindOfContent") int kindOfContent,
                                      @PathVariable("id") Long id) {
 
         if (kindOfContent == 0) {
@@ -209,12 +208,17 @@ public class AdminController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping("/announce/create")
-    public String adminAnnounceCreateForm(@Valid AnnouncementForm announcementForm, BindingResult bindingResult, Principal principal) {
+    public String adminAnnounceCreateForm(@Valid AnnouncementForm announcementForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "admin/admin_announcement_form";
         }
 
         Long id = announcementService.create(announcementForm.getSubject(), announcementForm.getSubject());
+
+        if (id == -1) {
+            // alert 띄울 수 있으면 띄우기
+            return "redirect:/management/announce";
+        }
 
         return String.format("redirect:/management/announce/%s", id);
     }

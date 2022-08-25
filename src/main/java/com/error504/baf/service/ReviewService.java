@@ -121,7 +121,8 @@ public class ReviewService {
         review.setAuthor(user);
         this.reviewRepository.save(review);
         this.reviewRepository.flush();
-        long id = review.getId();
+        long id = -1;
+        id = review.getId();
 
 
         return id;

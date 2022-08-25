@@ -286,6 +286,9 @@ function uploadReview() {
             } else if (data === "placeReviewIsNull") {
                 alert("장소 리뷰를 입력해주세요.");
                 return;
+            } else if (data === "errorImage") {
+                alert("이미지 업로드에 실패하였습니다.");
+                return;
             }
             sessionStorage.removeItem("form_data");
             sessionStorage.removeItem("selectPlaceData");

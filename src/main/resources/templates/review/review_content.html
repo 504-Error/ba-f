@@ -38,6 +38,9 @@
     </nav>
 
     <h5 class="my-3 border-bottom pb-2">리뷰 내용</h5>
+    <div id="hide" th:if="${message}" class="alert alert-danger" role="alert">
+        <p th:text="${message}">message fail</p>
+    </div>
     <div class="review-content-area mt-0 mb-4">
         <a href="javascript:void(0);" th:data-uri="@{|/review/delete/${review.id}|}"
            class="delete btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"
@@ -366,6 +369,11 @@
         });
     </script>
     <script layout:fragment="script" type="text/javascript">
+        function hideDiv (){
+            document.getElementById("hide").style.display="none";
+        }
+        self.setTimeout("hideDiv()",3000); // 초 지정
+
         $("#check-anonym").change(function () {
             if (this.checked) {
                 $(this).attr('value', true);

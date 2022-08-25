@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -179,6 +180,9 @@ public class ReviewController {
         Long id = reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(), reviewForm.getPlaceAddress(),
                 reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
 
+        if (id == -1) {
+            return "errorImage";
+        }
 
         Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
         Path uploadPath;
@@ -229,9 +233,13 @@ public class ReviewController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
-    public String reviewVote(Principal principal, @PathVariable("id") Long id) {
+    public String reviewVote(Principal principal, @PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         Review review = this.reviewService.getReview(id);
         SiteUser siteUser = this.userService.getUser(principal.getName());
+        if(review.getVoter().contains(siteUser)){
+            redirectAttributes.addFlashAttribute("message", "이미 좋아요 누른 글입니다.");
+            return String.format("redirect:/review/content/%s", id);
+        }
         this.reviewService.vote(review, siteUser);
         return String.format("redirect:/review/content/%s", id);
     }
@@ -272,26 +280,6 @@ public class ReviewController {
 
         return "review/review_search_perform";
     }
-
-    @GetMapping(value = "/display")
-    public ResponseEntity<Resource> display(@Param("filePath") String filePath) {
-        FileSystemResource resource = new FileSystemResource(filePath);
-
-        if (!resource.exists()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        HttpHeaders header = new HttpHeaders();
-        try {
-            Path imgPath = Paths.get(filePath);
-            header.add("Content-Type", Files.probeContentType(imgPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new ResponseEntity<>(resource, header, HttpStatus.OK);
-    }
-
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/user/mypage/write")

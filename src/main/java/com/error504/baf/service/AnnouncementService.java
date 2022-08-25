@@ -48,7 +48,8 @@ public class AnnouncementService {
         announcement.setCreateDate(LocalDateTime.now());
         this.announcementRepository.save(announcement);
         this.announcementRepository.flush();
-        long id = announcement.getId();
+        long id = -1;
+        id = announcement.getId();
 
         return id;
     }

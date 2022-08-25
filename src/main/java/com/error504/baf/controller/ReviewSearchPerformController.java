@@ -17,16 +17,16 @@ import java.util.ArrayList;
 @Controller
 public class ReviewSearchPerformController {
     public static ArrayList<ReviewPerformInfo> getPerformData(int genreNum, String keyword) {
-        ArrayList<ReviewPerformInfo> performInfo = new ArrayList<ReviewPerformInfo>();
+        ArrayList<ReviewPerformInfo> performInfo = new ArrayList<>();
 
         try {
             StringBuilder urlstr = new StringBuilder();
             urlstr.append("https://www.kopis.or.kr/openApi/restful/pblprfr?service=dbb49cb5408245b78d5b03a8ca629ce7");
-            urlstr.append("&stdate=" + 20000101);
-            urlstr.append("&eddate=" + 20231231);
-            urlstr.append("&cpage=" + 1);
-            urlstr.append("&rows=" + 50);
-            urlstr.append("&prfstate=" + "02");
+            urlstr.append("&stdate=20000101");
+            urlstr.append("&eddate=20231231");
+            urlstr.append("&cpage=1");
+            urlstr.append("&rows=50");
+            urlstr.append("&prfstate=02");
             String encodeData = URLEncoder.encode(keyword, "UTF-8");
             urlstr.append("&shprfnm=" + encodeData);
 

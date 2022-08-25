@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -51,9 +52,16 @@ public class ReviewCommentController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/review/{reviewId}/comment/vote/{commentId}")
-    public String reviewVote(Principal principal, @PathVariable("reviewId") Long reviewId, @PathVariable("commentId") Long commentId) {
+    public String reviewVote(Principal principal, @PathVariable("reviewId") Long reviewId,
+                             @PathVariable("commentId") Long commentId, RedirectAttributes redirectAttributes) {
         ReviewComment reviewComment = this.reviewCommentService.getReviewComment(commentId);
         SiteUser siteUser = this.userService.getUser(principal.getName());
+
+        if(reviewComment.getVoter().contains(siteUser)){
+            redirectAttributes.addFlashAttribute("message", "이미 좋아요 누른 글입니다.");
+            return String.format("redirect:/review/content/%s", reviewId);
+        }
+
         this.reviewCommentService.vote(reviewComment, siteUser);
 
         return String.format("redirect:/review/content/%s", reviewId);
@@ -64,7 +72,7 @@ public class ReviewCommentController {
     public String reviewDelete(Principal principal, @PathVariable("reviewId") Long reviewId, @PathVariable("commentId") Long commentId) {
         ReviewComment reviewComment = this.reviewCommentService.getReviewComment(commentId);
         if (!reviewComment.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
         }
         this.reviewCommentService.delete(reviewComment);
 

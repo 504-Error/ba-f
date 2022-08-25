@@ -11,12 +11,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -139,7 +137,7 @@ public class QuestionController {
     @ResponseBody
     public String questionCreate(@RequestPart(name = "contentData") QuestionForm questionForm,
                                  @RequestPart(name = "images", required = false) List<MultipartFile> imageList,
-                                 BindingResult bindingResult, Principal principal, HttpServletRequest request) throws IOException {
+                                 Principal principal) {
 
         if (questionForm.getBoardId() == 0){
             return "boardIdIsNull";

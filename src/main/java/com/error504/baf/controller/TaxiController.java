@@ -36,6 +36,7 @@ public class TaxiController {
     @GetMapping("/taxi/searchAddress")
     public String getDestination(@RequestParam("category") String category, Model model) {
         model.addAttribute("category", category);
+
         return "/baf_map/searchAddress";
     }
 }

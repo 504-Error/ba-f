@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Controller
 public class BusController {
-    private BusService busService;
+    private final BusService busService;
 
     @Autowired
     public BusController(BusService busService){
@@ -32,7 +32,7 @@ public class BusController {
     public ArrayList searchStation(@RequestBody Map<String, Object> input) throws IOException {
         ArrayList result = busService.getStationsByPos(input.get("LAT").toString(), input.get("LNG").toString());
 
-        ArrayList<String> lowBusNumList =  new ArrayList<String>();
+        ArrayList<String> lowBusNumList =  new ArrayList<>();
 
         for (Object stationData : result) {
             String[] arr = stationData.toString().split(",");
@@ -47,7 +47,7 @@ public class BusController {
             lowBusNumList.add(lowBusExisting);
         }
 
-        ArrayList<ArrayList<String>> test = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<String>> test = new ArrayList<>();
         test.add(result);
         test.add(lowBusNumList);
 
@@ -76,12 +76,9 @@ public class BusController {
     @PostMapping("/bus/bus-info")
     @ResponseBody
     public ArrayList[] busInfo(@RequestBody Map<String, Object> input) throws IOException {
-        ArrayList busInfo = busService.getRouteInfoItem(input.get("busRouteId").toString());
-        ArrayList busRouteInfo = busService.getStaionsByRouteList(input.get("busRouteId").toString());
-
-        ArrayList<ArrayList>[] result = new ArrayList[2];
-        result[0] = busInfo;
-        result[1] = busRouteInfo;
+        ArrayList[] result = new ArrayList[2];
+        result[0] = busService.getRouteInfoItem(input.get("busRouteId").toString());
+        result[1] = busService.getStaionsByRouteList(input.get("busRouteId").toString());
 
         return result;
     }
