@@ -5,13 +5,8 @@ import com.error504.baf.service.ReviewService;
 import com.error504.baf.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -120,31 +115,9 @@ public class ReviewController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
-    public String reviewCreate(Model model, ReviewForm reviewForm) {
+    public String reviewCreate(ReviewForm reviewForm) {
         return "review/review_form";
     }
-
-//    @PreAuthorize("isAuthenticated()")
-//    @PostMapping("/create")
-//    public String reviewCreate(@Valid ReviewForm reviewForm, BindingResult bindingResult, Principal principal) {
-//        if (bindingResult.hasErrors()) {
-//            return "review/review_form";
-//        }
-//
-//
-//        SiteUser siteUser = userService.getUser(principal.getName());
-//        logger.info(siteUser.toString());
-//
-//        String amenitiesList = String.join(",", reviewForm.getAmenities());
-//
-//        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        String dateToString = transFormat.format(reviewForm.getDate());
-//
-//        reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(),
-//                reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
-//
-//        return "redirect:/review";
-//    }
 
     // 뭔가 예외처리가 필요할 것 같음
     @PreAuthorize("isAuthenticated()")

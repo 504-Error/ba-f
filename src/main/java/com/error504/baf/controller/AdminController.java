@@ -3,7 +3,14 @@ package com.error504.baf.controller;
 import com.error504.baf.model.*;
 import com.error504.baf.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +18,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RequestMapping("/management")
@@ -104,6 +116,24 @@ public class AdminController {
         model.addAttribute("kindOfContent", kindOfContent);
 
         return "admin/admin_content_management";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/account/download")
+    public ResponseEntity<Resource> download(@Param("filePath") String filePath) throws IOException {
+        Path path = Paths.get(filePath);
+        String contentType = Files.probeContentType(path);
+        // header를 통해서 다운로드 되는 파일의 정보를 설정한다.
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("test")
+                .build());
+//                .filename(dto.getFileName(), StandardCharsets.UTF_8)
+
+        headers.add(HttpHeaders.CONTENT_TYPE, contentType);
+
+        Resource resource = new InputStreamResource(Files.newInputStream(path));
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 
     @Secured("ROLE_ADMIN")

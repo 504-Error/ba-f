@@ -2,7 +2,6 @@ package com.error504.baf.controller;
 
 import com.error504.baf.model.SiteUser;
 import com.error504.baf.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +14,9 @@ import java.security.Principal;
 public class TaxiController {
     private final UserService userService;
 
-    @Autowired
-    public TaxiController(UserService userService){
+    public TaxiController(UserService userService) {
         this.userService = userService;
     }
-
-//    @PreAuthorize("isAuthenticated()")
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/taxi")

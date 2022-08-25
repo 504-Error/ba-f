@@ -28,7 +28,7 @@ public class ReviewSearchPerformController {
             urlstr.append("&rows=50");
             urlstr.append("&prfstate=02");
             String encodeData = URLEncoder.encode(keyword, "UTF-8");
-            urlstr.append("&shprfnm=" + encodeData);
+            urlstr.append("&shprfnm=").append(encodeData);
 
             if (genreNum != 0){
                 switch (genreNum) {
@@ -94,7 +94,7 @@ public class ReviewSearchPerformController {
 
     public static String getTagValue(String tag, Element element) {
         NodeList nList = element.getElementsByTagName(tag).item(0).getChildNodes();
-        Node nValue = (Node) nList.item(0);
+        Node nValue = nList.item(0);
 
         if(nValue == null) {
             return null;

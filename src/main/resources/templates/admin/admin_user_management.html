@@ -32,6 +32,7 @@
             <th>E-mail</th>
             <th>장애 유형</th>
             <th>휠체어 탑승 여부</th>
+            <th>인증 파일</th>
             <th>가입 승인</th>
         </tr>
         </thead>
@@ -40,6 +41,7 @@
             <td th:text="${userPage.getTotalElements - (userPage.number * userPage.size) - loop.index}"></td>
             <td th:text="${userInfo.username}"></td>
             <td th:text="${userInfo.email}"></td>
+
             <td th:if="${userInfo.type eq 0}">선택 안 함</td>
             <td th:if="${userInfo.type eq 1}">지체 장애</td>
             <td th:if="${userInfo.type eq 2}">뇌병변</td>
@@ -56,9 +58,15 @@
             <td th:if="${userInfo.type eq 13}">안면장애</td>
             <td th:if="${userInfo.type eq 14}">장루,요루장애</td>
             <td th:if="${userInfo.type eq 15}">간질장애</td>
+
             <td th:if="${userInfo.getWheel eq 0}">선택 안 함</td>
             <td th:if="${userInfo.getWheel eq 1}">탑승</td>
             <td th:if="${userInfo.getWheel eq 2}">미탑승</td>
+
+            <td>
+                <a th:href="@{|/display?filePath=${userInfo.certifyFilePath}|}">파일 다운로드</a>
+            </td>
+
             <td th:if="${getAuth == 0}">
                 <a href="javascript:void(0);" th:data-uri="@{|/management/account/${getAuth}/accept/${userInfo.id}|}"
                    class="accept btn btn-primary">승인</a>

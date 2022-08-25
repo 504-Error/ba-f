@@ -233,9 +233,14 @@
     <div class="review-content-area" style="clear:both;">
         <div class="float-start">
             <a href="javascript:void(0)" class="btn btn-light recommend-btn"
+               sec:authorize="isAuthenticated()"
                th:data-uri="@{|/review/vote/${review.id}|}">
                 <span class="recommend-disable ps-4" style="color:#7F7F7F">좋아요</span>
             </a>
+<!--            <a href="javascript:void(0)" class="btn btn-light recommend-btn"-->
+<!--               th:data-uri="@{|/review/vote/${review.id}|}">-->
+<!--                <span class="recommend-disable ps-4" style="color:#7F7F7F">좋아요</span>-->
+<!--            </a>-->
         </div>
         <ul class="content-info">
             <li class="recommend" th:text="${#lists.size(review.voter)}"></li>
@@ -293,17 +298,19 @@
                                 <span class="recommend ps-4 content-nickname"
                                       th:text="${#lists.size(comment.voter)}"></span>
                             </div>
-                            <a href="javascript:void(0)" class="btn btn-light recommend-btn"
-                               sec:authorize="isAuthenticated()"
-                               th:data-uri="@{|/review/${review.id}/comment/vote/${comment.id}|}">
-                                <span class="recommend-disable ps-4" style="color:#7F7F7F">좋아요</span>
-                            </a>
-                            <a href="javascript:void(0)" class="btn btn-light delete" sec:authorize="isAuthenticated()"
-                               th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
-                               th:data-uri="@{|/review/${review.id}/comment/delete/${comment.id}|}">
-                                <span class="recommend-disable ps-4" style="color:#7F7F7F">삭제</span>
-                            </a>
                         </div>
+                        <a href="javascript:void(0)" class="btn btn-light delete"
+                           sec:authorize="isAuthenticated()" style="height: 40px"
+                           th:if="${review.author != null and #authentication.getPrincipal().getUsername() == review.author.username}"
+                           th:data-uri="@{|/review/${review.id}/comment/delete/${comment.id}|}">
+                            <span style="color:#7F7F7F">삭제</span>
+                        </a>
+                        <a href="javascript:void(0)" class="btn btn-light recommend-btn"
+                           sec:authorize="isAuthenticated()" style="height: 40px"
+                           th:unless="${review.author != null and #authentication.getPrincipal().getUsername() == review.author.username}"
+                           th:data-uri="@{|/review/${review.id}/comment/vote/${comment.id}|}">
+                            <span class="recommend-disable ps-4" style="color:#7F7F7F">좋아요</span>
+                        </a>
                     </div>
                 </li>
             </ol>

@@ -86,17 +86,17 @@
                             <div class="mt-2">
                                 <time class="fw-normal me-3 content-time"
                                       th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></time>
-                                <a href="javascript:void(0)" class="recommendPopup" type="button"
-                                   style="text-decoration: none"
-                                   th:data-uri="@{|/answer/vote/${answer.id}|}"><span
-                                        class="recommend ps-4 content-nickname"
-                                        th:text="${#lists.size(answer.voter)}"></span></a>
+                                <span class="recommend ps-4 content-nickname" th:text="${#lists.size(answer.voter)}"></span>
                             </div>
                         </div>
-                        <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-                           aria-controls="collapseExample" style="text-decoration:none;">
-                            <span class="btn-child-comment">대댓글</span>
-                        </a>
+                        <a href="javascript:void(0);" th:data-uri="@{|/answer/delete/${answer.id}|}"
+                           class="delete btn btn-light float-end" style="color:#7F7F7F; height: 40px" sec:authorize="isAuthenticated()"
+                           th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+                           th:text="삭제"></a>
+                        <a href="javascript:void(0);" th:data-uri="@{|/answer/vote/${answer.id}|}"
+                           class="delete btn btn-light float-end" style="color:#7F7F7F; height: 40px" sec:authorize="isAuthenticated()"
+                           th:unless="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+                           th:text="좋아요"></a>
                     </div>
                 </li>
             </ol>
