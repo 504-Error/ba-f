@@ -228,6 +228,10 @@
                 <img class="btn preview-img float-start" th:src="@{|/display?filePath=${imgPath.getImage()}|}">
             </div>
         </div>
+        <div class="expand-image">
+            <span class="expand-close">&times;</span>
+            <img class="expand-image-content" id="expand-image-img">
+        </div>
     </div>
 
     <div class="review-content-area" style="clear:both;">
@@ -237,10 +241,6 @@
                th:data-uri="@{|/review/vote/${review.id}|}">
                 <span class="recommend-disable ps-4" style="color:#7F7F7F">좋아요</span>
             </a>
-<!--            <a href="javascript:void(0)" class="btn btn-light recommend-btn"-->
-<!--               th:data-uri="@{|/review/vote/${review.id}|}">-->
-<!--                <span class="recommend-disable ps-4" style="color:#7F7F7F">좋아요</span>-->
-<!--            </a>-->
         </div>
         <ul class="content-info">
             <li class="recommend" th:text="${#lists.size(review.voter)}"></li>
@@ -329,44 +329,37 @@
     <script>
         console.log("map script");
 
-        var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+        var mapContainer = document.getElementById('map');
         var place = document.getElementById('reviewPlace').value;
 
         var mapOption = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-            level : 3 // 지도의 확대 레벨
+            center: new kakao.maps.LatLng(33.450701, 126.570667),
+            level : 3
         };
 
 
-        // 지도를 생성합니다
         var map = new kakao.maps.Map(mapContainer, mapOption);
 
-        // 주소-좌표 변환 객체를 생성합니다
         var geocoder = new kakao.maps.services.Geocoder();
 
-        // 주소로 좌표를 검색합니다
         geocoder.addressSearch(place, function (result, status) {
 
             console.log("map value - address : ", place);
 
-            // 정상적으로 검색이 완료됐으면
             if (status === kakao.maps.services.Status.OK) {
 
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                // 결과값으로 받은 위치를 마커로 표시합니다
                 var marker = new kakao.maps.Marker({
                     map     : map,
                     position: coords
                 });
 
-                // 인포윈도우로 장소에 대한 설명을 표시합니다
                 var infowindow = new kakao.maps.InfoWindow({
                     content: '<div style="width:150px;text-align:center;padding:6px 0;">[[${review.place}]]</div>'
                 });
                 infowindow.open(map, marker);
 
-                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                 map.setCenter(coords);
             }
         });
@@ -375,7 +368,7 @@
         function hideDiv (){
             document.getElementById("hide").style.display="none";
         }
-        self.setTimeout("hideDiv()",3000); // 초 지정
+        self.setTimeout("hideDiv()",3000);
 
         $("#check-anonym").change(function () {
             if (this.checked) {
@@ -391,7 +384,6 @@
                 if (confirm("정말로 삭제하시겠습니까?")) {
                     location.href = this.dataset.uri;
                 }
-                ;
             });
         });
 
@@ -401,7 +393,6 @@
                 if (confirm("정말로 신고하시겠습니까?")) {
                     location.href = this.dataset.uri;
                 }
-                ;
             });
         });
 
@@ -411,9 +402,29 @@
                 if (confirm("정말로 추천하시겠습니까?")) {
                     location.href = this.dataset.uri;
                 }
-                ;
             });
         });
+
+        const expandImage = document.querySelector(".expand-image");
+        const expandImgContent = document.querySelector(".expand-image-content");
+        const span = document.querySelector(".expand-close");
+
+        $(".preview-img").each(function () {
+            this.addEventListener('click', function () {
+                expandDisplay("block");
+                expandImgContent.src = this.src;
+            });
+        });
+
+        span.addEventListener('click', ()=>{
+            expandDisplay("none");
+        });
+        expandImage.addEventListener('click', ()=>{
+            expandDisplay("none");
+        });
+        function expandDisplay(text){
+            expandImage.style.display = text;
+        }
     </script>
 </div>
 </body>
