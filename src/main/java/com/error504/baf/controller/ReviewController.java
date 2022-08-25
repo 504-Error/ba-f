@@ -57,15 +57,21 @@ public class ReviewController {
     @RequestMapping("")
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
-        Page<Review> reviewPage = this.reviewService.getList(page, keyword, "");
-        List<Review> reviewList = this.reviewService.getReviewList();
+        //보안 4.1.2
+        if (keyword.matches("\\w*") == false) {
+            throw new IllegalArgumentException();
+        }
+        else {
+            Page<Review> reviewPage = this.reviewService.getList(page, keyword, "");
+            List<Review> reviewList = this.reviewService.getReviewList();
 
-        model.addAttribute("tab", "review");
-        model.addAttribute("reviewList", reviewList);
-        model.addAttribute("reviewPage", reviewPage);
-        model.addAttribute("category", "all");
-        model.addAttribute("keyword", keyword);
-        return "review/review_main";
+            model.addAttribute("tab", "review");
+            model.addAttribute("reviewList", reviewList);
+            model.addAttribute("reviewPage", reviewPage);
+            model.addAttribute("category", "all");
+            model.addAttribute("keyword", keyword);
+            return "review/review_main";
+        }
     }
 
     @RequestMapping("/{category}/{type}")
@@ -74,6 +80,12 @@ public class ReviewController {
                              @PathVariable("category") String category,
                              @PathVariable("type") String type,
                              HttpServletResponse response) throws IOException {
+
+        //보안 4.1.2
+
+        if (keyword.matches("\\w*") == false) {
+            throw new IllegalArgumentException();
+        } else {
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
 
         if (reviewPage.getSize() == 0) {
@@ -89,6 +101,8 @@ public class ReviewController {
         model.addAttribute("category", category);
         model.addAttribute("type", type);
         return "review/review_list";
+
+        }
     }
 
     @RequestMapping(value = "/content/{id}")
@@ -272,13 +286,18 @@ public class ReviewController {
     @GetMapping("/create/search/perform")
     public String searchShow(Model model, @RequestParam(value="genre", defaultValue="0") int genre,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
-        ArrayList<ReviewPerformInfo> performInfoList = getPerformData(genre, keyword);
+        //보안 4.1.2
+        if (keyword.matches("\\w*") == false) {
+            throw new IllegalArgumentException();
+        } else {
+            ArrayList<ReviewPerformInfo> performInfoList = getPerformData(genre, keyword);
 
-        model.addAttribute("performInfoList", performInfoList);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("genre", genre);
+            model.addAttribute("performInfoList", performInfoList);
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("genre", genre);
 
-        return "review/review_search_perform";
+            return "review/review_search_perform";
+        }
     }
 
     @PreAuthorize("isAuthenticated()")

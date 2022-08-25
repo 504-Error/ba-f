@@ -252,12 +252,19 @@ public class UserController {
     public String userAnnounce(Model model, @RequestParam(value="page", defaultValue="0") int page,
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
-        Page<Announcement> announcementPage = announcementService.getList(page, keyword);
-        model.addAttribute("announcementPage", announcementPage);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("tab", "mypage");
+        //보안 4.1.2
+        if (keyword.matches("\\w*") == false) {
+            throw new IllegalArgumentException();
+        }
+        else {
+            Page<Announcement> announcementPage = announcementService.getList(page, keyword);
 
-        return  "announcement_board";
+            model.addAttribute("announcementPage", announcementPage);
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("tab", "mypage");
+
+            return "announcement_board";
+        }
     }
 
     @PreAuthorize("isAuthenticated()")
