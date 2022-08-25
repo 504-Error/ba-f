@@ -51,7 +51,7 @@ public class ReviewService {
     public Page<Review> getList(int page, String keyword, String category) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         Specification<Review> spec = searchReview(keyword, category);
         return this.reviewRepository.findAll(spec, pageable);
     }
@@ -95,7 +95,7 @@ public class ReviewService {
             default:
                 sorts.add(Sort.Order.desc("createDate"));
         }
-        Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         Specification<Review> spec = searchReviewWithUsername(keyword, categoryId);
         return this.reviewRepository.findAll(spec, pageable);
     }

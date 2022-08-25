@@ -154,7 +154,7 @@ public class QuestionService {
     public Page<Question>  getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
 //        Specification<Question> spec = search(kw);
         return questionRepository.findAll(
 //                spec,
@@ -165,7 +165,7 @@ public class QuestionService {
     public Page<Question> getQuestion(int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return questionRepository.findAll(pageable);
     }
 

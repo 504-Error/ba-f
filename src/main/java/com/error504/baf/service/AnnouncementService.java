@@ -36,7 +36,7 @@ public class AnnouncementService {
     public Page<Announcement> getList(int page, String keyword) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("id"));
-        Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         Specification<Announcement> spec = searchAnnouncement(keyword);
         return this.announcementRepository.findAll(spec, pageable);
     }

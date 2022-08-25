@@ -27,14 +27,14 @@ public class BoardService {
     public Page<Board> getList(int page, String keyword) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.asc("id"));
-        Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         Specification<Board> spec = searchBoard(keyword);
         return boardRepository.findAll(spec, pageable);
     }
 
     public Page<Board> getList(int page) {
         List<Sort.Order> sorts = new ArrayList<>();
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return boardRepository.findAll(pageable);
     }
 

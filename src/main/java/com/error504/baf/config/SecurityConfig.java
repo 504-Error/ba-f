@@ -30,10 +30,9 @@ public class SecurityConfig {
                 .antMatchers("/user/login").permitAll()
                 .antMatchers("/user/signup").permitAll()
                 .antMatchers(staticResources).permitAll()
-                .antMatchers("/question/**").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/board/**").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/question/**").hasAuthority("USER_AUTH")
-                .antMatchers("/board/**").hasAuthority("USER_AUTH")
+                .antMatchers("/question/**").hasAnyAuthority("ROLE_ADMIN","USER_AUTH")
+//                .antMatchers("/question/**").hasAuthority("USER_AUTH")
+                .antMatchers("/board/**").hasAnyAuthority("ROLE_ADMIN","USER_AUTH")
                 .antMatchers("/review/create").authenticated()
                 .antMatchers("/community/home").authenticated()
 

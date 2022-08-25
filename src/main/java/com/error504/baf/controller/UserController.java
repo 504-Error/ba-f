@@ -2,8 +2,7 @@ package com.error504.baf.controller;
 
 
 import com.error504.baf.model.*;
-import com.error504.baf.service.AnnouncementService;
-import com.error504.baf.service.UserService;
+import com.error504.baf.service.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -30,7 +27,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,12 +40,21 @@ public class UserController {
     private UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private QuestionService questionService;
+    private AnswerService answerService;
+    private ReviewCommentService reviewCommentService;
+    private ReviewService reviewService;
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, AnnouncementService announcementService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, AnnouncementService announcementService
+    ) {
         this.announcementService = announcementService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+//        this.questionService =questionService;
+//        this.answerService = answerService;
+//        this.reviewCommentService = reviewCommentService;
+//        this.reviewService = reviewService;
     }
 
 
@@ -68,7 +73,7 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, @RequestParam("certifyFile") MultipartFile file, BindingResult bindingResult) {
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "account/signup_form";
         }
@@ -93,25 +98,20 @@ public class UserController {
             return "account/signup_form";
         }
 
-        if (!file.isEmpty()) {
-            logger.info("file : " + file);
-
+        if (!userCreateForm.getCertifyFile().isEmpty()) {
             Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
 
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
-            stringBuilder.append(file.getOriginalFilename());
+            stringBuilder.append(userCreateForm.getCertifyFile().getOriginalFilename());
             String filename = StringUtils.cleanPath(String.valueOf(stringBuilder)); // org.springframework.util
             filename = StringUtils.getFilename(filename);
             filename = filename.replace(":", "-");
             filename = filename.replace(" ", "_");
-            logger.info("file name : " + filename);
 
             Path uploadPath = uploadRoot.resolve(filename);
 
-            logger.info("uploadPath : " + uploadPath);
-
-            try (InputStream inputFile = file.getInputStream()) {
+            try (InputStream inputFile = userCreateForm.getCertifyFile().getInputStream()) {
                 Files.copy(inputFile, uploadPath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 throw new IllegalStateException("업로드 실패...", e);
@@ -129,6 +129,7 @@ public class UserController {
 
         return "redirect:/user/login";
     }
+
 
 
 
@@ -173,13 +174,6 @@ public class UserController {
 
 
 
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/mypage/comment")
-//    public String myPageComment(Model model, Principal principal){
-//        SiteUser siteUser = userService.getUser(principal.getName());
-//        model.addAttribute("siteUser", siteUser);
-//        return "account/my_page_comment";
-//    }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping("/mypage/wheelchair")
@@ -228,13 +222,26 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/settings/delete")
     public String memberDelete( @Valid PasswordForm passwordForm, BindingResult bindingResult, Principal principal){
-        if(bindingResult.hasErrors()) {
-            return "account/member_delete";
-        }
+
         SiteUser siteUser = userService.getUser(principal.getName());
+//        Long id = siteUser.getId();
         logger.info(siteUser.getPassword());
         logger.info(passwordEncoder.encode(passwordForm.getNewPassword()));
         if(passwordEncoder.matches(passwordForm.getNewPassword(), siteUser.getPassword())){
+
+//            List<Question> questionList = this.questionService.getQuestionByAuthor(id);
+//            this.questionService.deleteByAuthor(questionList);
+//
+//            List<Answer> answerList = this.answerService.getAnswerByAuthor(id);
+//            this.answerService.deleteByAuthor(answerList);
+//
+//            List<Review> reviewList = this.reviewService.getListByAuthor(id);
+//            this.reviewService.deleteUser(reviewList);
+//
+//            List<ReviewComment> reviewCommentList = this.reviewCommentService.getReviewCommentByAuthor(id);
+//            this.reviewCommentService.deleteByAuthor(reviewCommentList);
+//
+//
             userService.deleteMember(siteUser);
         }else{
             return "account/member_delete";
@@ -242,14 +249,6 @@ public class UserController {
         return   "redirect:/user/logout";
     }
 
-
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/mypage/notice")
-//    public String myPageNotice(Model model, Principal principal){
-//        SiteUser siteUser = userService.getUser(principal.getName());
-//        model.addAttribute("siteUser", siteUser);
-//        return "account/my_page_notice";
-//    }
 
 
     @PreAuthorize("isAuthenticated()")

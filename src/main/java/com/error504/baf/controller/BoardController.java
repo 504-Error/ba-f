@@ -1,6 +1,6 @@
 package com.error504.baf.controller;
 
-import com.error504.baf.model.Answer;
+
 import com.error504.baf.model.Board;
 import com.error504.baf.model.BoardForm;
 import com.error504.baf.model.SiteUser;
@@ -41,7 +41,8 @@ public class BoardController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/board/create")
-    public String boardCreate(BoardForm boardForm){
+    public String boardCreate(Model model, BoardForm boardForm){
+        model.addAttribute("boardForm", boardForm);
         return "community/board_form";
     }
 
@@ -53,7 +54,7 @@ public class BoardController {
         if(bindingResult.hasErrors()) {
             return "community/board_form";
         }
-        SiteUser siteUser = userService.getUser(principal.getName());
+        SiteUser siteUser = this.userService.getUser(principal.getName());
         boardService.create(boardForm.getBoardName(), boardForm.getBoardIntro(), siteUser);
         return "redirect:/board/board_list";
     }
