@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class Time {
 
-    private static class TIME_MAXIMUM {
+    private static class TimeMaximum{
         public static final int SEC = 60;
         public static final int MIN = 60;
         public static final int HOUR = 24;
@@ -36,33 +36,33 @@ public class Time {
         // now보다 이후면 +, 전이면 -
         String msg = null;
 
-        if (diffTime < TIME_MAXIMUM.SEC) {
+        if (diffTime < TimeMaximum.SEC) {
             return diffTime + "초전";
         }
 
-        diffTime = diffTime / TIME_MAXIMUM.SEC;
-        if (diffTime < TIME_MAXIMUM.MIN) {
+        diffTime = diffTime / TimeMaximum.SEC;
+        if (diffTime < TimeMaximum.MIN) {
             return diffTime + "분 전";
         }
-        diffTime = diffTime / TIME_MAXIMUM.MIN;
+        diffTime = diffTime / TimeMaximum.MIN;
 
-        if (diffTime < TIME_MAXIMUM.HOUR) {
+        if (diffTime < TimeMaximum.HOUR) {
             return diffTime + "시간 전";
         }
 
-        diffTime = diffTime / TIME_MAXIMUM.HOUR;
+        diffTime = diffTime / TimeMaximum.HOUR;
 
-        if (diffTime < TIME_MAXIMUM.DAY) {
+        if (diffTime < TimeMaximum.DAY) {
             return diffTime + "일 전";
         }
 
-        diffTime = diffTime / TIME_MAXIMUM.DAY;
+        diffTime = diffTime / TimeMaximum.DAY;
 
-        if (diffTime < TIME_MAXIMUM.MONTH) {
+        if (diffTime < TimeMaximum.MONTH) {
             return diffTime + "개월 전";
         }
 
-        diffTime = diffTime / TIME_MAXIMUM.MONTH;
+        diffTime = diffTime / TimeMaximum.MONTH;
         return diffTime + "년 전";
     }
 

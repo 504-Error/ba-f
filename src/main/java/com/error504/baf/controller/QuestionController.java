@@ -1,12 +1,9 @@
 package com.error504.baf.controller;
 
 import com.error504.baf.model.*;
-import com.error504.baf.service.AnnouncementService;
 import com.error504.baf.service.BoardService;
 import com.error504.baf.service.QuestionService;
 import com.error504.baf.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -33,7 +30,6 @@ import java.util.List;
 
 @Controller
 public class QuestionController {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
     private final QuestionService questionService;
     private final BoardService boardService;
     private final UserService userService;
@@ -77,7 +73,7 @@ public class QuestionController {
     @RequestMapping("/question/search")
     public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page,
                              @RequestParam(value="keyword", defaultValue = "") String keyword){
-        logger.info("keyword : " + keyword);
+
         Page<Question> questionList = questionService.getAllQuestion(page, keyword, 0L, 0);
         model.addAttribute("questionList", questionList);
         model.addAttribute("keyword", keyword);
@@ -105,7 +101,6 @@ public class QuestionController {
 
     @GetMapping(value = "/question/detail/{id}")
     public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm) {
-        logger.info("Viewing Question detail: " + id);
 
         Question question = questionService.getQuestion(id);
 
@@ -157,10 +152,10 @@ public class QuestionController {
 
 
         SiteUser siteUser = userService.getUser(principal.getName());
-        logger.info(questionForm.getBoardId().toString());
+
         Board board = boardService.getBoard(questionForm.getBoardId());
         Long boardId = questionForm.getBoardId();
-        logger.info(siteUser.toString());
+
         Long id = questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board, questionForm.getIsAnonymous());
 
         Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
@@ -175,11 +170,9 @@ public class QuestionController {
                 filename = StringUtils.getFilename(filename);
                 filename = filename.replace(":", "-");
                 filename = filename.replace(" ", "_");
-                logger.info("file name : " + filename);
 
                 uploadPath = uploadRoot.resolve(filename);
 
-                logger.info("uploadPath : " + uploadPath);
 
                 try (InputStream file = imageList.get(i).getInputStream()) {
                     Files.copy(file, uploadPath, StandardCopyOption.REPLACE_EXISTING);

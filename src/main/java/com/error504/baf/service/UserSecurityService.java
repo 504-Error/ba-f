@@ -22,8 +22,6 @@ import java.util.Optional;
 @Service
 public class UserSecurityService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 
     @Override public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<SiteUser> _siteUser = this.userRepository.findByUsername(username);
@@ -40,7 +38,6 @@ public class UserSecurityService implements UserDetailsService {
         } else {
             authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
         }
-        logger.info("user role : " + authorities);
 
         return new User(siteUser.getUsername(), siteUser.getPassword(), authorities);
     }

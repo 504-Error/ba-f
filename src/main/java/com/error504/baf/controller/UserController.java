@@ -39,7 +39,6 @@ public class UserController {
     private AnnouncementService announcementService;
     private UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private QuestionService questionService;
     private AnswerService answerService;
     private ReviewCommentService reviewCommentService;
@@ -179,7 +178,6 @@ public class UserController {
     @RequestMapping("/mypage/wheelchair")
     public String changeWheelchair(Principal principal) {
         SiteUser siteUser = userService.getUser(principal.getName());
-        logger.info(String.valueOf(siteUser.getGetWheel()));
         userService.updateWheelchair(siteUser);
         return  "redirect:/user/mypage";
 
@@ -225,8 +223,6 @@ public class UserController {
 
         SiteUser siteUser = userService.getUser(principal.getName());
 //        Long id = siteUser.getId();
-        logger.info(siteUser.getPassword());
-        logger.info(passwordEncoder.encode(passwordForm.getNewPassword()));
         if(passwordEncoder.matches(passwordForm.getNewPassword(), siteUser.getPassword())){
 
 //            List<Question> questionList = this.questionService.getQuestionByAuthor(id);

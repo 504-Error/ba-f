@@ -47,7 +47,6 @@ import static com.error504.baf.controller.ReviewSearchPerformController.getPerfo
 @Controller
 public class ReviewController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UserService userService;
     private final ReviewService reviewService;
 
@@ -80,7 +79,7 @@ public class ReviewController {
                              HttpServletResponse response) throws IOException {
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
 
-        logger.info("reivewpage.getsize() : " + reviewPage.getSize());
+
 
         if (reviewPage.getSize() == 0) {
             response.setContentType("text/html; charset=UTF-8");
@@ -174,7 +173,6 @@ public class ReviewController {
         }
 
         SiteUser siteUser = userService.getUser(principal.getName());
-        logger.info(siteUser.toString());
 
         String amenitiesList = String.join(",", reviewForm.getAmenities());
 
@@ -187,11 +185,8 @@ public class ReviewController {
         Long id = reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(), reviewForm.getPlaceAddress(),
                 reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
 
-        logger.info("review id : " + id);
-
         Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
         Path uploadPath;
-        logger.info("uploadRoot : " + uploadRoot);
 
         if (imageList != null) {
             for (int i = 0; i < imageList.size(); i++) {
@@ -202,11 +197,8 @@ public class ReviewController {
                 filename = StringUtils.getFilename(filename);
                 filename = filename.replace(":", "-");
                 filename = filename.replace(" ", "_");
-                logger.info("file name : " + filename);
 
                 uploadPath = uploadRoot.resolve(filename);
-
-                logger.info("uploadPath : " + uploadPath);
 
                 try (InputStream file = imageList.get(i).getInputStream()) {
                     Files.copy(file, uploadPath, StandardCopyOption.REPLACE_EXISTING);
@@ -215,7 +207,6 @@ public class ReviewController {
                 }
 
                 Review review = this.reviewService.getReview(id);
-                logger.info("path.toString : " + uploadPath.toString());
                 this.reviewService.uploadImage(review, uploadPath.toString());
             }
         }
@@ -287,7 +278,6 @@ public class ReviewController {
 
     @GetMapping(value = "/display")
     public ResponseEntity<Resource> display(@Param("filePath") String filePath) {
-        logger.info("filePath : " + filePath);
         FileSystemResource resource = new FileSystemResource(filePath);
 
         if (!resource.exists()) {
@@ -297,7 +287,6 @@ public class ReviewController {
         HttpHeaders header = new HttpHeaders();
         try {
             Path imgPath = Paths.get(filePath);
-            logger.info("img path : " + imgPath);
 
             header.add("Content-Type", Files.probeContentType(imgPath));
         } catch (IOException e) {

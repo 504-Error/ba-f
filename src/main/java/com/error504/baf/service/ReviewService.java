@@ -29,7 +29,6 @@ import java.util.Optional;
 
 @Service
 public class ReviewService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ReviewRepository reviewRepository;
     private final ReviewImageRepository reviewImageRepository;
 
@@ -119,7 +118,7 @@ public class ReviewService {
         this.reviewRepository.flush();
         long id = review.getId();
 
-        logger.info("service get id : " + id);
+
         return id;
     }
 

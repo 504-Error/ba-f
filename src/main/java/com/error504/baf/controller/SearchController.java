@@ -37,8 +37,6 @@ public class SearchController {
     public String test() {
         return "/baf_map/search";
     }
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UserService userService;
     private final ReviewService reviewService;
 
