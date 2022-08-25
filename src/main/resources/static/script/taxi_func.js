@@ -1,3 +1,7 @@
+let test = window.localStorage.getItem('messageForm');
+test = JSON.parse(test);
+console.log(test);
+
 checkStorage();
 function checkStorage(){
     let storageData = JSON.parse(window.localStorage.getItem('messageForm'));
@@ -53,6 +57,7 @@ function getDetailAddrFromCoords(locPosition) {
 
     let callback = function(result, status) {
         if (status === kakao.maps.services.Status.OK) {
+            // console.log(result);
             if(result[0].road_address != null){
                 resultAddr = result[0].road_address.address_name;
             }else{
@@ -65,10 +70,9 @@ function getDetailAddrFromCoords(locPosition) {
     }
     geocoder.coord2Address(locPosition.getLng(), locPosition.getLat(), callback);
 }
-
-
-// 출발지/도착지 검색 -> 입력 폼 내용 localStroage에 저장
-function onClickAddressSearchBtn(){
+// 출발지 검색 -> 입력 폼 내용 localStroage에 저장
+// document.getElementById("desBtn").addEventListener('click',onClickDestinationBtn);
+function onClickSourceBtn(){
     let passengerName = document.getElementById("passengerName").value,
         sourceAddress = document.getElementById("sourceAddress").value,
         destinationAddress = document.getElementById("destinationAddress").value,
@@ -77,6 +81,23 @@ function onClickAddressSearchBtn(){
     let obj = {"passengerName": passengerName, "sourceAddress": sourceAddress, "destinationAddress": destinationAddress, "passengerNum": passengerNum, "wChairRadioBtn": wChairRadioBtn}
     let objStr = JSON.stringify(obj);
     window.localStorage.setItem('messageForm', objStr);
+
+    console.log(window.localStorage.getItem('messageForm'));
+}
+
+// 도착지 검색 -> 입력 폼 내용 localStroage에 저장
+// document.getElementById("desBtn").addEventListener('click',onClickDestinationBtn);
+function onClickDestinationBtn(){
+    let passengerName = document.getElementById("passengerName").value,
+        sourceAddress = document.getElementById("sourceAddress").value,
+        destinationAddress = document.getElementById("destinationAddress").value,
+        passengerNum = document.getElementById("passengerNum").value,
+        wChairRadioBtn =  $('input[name=wChairRadioBtn]:checked').val();
+    let obj = {"passengerName": passengerName, "sourceAddress": sourceAddress, "destinationAddress": destinationAddress, "passengerNum": passengerNum, "wChairRadioBtn": wChairRadioBtn}
+    let objStr = JSON.stringify(obj);
+    window.localStorage.setItem('messageForm', objStr);
+
+    console.log(window.localStorage.getItem('messageForm'));
 }
 
 
@@ -104,6 +125,11 @@ function onClickWriteBtn(){
         let msgBox = document.getElementById("msgTextarea");
         msgBox.innerHTML = msgStr;
     } else {
+        console.log(!isNull(passengerName));
+        console.log(!isNull(sourceAddress));
+        console.log(!isNull(destinationAddress));
+        console.log(!isNull(passengerNum));
+        console.log(wChairRadioBtn.is(":checked"));
         alert("필수 내용 입력을 확인하세요.");
     }
 }
@@ -116,7 +142,7 @@ function isNull(v) {
 // '문자 전송' 버튼 클릭 -> QR 코드 생성
 function onClickSendBtn(){
     let msgStr = document.getElementById("msgTextarea").value;
-    let qrUrl = "https://api.scanova.io/v2/qrcode/SMS?phone_no=01043354231&apikey=hqaaicyzmwmvfatxgjlgtmimsvrzgfpenpknlagf&message=" + msgStr;
+    let qrUrl = "https://api.scanova.io/v2/qrcode/SMS?phone_no=15884388&apikey=hqaaicyzmwmvfatxgjlgtmimsvrzgfpenpknlagf&size=s&message=" + msgStr;
     $("#QRImage").attr("src", qrUrl);
-
+    // $("#QRImage").attr("style", "width: 250px; height: 250px;");
 }

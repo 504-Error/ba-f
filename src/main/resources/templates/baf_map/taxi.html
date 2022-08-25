@@ -6,30 +6,33 @@
         layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Ba-f : 장애인 콜택시 호출</title>
+    <title>Taxi</title>
 </head>
 
 <body class="row justify-content-center">
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-    <div  layout:fragment="content" class="container">
-        <nav class="sub-navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <ul class="nav justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="icon">아이콘</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="bus">저상버스</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="search">검색</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-select" href="#">장애인 콜택시</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+<div  layout:fragment="content" class="container">
+    <nav class="sub-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="icon">아이콘</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="direction">길찾기</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="bus">저상버스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="search">검색</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-select" href="#">장애인 콜택시</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
     <h4 class="row justify-content-center fw-bold" style="margin: 3rem">장애인 콜택시</h4>
 
@@ -39,7 +42,7 @@
                 <label for="passengerName" class="col-form-label fs-5 fw-bold">이름</label>
             </div>
             <div class="col">
-                <input type="text" class="form-control form-control-lg" style="width: 30%" th:value="${siteUser != null? siteUser.username : ''}" id="passengerName">
+                <input type="text" class="form-control form-control-lg" style="width: 30%" value="회원이름" id="passengerName">
             </div>
         </div>
 
@@ -50,7 +53,7 @@
             <div class="col">
                 <input type="text" class="form-control form-control-lg" placeholder="출발지를 입력하세요." id="sourceAddress">
                 <button type="button" class="btn btn-secondary" id="currentBtn" onclick="currentLocationCoord();">현재 위치</button>
-                <button type="button" class="btn btn-secondary" id="sourceBtn" onclick = "location.href = '/taxi/searchAddress?category=source'; onClickAddressSearchBtn();">검색하기</button>
+                <button type="button" class="btn btn-secondary" id="sourceBtn" onclick="location.href='/taxi/searchSource';onClickSourceBtn();">검색하기</button>
             </div>
         </div>
 
@@ -60,7 +63,7 @@
             </div>
             <div class="col">
                 <input type="text" class="form-control form-control-lg" placeholder="도착지를 입력하세요." id="destinationAddress">
-                <button type="button" class="btn btn-secondary" id="desBtn" onclick="location.href='/taxi/searchAddress?category=destination';onClickAddressSearchBtn();">검색하기</button>
+                <button type="button" class="btn btn-secondary" id="desBtn" onclick="location.href='/taxi/searchDes';onClickDestinationBtn();">검색하기</button>
             </div>
         </div>
 
@@ -85,11 +88,11 @@
             </div>
             <div class="col">
                 <div class="form-check form-check-inline" style="padding-top: 0.5rem">
-                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairYes" value="wChairYes" th:checked="${(siteUser != null) and (siteUser.getWheel eq 1)}">
+                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairYes" value="wChairYes">
                     <label class="form-check-label fs-5" for="wChairYes">탑승</label>
                 </div>
                 <div class="form-check form-check-inline" style="padding-top: 0.5rem">
-                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo" th:checked="${(siteUser != null) and (siteUser.getWheel eq 2)}">
+                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo" checked="checked">
                     <label class="form-check-label fs-5" for="wChairNo">미탑승</label>
                 </div>
             </div>
@@ -108,17 +111,20 @@
             <button type="button" class="col-2 btn text-light fs-5 fw-bold" id="sendBtn" onclick="onClickSendBtn();" style="background-color: #FA9622;" >문자 전송</button>
         </div>
 
-        <div class="row justify-content-end">
-            <img id="QRImage" src="">
-        </div>
+<!--        <div class="row justify-content-end">-->
+<!--            <img id="QRImage" src="">-->
+<!--        </div>-->
+
 
     </form>
-        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-        <meta name="_csrf" th:content="${_csrf.token}">
-        <meta name="_csrf_header" th:content="${_csrf.headerName}">
-        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
-        <script type="text/javascript" src="/static/script/taxi_func.js"></script>
-    </div>
+    <img id="QRImage" src="">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
+    <script type="text/javascript" src="/static/script/taxi_func.js"></script>
+</div>
 
 </body>
 </html>
