@@ -25,7 +25,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -60,7 +59,6 @@ public class ReviewController {
     @RequestMapping("")
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
-        // 카테고리 없이 카테고리 자체도 검색 키워드가 될 수 있도록...!
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, "");
         List<Review> reviewList = this.reviewService.getReviewList();
 
@@ -79,8 +77,6 @@ public class ReviewController {
                              @PathVariable("type") String type,
                              HttpServletResponse response) throws IOException {
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
-
-        logger.info("reivewpage.getsize() : " + reviewPage.getSize());
 
         if (reviewPage.getSize() == 0) {
             response.setContentType("text/html; charset=UTF-8");
@@ -121,7 +117,7 @@ public class ReviewController {
 
         model.addAttribute("tab", "review");
 
-        return "review/review_content_2";
+        return "review/review_content";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -161,20 +157,19 @@ public class ReviewController {
             @RequestPart(name = "images", required = false) List<MultipartFile> imageList,
             BindingResult bindingResult, Principal principal, HttpServletRequest request) throws IOException {
 
-        if (reviewForm.getGenre().equals("0")){
+        if ("0".equals(reviewForm.getGenre())){
             return "genreIsNull";
-        } else if (reviewForm.getSubject().equals("")) {
+        } else if ("".equals(reviewForm.getSubject())) {
             return "subjectIsNull";
-        } else if (reviewForm.getPlace().equals("")) {
+        } else if ("".equals(reviewForm.getPlace())) {
             return "placeIsNull";
         } else if (reviewForm.getGrade() == 0) {
             return "gradeIsNull";
-        } else if (reviewForm.getPlaceReview().equals("")) {
+        } else if ("".equals(reviewForm.getPlaceReview())) {
             return "placeReviewIsNull";
         }
 
         SiteUser siteUser = userService.getUser(principal.getName());
-        logger.info(siteUser.toString());
 
         String amenitiesList = String.join(",", reviewForm.getAmenities());
 
@@ -187,35 +182,29 @@ public class ReviewController {
         Long id = reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(), reviewForm.getPlaceAddress(),
                 reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
 
-        logger.info("review id : " + id);
 
         Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
         Path uploadPath;
-        logger.info("uploadRoot : " + uploadRoot);
 
         if (imageList != null) {
-            for (int i = 0; i < imageList.size(); i++) {
+            for (MultipartFile image : imageList) {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
-                stringBuilder.append(imageList.get(i).getOriginalFilename());
+                stringBuilder.append(image.getOriginalFilename());
                 String filename = StringUtils.cleanPath(String.valueOf(stringBuilder)); // org.springframework.util
                 filename = StringUtils.getFilename(filename);
                 filename = filename.replace(":", "-");
                 filename = filename.replace(" ", "_");
-                logger.info("file name : " + filename);
 
                 uploadPath = uploadRoot.resolve(filename);
 
-                logger.info("uploadPath : " + uploadPath);
-
-                try (InputStream file = imageList.get(i).getInputStream()) {
+                try (InputStream file = image.getInputStream()) {
                     Files.copy(file, uploadPath, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
                     throw new IllegalStateException("업로드 실패...", e);
                 }
 
                 Review review = this.reviewService.getReview(id);
-                logger.info("path.toString : " + uploadPath.toString());
                 this.reviewService.uploadImage(review, uploadPath.toString());
             }
         }
@@ -234,6 +223,8 @@ public class ReviewController {
             case "기타":
                 category = "etc";
                 break;
+            default:
+                category = "";
         }
 
         return "/review/" + category + "/list";
@@ -287,7 +278,6 @@ public class ReviewController {
 
     @GetMapping(value = "/display")
     public ResponseEntity<Resource> display(@Param("filePath") String filePath) {
-        logger.info("filePath : " + filePath);
         FileSystemResource resource = new FileSystemResource(filePath);
 
         if (!resource.exists()) {
@@ -297,7 +287,6 @@ public class ReviewController {
         HttpHeaders header = new HttpHeaders();
         try {
             Path imgPath = Paths.get(filePath);
-            logger.info("img path : " + imgPath);
 
             header.add("Content-Type", Files.probeContentType(imgPath));
         } catch (IOException e) {

@@ -1,12 +1,12 @@
 // 마커를 클릭했을 때 해당 장소의 상세정보를 보여줄 커스텀오버레이입니다
-var placeOverlay = new kakao.maps.CustomOverlay({zIndex:1}),
+var placeOverlay = new kakao.maps.CustomOverlay({zIndex: 1}),
     contentNode = document.createElement('div'), // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다
     markers = []; // 마커를 담을 배열입니다
 
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
         center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
+        level : 3 // 지도의 확대 레벨
     };
 
 // 지도를 생성합니다
@@ -47,7 +47,7 @@ function searchPlaces() {
     }
 
     // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-    ps.keywordSearch( keyword, placesSearchCB);
+    ps.keywordSearch(keyword, placesSearchCB);
 }
 
 // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
@@ -89,18 +89,18 @@ function displayPlaces(places) {
     // 지도에 표시되고 있는 마커를 제거합니다
     removeMarker();
 
-    for ( var i=0; i<places.length; i++ ) {
+    for (var i = 0; i < places.length; i++) {
 
         // 마커를 생성하고 지도에 표시합니다
         var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
             marker = addMarker(placePosition, i),
             itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
 
-        (function(marker, place) {
-            kakao.maps.event.addListener(marker, 'click', function() {
+        (function (marker, place) {
+            kakao.maps.event.addListener(marker, 'click', function () {
                 displayPlaceInfo(place);
             });
-            itemEl.onclick =  function () {
+            itemEl.onclick = function () {
                 panTo(place.y, place.x);
                 storeInfo(place);
                 console.log("click");
@@ -128,21 +128,21 @@ function displayPlaces(places) {
 function getListItem(index, places) {
 
     var el = document.createElement('li'),
-        itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+        itemStr = '<span class="markerbg marker_' + (index + 1) + '"></span>' +
             '<div class="info">' +
             '   <h5>' + places.place_name + '</h5>';
 
     if (places.road_address_name) {
         itemStr += '    <span>' + places.road_address_name + '</span>' +
-            '   <span class="jibun gray">' +  places.address_name  + '</span>';
+            '   <span class="jibun gray">' + places.address_name + '</span>';
     } else {
-        itemStr += '    <span>' +  places.address_name  + '</span>';
+        itemStr += '    <span>' + places.address_name + '</span>';
     }
 
-    itemStr += '  <span class="tel">' + places.phone + '</span>' ;
+    itemStr += '  <span class="tel">' + places.phone + '</span>';
 
-    itemStr += '  <a class="review" href="$(/review/content/7)">' + "리뷰 보러가기" + '</a>' +
-        '</div>';
+    let placeAddress = places.road_address_name.replace(/ /gi, "+");
+    itemStr += '  <a class="review" href="/review/all/list?keyword=' + placeAddress + '">' + '리뷰 보러가기' + '</a>' + '</div>';
     el.innerHTML = itemStr;
     el.className = 'item';
     return el;
@@ -152,15 +152,15 @@ function getListItem(index, places) {
 function addMarker(position, idx, title) {
     var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
         imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
-        imgOptions =  {
-            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        imgOptions = {
+            spriteSize  : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+            spriteOrigin: new kakao.maps.Point(0, (idx * 46) + 10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+            offset      : new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
         },
         markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
         marker = new kakao.maps.Marker({
             position: position, // 마커의 위치
-            image: markerImage
+            image   : markerImage
         });
 
     marker.setMap(map); // 지도 위에 마커를 표출합니다
@@ -168,74 +168,128 @@ function addMarker(position, idx, title) {
 
     return marker;
 }
+
 //목록을 선택하면 상세정보 창을 보여주는 함수입니다.
-function storeInfo(place){
+function storeInfo(place) {
+    console.log("place url1 : ", place.place_url);
+    console.log("place road_address_name : ", place.road_address_name);
+    console.log("place address_name : ", place.address_name);
+
+    let searchPlace = "";
+    if (place.road_address_name) {
+        searchPlace = place.road_address_name;
+    } else {
+        searchPlace = place.address_name;
+    }
+
+    console.log("searchplace : ", searchPlace);
+    let data = {};
+    data["address"] = searchPlace;
+
+    let reviewData = new Array();
+
+    $.ajax({
+        url        : "/search/loadReview",
+        type       : "POST",
+        data       : searchPlace, // 요청 시 포함되어질 데이터
+        contentType: 'application/json', //요청 컨텐트 타입
+        dataType   : "json", // 응답 데이터 형식
+        beforeSend : function (jqXHR, settings) {
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
+            jqXHR.setRequestHeader(header, token);
+        },
+        success    : function (result) {
+            if (result == "error") {
+                alert("오류가 발생하였습니다.")
+                return;
+            }
+
+            reviewData = result;
+            console.log("reviewdata - inner : ", reviewData);
+
+        },
+        error      : function () {
+            // 검색 결과 없는 경우 메시지 출력 추가 필요
+            alert("리뷰가 존재하지 않습니다.");
+        }
+    });
+
+
+    console.log("reviewdata : ", reviewData);
+
     let elWrap = document.getElementById('map_wrapper'),
         info = document.createElement('div'),
         expBefore = document.getElementById('menu_info_wrap');
 
-    if(expBefore != null){
+    if (expBefore != null) {
         expBefore.remove();
     }
 
-    let str = '<div class="wrap">'+
-    '<iframe class="frame" src="'+ place.place_url +'" id = "chat_iframe"></iframe>'+
-    '</div>'+
-    '<ul class="list_evaluation">\n' +
-        '        <li>\n' +
-        '            <div class="unit_info">\n' +
-        '                <em class="screen_out">작성자 : </em>\n' +
-        '                <a href="#none" class="link_user">어쩌구</a>\n' +
-        '                <span class="bg_bar"></span>\n' +
-        '                <span class="screen_out">글 작성일 : </span>\n' +
-        '                <span class="time_write">2022.01.01</span>\n' +
-        '            </div>\n' +
-        '            <div class="star_info">\n' +
-        '                <div class="grade_star size_s">\n' +
-        '\t\t\t\t      <span class="ico_star star_rate">\n' +
-        '\t\t\t\t        <span class="ico_star inner_star" style="width:100%;"></span>\n' +
-        '\t\t\t\t      </span>\n' +
-        '                </div>\n' +
-        '            </div>\n' +
-        '            <div class="comment_info">\n' +
-        '                <p class="txt_comment"><span>리뷰 텍스트</span>\n' +
-        '                    <button type="button" class="btn_fold">더보기</button></p>\n' +
-        '            </div>\n' +
-        '            <div class="group_photo">\n' +
-        '                <strong class="screen_out">편의사항 이미지</strong>\n' +
-        '                <ul class="list_photo">\n' +
-        '                    <li>\n' +
-        '                        <a href="#none" data-basis="5742999" data-pidx="0" data-type="kakaomapcomment">\n' +
-        '                            <img src="/static/image/amenities_elevator_select.png" width="80" height="80" alt="후기사진">\n' +
-        '                        </a>\n' +
-        '                    </li>\n' +
-        '                    <li>\n' +
-        '                        <a href="#none" data-basis="5742999" data-pidx="1" data-type="kakaomapcomment">\n' +
-        '                            <img src="/static/image/amenities_incline_select.png" width="80" height="80" alt="후기사진">\n' +
-        '                        </a>\n' +
-        '                    </li>\n' +
-        '                    <li>\n' +
-        '                        <a href="#none" data-basis="5742999" data-pidx="2" data-type="kakaomapcomment">\n' +
-        '                            <img src="/static/image/amenities_parking_select.png" width="100" height="100" alt="후기사진">\n' +
-        '                        </a>\n' +
-        '                    </li>\n' +
-        '                    <li>\n' +
-        '                        <a href="#none" data-basis="5742999" data-pidx="3" data-type="kakaomapcomment">\n' +
-        '                            <img src="/static/image/amenities_rest-room_select.png" width="80" height="80" alt="후기사진">\n' +
-        '                        </a>\n' +
-        '                    </li>\n' +
-        '                    <li>\n' +
-        '                        <a href="#none" data-basis="5742999" data-pidx="4" data-type="kakaomapcomment">\n' +
-        '                            <img src="/static/image/amenities_table_select.png" width="80" height="80" alt="후기사진">\n' +
-        '                        </a>\n' +
-        '                    </li>\n' +
-        '                </ul>\n' +
-        '            </div>\n' +
-        '        </li>\n' +
-        '    </ul>'
+    let str = '<div class="wrap">' +
+        '<iframe class="frame" src="' + place.place_url + '" id = "chat_iframe"></iframe>' +
+        '</div>' +
+        '<ul class="list_evaluation">\n';
+
+    for (let i = 0; i < reviewData.length; i++) {
+        let str2 = '        <li>\n' +
+            '            <div class="unit_info">\n' +
+            '                <em class="screen_out">작성자 : </em>\n' +
+            '                <a href="#none" class="link_user">어쩌구</a>\n' +
+            '                <span class="bg_bar"></span>\n' +
+            '                <span class="screen_out">글 작성일 : </span>\n' +
+            '                <span class="time_write">2022.01.01</span>\n' +
+            '            </div>\n' +
+            '            <div class="star_info">\n' +
+            '                <div class="grade_star size_s">\n' +
+            '                <span class="ico_star star_rate">\n' +
+            '                <span class="ico_star inner_star" style="width:100%;"></span>\n' +
+            '                </span>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="comment_info">\n' +
+            '                <p class="txt_comment"><span>리뷰 텍스트</span>\n' +
+            '                    <button type="button" class="btn_fold">더보기</button></p>\n' +
+            '            </div>\n' +
+            '            <div class="group_photo">\n' +
+            '                <strong class="screen_out">편의사항 이미지</strong>\n' +
+            '                <ul class="list_photo">\n' +
+            '                    <li>\n' +
+            '                        <a href="#none" data-basis="5742999" data-pidx="0" data-type="kakaomapcomment">\n' +
+            '                            <img src="/static/image/amenities_elevator_select.png" width="80" height="80" alt="후기사진">\n' +
+            '                        </a>\n' +
+            '                    </li>\n' +
+            '                    <li>\n' +
+            '                        <a href="#none" data-basis="5742999" data-pidx="1" data-type="kakaomapcomment">\n' +
+            '                            <img src="/static/image/amenities_incline_select.png" width="80" height="80" alt="후기사진">\n' +
+            '                        </a>\n' +
+            '                    </li>\n' +
+            '                    <li>\n' +
+            '                        <a href="#none" data-basis="5742999" data-pidx="2" data-type="kakaomapcomment">\n' +
+            '                            <img src="/static/image/amenities_parking_select.png" width="100" height="100" alt="후기사진">\n' +
+            '                        </a>\n' +
+            '                    </li>\n' +
+            '                    <li>\n' +
+            '                        <a href="#none" data-basis="5742999" data-pidx="3" data-type="kakaomapcomment">\n' +
+            '                            <img src="/static/image/amenities_rest-room_select.png" width="80" height="80" alt="후기사진">\n' +
+            '                        </a>\n' +
+            '                    </li>\n' +
+            '                    <li>\n' +
+            '                        <a href="#none" data-basis="5742999" data-pidx="4" data-type="kakaomapcomment">\n' +
+            '                            <img src="/static/image/amenities_table_select.png" width="80" height="80" alt="후기사진">\n' +
+            '                        </a>\n' +
+            '                    </li>\n' +
+            '                </ul>\n' +
+            '            </div>\n' +
+            '        </li>\n';
+
+        str += str2;
+    }
+
+    str +=  '    </ul>';
 
     info.setAttribute("id", "menu_info_wrap");
-    info.className='bg_white';
+    info.className = 'bg_white';
     info.innerHTML = str;
 
     console.log(info);
@@ -245,36 +299,36 @@ function storeInfo(place){
 
 // 지도 위에 표시되고 있는 마커를 모두 제거합니다
 function removeMarker() {
-    for ( var i = 0; i < markers.length; i++ ) {
+    for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
     }
     markers = [];
 }
 
 // 클릭한 마커에 대한 장소 상세정보를 커스텀 오버레이로 표시하는 함수입니다
-function displayPlaceInfo (place) {
+function displayPlaceInfo(place) {
     var content = '<div class="placeinfo">' +
         '   <a class="title" href="' + place.place_url + '" target="_blank" title="' + place.place_name + '">' + place.place_name + '</a>';
 
     if (place.road_address_name) {
         content += '    <span title="' + place.road_address_name + '">' + place.road_address_name + '</span>' +
             '  <span class="jibun" title="' + place.address_name + '">(지번 : ' + place.address_name + ')</span>';
-    }  else {
+    } else {
         content += '    <span title="' + place.address_name + '">' + place.address_name + '</span>';
     }
 
     content += '    <span class="tel">' + place.phone + '</span>' +
         '</div>' +
         '<div class="after"></div>';
-    panTo(place.y,place.x);
+    panTo(place.y, place.x);
     contentNode.innerHTML = content;
     placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
     placeOverlay.setMap(map);
 }
 
-function panTo(y,x) {
+function panTo(y, x) {
     // 이동할 위도 경도 위치를 생성합니다
-    var moveLatLon = new kakao.maps.LatLng(y,x);
+    var moveLatLon = new kakao.maps.LatLng(y, x);
 
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
@@ -291,19 +345,19 @@ function displayPagination(pagination) {
 
     // 기존에 추가된 페이지번호를 삭제합니다
     while (paginationEl.hasChildNodes()) {
-        paginationEl.removeChild (paginationEl.lastChild);
+        paginationEl.removeChild(paginationEl.lastChild);
     }
 
-    for (i=1; i<=pagination.last; i++) {
+    for (i = 1; i <= pagination.last; i++) {
         var el = document.createElement('a');
         el.href = "#";
         el.innerHTML = i;
 
-        if (i===pagination.current) {
+        if (i === pagination.current) {
             el.className = 'on';
         } else {
-            el.onclick = (function(i) {
-                return function() {
+            el.onclick = (function (i) {
+                return function () {
                     pagination.gotoPage(i);
                 }
             })(i);
@@ -318,6 +372,6 @@ function displayPagination(pagination) {
 // 검색결과 목록의 자식 Element를 제거하는 함수입니다
 function removeAllChildNods(el) {
     while (el.hasChildNodes()) {
-        el.removeChild (el.lastChild);
+        el.removeChild(el.lastChild);
     }
 }

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{admin_nav_layout}">
+<html lang="ko"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{admin_nav_layout}">
 <head>
     <meta charset="UTF-8">
     <title>ba-f : 관리자 페이지</title>
@@ -13,7 +15,7 @@
         <div th:replace="form_errors :: formErrorsFragment"></div>
         <div class="mb-3">
             <label id="subject" class="form-label">공지사항 제목</label>
-            <input type="text" name="subject" class="form-control"> </div>
+            <input type="text" name="subject" class="form-control"></div>
         <div class="mb-3">
             <label id="content" class="form-label">공지사항 내용</label>
             <textarea name="content" class="form-control" rows="10"></textarea>

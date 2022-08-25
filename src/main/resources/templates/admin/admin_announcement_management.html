@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{admin_nav_layout}">
+<html lang="ko"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{admin_nav_layout}">
 <head>
     <meta charset="UTF-8">
     <title>ba-f : 관리자 페이지</title>
@@ -10,18 +12,19 @@
 <div layout:fragment="content" class="container my-3 admin-main">
     <h5 class="my-3 border-bottom pb-2">공지사항 관리</h5>
 
-    <a th:href="@{/management/announce/create}" class="btn btn-primary">질문 등록하기</a>
+    <a th:href="@{/management/announce/create}" class="btn btn-primary">공지 등록하기</a>
     <div class="float-end" style="width: 30%">
         <form th:action="@{|/management/announce|}" method="get" id="searchForm">
             <div class="input-group mb-3 me-sm-3">
-                <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control" placeholder="공지사항 검색" aria-label="review search" aria-describedby="button-addon2">
+                <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control"
+                       placeholder="공지사항 검색" aria-label="review search" aria-describedby="button-addon2">
                 <input type="hidden" id="page" name="page" th:value="${announcementPage.number}">
                 <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
             </div>
         </form>
     </div>
 
-    <table class="table">
+    <table class="table table-align-center">
         <thead class="table-dark">
         <tr>
             <th>번호</th>
@@ -34,9 +37,10 @@
         <tr th:each="announce, loop : ${announcementPage}">
             <td th:text="${announcementPage.getTotalElements - (announcementPage.number * announcementPage.size) - loop.index}"></td>
             <td th:text="${announce.subject}"></td>
-            <td th:text="${announce.createDate}"></td>
             <td>
-                <!--                관리자 권한 확인 필요!-->
+                <time th:text="${#temporals.format(announce.createDate, 'yyyy-MM-dd HH:mm')}"></time>
+            </td>
+            <td>
                 <a href="javascript:void(0);" th:data-uri="@{|/management/announce/delete/${announce.id}|}"
                    class="delete btn btn-danger">삭제</a>
                 <a th:href="@{|/management/announce/${announce.id}|}" class="btn btn-secondary">글 보기</a>
@@ -70,24 +74,25 @@
 
 <script layout:fragment="script" type='text/javascript'>
     const page_elements = document.getElementsByClassName("page-link");
-    Array.from(page_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
+    Array.from(page_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
             document.getElementById('page').value = this.dataset.page;
             document.getElementById('searchForm').submit();
         });
     });
     const btn_search = document.getElementById("review-button-search");
-    btn_search.addEventListener('click', function() {
+    btn_search.addEventListener('click', function () {
         document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
         document.getElementById('searchForm').submit();
     });
 
     const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
-            if(confirm("정말로 삭제하시겠습니까?")) {
+    Array.from(delete_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
+            if (confirm("정말로 삭제하시겠습니까?")) {
                 location.href = this.dataset.uri;
-            };
+            }
+            ;
         });
     });
 </script>

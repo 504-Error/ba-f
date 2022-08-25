@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{admin_nav_layout}">
+<html lang="ko"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{admin_nav_layout}">
 <head>
     <meta charset="UTF-8">
     <title>ba-f : 관리자 페이지</title>
@@ -8,21 +11,38 @@
 </head>
 <body>
 <div layout:fragment="content" class="container my-3 admin-main">
-    <h5 class="my-3 border-bottom pb-2" th:text="${announcement.subject}">리뷰 내용</h5>
+    <h5 class="my-3 border-bottom pb-2" th:text="${announcement.subject}"></h5>
     <div class="review-content-area mt-0 mb-4">
-<!--        <a href="javascript:void(0);" th:data-uri="@{|/management/announce/delete/${question.id}|}"-->
-<!--           class="delete btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"-->
-<!--           th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"-->
-<!--           th:text="삭제"></a>-->
+        <a href="javascript:void(0);" th:data-uri="@{|/management/announce/delete/${announcement.id}|}"
+           class="delete btn btn-light float-end" style="color:#7F7F7F" sec:hasAuthorize="hasRole('ROLE_ADMIN')"
+           th:text="삭제"></a>
+
+        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
         <div class="ms-5">
             <p class="fw-bolder mb-0 content-nickname" th:text="관리자"></p>
-            <time class="fw-normal content-time" th:text="${#temporals.format(announcement.createDate, 'yyyy-MM-dd HH:mm')}"></time>
+            <time class="fw-normal content-time"
+                  th:text="${#temporals.format(announcement.createDate, 'yyyy-MM-dd HH:mm')}"></time>
         </div>
     </div>
     <div class="card-body">
         <div class="card-text" style="white-space: pre-line; margin-bottom: 5%" th:text="${announcement.content}"></div>
     </div>
-</div>
 
+    <hr class="border-bottom">
+
+    <a th:href="@{/management/announce}" class="btn btn-primary mb-4" style="float:right;">공지목록</a>
+
+    <script layout:fragment="script" type='text/javascript'>
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                }
+                ;
+            });
+        });
+    </script>
+</div>
 </body>
 </html>

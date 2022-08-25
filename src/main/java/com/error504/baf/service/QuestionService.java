@@ -30,8 +30,6 @@ import javax.persistence.criteria.Predicate;
 public class QuestionService {
     private QuestionRepository questionRepository;
     private QuestionImageRepository questionImageRepository;
-    private BoardRepository boardRepository;
-    private AnnouncementRepository announcementRepository;
 
     @Autowired
     public QuestionService(QuestionRepository questionRepository, QuestionImageRepository questionImageRepository){

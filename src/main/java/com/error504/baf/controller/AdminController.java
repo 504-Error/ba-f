@@ -6,14 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -87,12 +84,8 @@ public class AdminController {
 
     @Secured("ROLE_ADMIN")
     @RequestMapping("/account/{getAuth}/delete/{id}")
-    public String adminAccountRefuse(Principal principal, @PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
+    public String adminAccountRefuse(@PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
         SiteUser siteUser = this.userService.getUser(id);
-        // 관리자인지 확인이 필요함!
-//        if (!siteUser.getAuthor().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-//        }
 
         List<Question> questionList = this.questionService.getQuestionByAuthor(id);
         this.questionService.deleteByAuthor(questionList);
@@ -124,7 +117,7 @@ public class AdminController {
             List<Board> board = boardService.findAll();
             model.addAttribute("contentPage", questionPage);
             model.addAttribute("board", board);
-        } if (kindOfContent == 1) {
+        } else if (kindOfContent == 1) {
             Page<Review> reviewPage = this.reviewService.getListWithUsername(page, keyword, boardId.intValue(), sortType);
             model.addAttribute("contentPage", reviewPage);
         }
@@ -190,7 +183,7 @@ public class AdminController {
                     model.addAttribute("category", "");
 
             }
-            returnValue = "review/review_content_2";
+            returnValue = "review/review_content";
         }
 
         model.addAttribute("tab", "management");
@@ -237,8 +230,14 @@ public class AdminController {
     }
 
     @Secured("ROLE_ADMIN")
-    @RequestMapping("/announce/create")
-    public String adminAnnounceCreate(@Valid AnnouncementForm announcementForm, BindingResult bindingResult, Principal principal) {
+    @GetMapping("/announce/create")
+    public String adminAnnounceCreate(AnnouncementForm announcementForm) {
+        return "admin/admin_announcement_form";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/announce/create")
+    public String adminAnnounceCreateForm(@Valid AnnouncementForm announcementForm, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "admin/admin_announcement_form";
         }
@@ -250,7 +249,7 @@ public class AdminController {
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/announce/{id}")
-    public String detail(Model model, @PathVariable("id") Long id, AnnouncementForm announcementForm) {
+    public String detailAnnounce(Model model, @PathVariable("id") Long id, AnnouncementForm announcementForm) {
         Announcement announcement = this.announcementService.getAnnouncement(id);
 
         model.addAttribute("tab", "management");
@@ -259,4 +258,12 @@ public class AdminController {
         return "admin/admin_announcement_detail";
     }
 
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/announce/delete/{id}")
+    public String deleteAnnounce(@PathVariable("id") Long id) {
+        Announcement announcement = this.announcementService.getAnnouncement(id);
+
+        this.announcementService.delete(announcement);
+        return "redirect:/management/announce";
+    }
 }

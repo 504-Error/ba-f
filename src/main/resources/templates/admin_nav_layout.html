@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:layout="">
+<html lang="ko" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:layout="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -28,7 +28,8 @@
             <ul class="admin-nav-child-menu">
                 <li><a th:href="@{/management/account/0}">가입 대기 회원</a></li>
                 <li><a th:href="@{/management/account/1}">회원 관리</a>
-            </ul></li>
+            </ul>
+        </li>
         <li><a th:href="@{/management/board}">게시판 관리</a></li>
         <li><a th:href="@{/management/content/0}">글 관리</a>
             <ul class="admin-nav-child-menu">
@@ -36,11 +37,7 @@
                 <li><a th:href="@{/management/content/1}">리뷰 관리</a>
             </ul>
         </li>
-        <li><a th:href="@{/management/announce}">기타</a>
-            <ul class="admin-nav-child-menu">
-                <li><a th:href="@{/management/announce}">공지사항 관리</a></li>
-                <li><a href="#">몰라요</a>
-            </ul>
+        <li><a th:href="@{/management/announce}">공지사항 관리</a>
         </li>
     </ul>
 </nav>

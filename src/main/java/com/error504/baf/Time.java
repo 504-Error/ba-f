@@ -34,7 +34,6 @@ public class Time {
         LocalDateTime now = LocalDateTime.now();
         long diffTime = localDateTime.until(now, ChronoUnit.SECONDS);
         // now보다 이후면 +, 전이면 -
-        String msg = null;
 
         if (diffTime < TIME_MAXIMUM.SEC) {
             return diffTime + "초전";

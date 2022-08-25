@@ -29,7 +29,6 @@ import java.util.Optional;
 
 @Service
 public class ReviewService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ReviewRepository reviewRepository;
     private final ReviewImageRepository reviewImageRepository;
 
@@ -46,6 +45,14 @@ public class ReviewService {
         } else {
             throw new DataNotFoundException("review not found");
         }
+    }
+
+    public Page<Review> getReviewByAddress(String address) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(0, 4, Sort.by(sorts));
+        Specification<Review> spec = searchReviewByAddress(address);
+        return this.reviewRepository.findAll(spec, pageable);
     }
 
     public Page<Review> getList(int page, String keyword, String category) {
@@ -119,7 +126,6 @@ public class ReviewService {
         this.reviewRepository.flush();
         long id = review.getId();
 
-        logger.info("service get id : " + id);
         return id;
     }
 
@@ -252,6 +258,13 @@ public class ReviewService {
         };
     }
 
+    private Specification searchReviewByAddress(String address){
+        return (review, query, criteriaBuilder) -> {
+            query.distinct(true);
+
+            return criteriaBuilder.equal(review.get("placeAddress"),  address);
+        };
+    }
 
 
     public Page<Review> getReviewResult(Long id, int page) {

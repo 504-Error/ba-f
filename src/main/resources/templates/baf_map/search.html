@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" href="/static/style.css">
     <link rel="stylesheet" href="/static/css/map/icon/icon-page.css">
+    <meta name="_csrf" th:content="${_csrf?.token}">
+    <meta name="_csrf_header" th:content="${_csrf?.headerName}">
     <title>Ba-f : 검색하기</title>
     <style>
         .list_evaluation li{position:relative;min-height:52px;padding:10px 0 18px 10px;border-top:1px solid #f2f2f2}
@@ -203,9 +205,49 @@
             <ul id="placesList"></ul>
             <div id="pagination"></div>
         </div>
-        <!--장소 정보를 보여주는 div 창입니다.<div id="menu_info_wrap" class="bg_white"></div>-->
+        <!--장소 정보를 보여주는 div 창입니다.-->
+<!--        <div id="menu_info_wrap" class="bg_white" style="display: none;">-->
+<!--            <div class="wrap">-->
+<!--                <iframe class="frame" src="#" id="place_iframe"></iframe>-->
+<!--            </div>-->
 
-    </div>
+<!--            <ul class="list_evaluation">-->
+<!--                <li>-->
+<!--                    <div class="unit_info">-->
+<!--                        <em class="screen_out">작성자 : </em>-->
+<!--                        <a href="#none" class="link_user">어쩌구</a>-->
+<!--                        <span class="bg_bar"></span>-->
+<!--                        <span class="screen_out">글 작성일 : </span>-->
+<!--                        <span class="time_write">2022.01.01</span>-->
+<!--                    </div>-->
+
+<!--                    <div class="star_info">-->
+<!--                        <div class="grade_star size_s">-->
+<!--                            <span class="ico_star star_rate">-->
+<!--                                <span class="ico_star inner_star" style="width:100%;"></span>-->
+<!--                            </span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <div class="comment_info">-->
+<!--                        <p class="txt_comment">-->
+<!--                            <span>리뷰 텍스트</span>-->
+<!--                            <button type="button" class="btn_fold">더보기</button>-->
+<!--                        </p>-->
+<!--                    </div>-->
+
+<!--                    <div class="group_photo">-->
+<!--                        <strong class="screen_out">편의사항 이미지</strong>-->
+<!--                        <ul class="list_photo">-->
+<!--                            <li>-->
+
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
 
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <meta name="_csrf" th:content="${_csrf.token}">

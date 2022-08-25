@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReviewPerformInfo {
-    public String ID;
+    public String id;
     public String title;
     public String startDate;
     public String endDate;

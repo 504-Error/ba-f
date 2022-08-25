@@ -52,11 +52,10 @@ public class QuestionController {
         this.announcementService = announcementService;
     }
 
-
     @RequestMapping("/community/home")
     public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page, Principal principal){
         SiteUser siteUser = userService.getUser(principal.getName());
-        if(siteUser.getGetAuth()==1 || siteUser.getUsername().equals("admin")){
+        if(siteUser.getGetAuth()==1 || "admin".equals(siteUser.getUsername())){
         Page<Question> questionList = questionService.getQuestion(page);
         model.addAttribute("questionList", questionList);
         List<Question> weeklyList=questionService.getWeeklyHotList();
@@ -170,9 +169,9 @@ public class QuestionController {
 
         if (questionForm.getBoardId() == 0){
             return "boardIdIsNull";
-        } else if (questionForm.getSubject().equals("")){
+        } else if ("".equals(questionForm.getSubject())){
             return "subjectIsNull";
-        } else if (questionForm.getContent().equals("")){
+        } else if ("".equals(questionForm.getContent())){
             return "contentIsNull";
         }
 
@@ -188,10 +187,10 @@ public class QuestionController {
         Path uploadPath;
 
         if (imageList != null) {
-            for (int i = 0; i < imageList.size(); i++) {
+            for (MultipartFile image : imageList) {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
-                stringBuilder.append(imageList.get(i).getOriginalFilename());
+                stringBuilder.append(image.getOriginalFilename());
                 String filename = StringUtils.cleanPath(String.valueOf(stringBuilder)); // org.springframework.util
                 filename = StringUtils.getFilename(filename);
                 filename = filename.replace(":", "-");
@@ -202,7 +201,7 @@ public class QuestionController {
 
                 logger.info("uploadPath : " + uploadPath);
 
-                try (InputStream file = imageList.get(i).getInputStream()) {
+                try (InputStream file = image.getInputStream()) {
                     Files.copy(file, uploadPath, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
                     throw new IllegalStateException("업로드 실패...", e);

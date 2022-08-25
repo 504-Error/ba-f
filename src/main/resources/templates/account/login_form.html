@@ -5,41 +5,43 @@
         xmlns:sec="http://www.w3.org/1999/xhtml"
 >
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
-  <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
-  <title>Ba-f : 로그인 페이지</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
+    <title>Ba-f : 로그인 페이지</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg">
-  <div class="container-fluid">
-    <a class="navbar-brand"  th:href="@{/visitReview}">
-      <img src="/static/image/ba-f_logo.png" alt="ba-f 로고 이미지" width="90" height="40">
-    </a>
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/review}">
+            <img src="/static/image/ba-f_logo.png" alt="ba-f 로고 이미지" width="90" height="40">
+        </a>
 
-    <div class="d-flex">
-      <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/signup}">SIGNUP</a>
-      <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">LOGOUT</a>
+        <div class="d-flex">
+            <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/signup}">SIGNUP</a>
+            <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">LOGOUT</a>
+        </div>
     </div>
-  </div>
 </nav>
 
 <div layout:fragment="content" class="container my-3">
-  <form th:action="@{/user/login}" method="post">
-    <div th:if="${param.error}">
-      <div class="alert alert-danger"> 사용자ID 또는 비밀번호를 확인해 주세요.
-      </div> </div>
-    <div class="mb-3">
-      <label for="username" class="form-label">사용자ID</label>
-      <input type="text" name="username" id="username" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">비밀번호</label>
-      <input type="password" name="password" id="password" class="form-control">
-    </div>
-    <button type="submit" class="btn btn-primary">로그인</button>
-  </form>
+    <form th:action="@{/user/login}" method="post">
+        <div th:if="${param.error}">
+            <div class="alert alert-danger">
+                사용자ID 또는 비밀번호를 확인해 주세요.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">사용자ID</label>
+            <input type="text" name="username" id="username" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">비밀번호</label>
+            <input type="password" name="password" id="password" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">로그인</button>
+    </form>
 </div>
 </body>
 </html>

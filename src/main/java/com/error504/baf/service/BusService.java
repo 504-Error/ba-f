@@ -16,11 +16,11 @@ import java.util.HashMap;
 public class BusService {
 
     // 좌표 기반으로 주변 버스 정류장 위치 정보 구하는 함수
-    public ArrayList getStationsByPos(String LAT, String LNG) throws IOException {
+    public ArrayList getStationsByPos(String lat, String lng) throws IOException {
         StringBuilder urlBuilder = new StringBuilder("http://ws.bus.go.kr/api/rest/stationinfo/getStationByPos"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + "j1X7vFE5RUb9KZAjevsWKZlhE5D3j53C4nqmug7%2Fe8se2gMQgV4Nm6jYuAdHW29ey3Ucn%2FsBwkIScNFRG5jt1g%3D%3D"); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("tmX","UTF-8") + "=" + URLEncoder.encode(LNG, "UTF-8")); /*기준위치 X*/
-        urlBuilder.append("&" + URLEncoder.encode("tmY","UTF-8") + "=" + URLEncoder.encode(LAT, "UTF-8")); /*기준위치 Y*/
+        urlBuilder.append("&" + URLEncoder.encode("tmX","UTF-8") + "=" + URLEncoder.encode(lng, "UTF-8")); /*기준위치 X*/
+        urlBuilder.append("&" + URLEncoder.encode("tmY","UTF-8") + "=" + URLEncoder.encode(lat, "UTF-8")); /*기준위치 Y*/
         urlBuilder.append("&" + URLEncoder.encode("radius","UTF-8") + "=" + URLEncoder.encode("350", "UTF-8")); /*검색 반경*/
         urlBuilder.append("&" + URLEncoder.encode("resultType","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*응답 유형*/
         URL url = new URL(urlBuilder.toString());

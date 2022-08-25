@@ -58,6 +58,10 @@ public class ReviewCommentService {
         return reviewCommentRepository.findReviewCommentByAuthorId(pageable, id);
     }
 
+    public void vote(ReviewComment reviewComment, SiteUser siteUser){
+        reviewComment.getVoter().add(siteUser);
+        this.reviewCommentRepository.save(reviewComment);
+    }
 
     public void delete(ReviewComment reviewComment) {
         reviewCommentRepository.delete(reviewComment);

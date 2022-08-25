@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:sec="http://www.w3.org/1999/xhtml"
-        layout:decorate="~{layout}">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰 내용</title>
@@ -15,19 +15,23 @@
         <div class="container-fluid">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="/review">전체</a>
+                    <a href="/review" th:attr="class=${category == 'all' ? 'nav-link-select' : 'nav-link'}">전체</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="restaurant" href="/review/restaurant/list">음식점</a>
+                    <a href="/review/restaurant/list"
+                       th:attr="class=${category == 'restaurant' ? 'nav-link-select' : 'nav-link'}">음식점</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/cafe/list">카페</a>
+                    <a class="nav-link" href="/review/cafe/list"
+                       th:attr="class=${category == 'cafe' ? 'nav-link-select' : 'nav-link'}">카페</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/perform/list">공연</a>
+                    <a class="nav-link" href="/review/perform/list"
+                       th:attr="class=${category == 'perform' ? 'nav-link-select' : 'nav-link'}">공연</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/etc/list">기타</a>
+                    <a class="nav-link" href="/review/etc/list"
+                       th:attr="class=${category == 'etc' ? 'nav-link-select' : 'nav-link'}">기타</a>
                 </li>
             </ul>
         </div>
@@ -68,7 +72,7 @@
             <th scope="row">리뷰명</th>
             <td>
                 [[${review.subject}]]
-                <a th:href="@{|/review/${category}?keyword=${review.subject}|}">
+                <a th:href="@{|/review/${category}/list?keyword=${review.subject}|}">
                     <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 주제 리뷰 </span>
                 </a>
             </td>
@@ -81,12 +85,13 @@
             <th scope="row">장소</th>
             <td>
                 [[${review.place}]]
-                <a th:href="@{|/review/${category}?keyword=${review.place}|}">
+                <a th:href="@{|/review/${category}/list?keyword=${review.place}|}">
                     <span class="badge rounded-pill bg-secondary btn-additional-review"> > 동일 장소 리뷰 </span>
                 </a>
-                <div id="map" style="width:300px;height:200px;" th:value="${review.placeAddress}"></div>
-                <a id="reviewPlace" th:value="${review.placeAddress}"></a>
-
+                <p th:if="${review.placeAddress != ''}" class="review-address mt-1">([[${review.placeAddress}]])</p>
+                <p th:unless="${review.placeAddress != ''}" class="review-address mt-1">(알 수 없음)</p>
+                <div th:if="${review.placeAddress != ''}" id="map" style="width:300px;height:200px;"
+                     th:value="${review.placeAddress}"></div>
             </td>
         </tr>
         <tr>
@@ -261,13 +266,17 @@
                         <div class="ms-2 me-auto">
                             <div class="mb-2" th:if="${comment.author != null}">
                                 <img class="img-profile-comment" src="/static/image/anonymous_profile.png">
-                                <span class="fw-bolder content-nickname" th:if="${comment.author == review.author and comment.isAnonymous == true}"
+                                <span class="fw-bolder content-nickname"
+                                      th:if="${comment.author == review.author and comment.isAnonymous == true}"
                                       text="익명 (글쓴이)"></span>
-                                <span class="fw-bolder content-nickname" th:if ="${comment.author == review.author and comment.isAnonymous != true}"
+                                <span class="fw-bolder content-nickname"
+                                      th:if="${comment.author == review.author and comment.isAnonymous != true}"
                                       th:text="${comment.author.getUsername() + ' (글쓴이)'}"></span>
-                                <span class="fw-bolder content-nickname" th:if="${comment.author != review.author and comment.isAnonymous == true}"
+                                <span class="fw-bolder content-nickname"
+                                      th:if="${comment.author != review.author and comment.isAnonymous == true}"
                                       text="익명"></span>
-                                <span class="fw-bolder content-nickname" th:if="${comment.author != review.author and comment.isAnonymous != true}"
+                                <span class="fw-bolder content-nickname"
+                                      th:if="${comment.author != review.author and comment.isAnonymous != true}"
                                       th:text="${comment.author.getUsername()}"></span>
                             </div>
                             <div class="mb-2" th:if="${comment.author == null}">
@@ -281,25 +290,40 @@
                                 <span class="recommend ps-4 content-nickname"
                                       th:text="${#lists.size(comment.voter)}"></span>
                             </div>
+                            <a href="javascript:void(0)" class="btn btn-light recommend-btn"
+                               sec:authorize="isAuthenticated()"
+                               th:data-uri="@{|/review/${review.id}/comment/vote/${comment.id}|}">
+                                <span class="recommend-disable ps-4" style="color:#7F7F7F">좋아요</span>
+                            </a>
+                            <a href="javascript:void(0)" class="btn btn-light delete" sec:authorize="isAuthenticated()"
+                               th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+                               th:data-uri="@{|/review/${review.id}/comment/delete/${comment.id}|}">
+                                <span class="recommend-disable ps-4" style="color:#7F7F7F">삭제</span>
+                            </a>
                         </div>
                     </div>
                 </li>
             </ol>
         </div>
     </div>
+
+    <a th:href="@{|/review/${category}/list|}" class="btn btn-primary mb-4" style="float:right;">글목록</a>
+
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6f5ee4dc680406f1dbe36437ebafb94f&libraries=services"></script>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6f5ee4dc680406f1dbe36437ebafb94f&libraries=services"></script>
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d8aa491fb8446dec868e2994549014ef&libraries=services"></script>
     <script>
         console.log("map script");
 
         var mapContainer = document.getElementById('map'); // 지도를 표시할 div
         var valueElement = document.getElementById("reviewPlace").outerHTML;
         var place = valueElement.split('"');
-        console.log("1",valueElement);
-        console.log("2",place);
+        console.log("1", valueElement);
+        console.log("2", place);
         console.log("mapcontatiner : ", $('#map').val());
 
         var mapOption = {

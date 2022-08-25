@@ -68,7 +68,7 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, @RequestParam("certifyFile") MultipartFile file, BindingResult bindingResult) {
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "account/signup_form";
         }
@@ -93,25 +93,20 @@ public class UserController {
             return "account/signup_form";
         }
 
-        if (!file.isEmpty()) {
-            logger.info("file : " + file);
-
+        if (!userCreateForm.getCertifyFile().isEmpty()) {
             Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
 
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
-            stringBuilder.append(file.getOriginalFilename());
+            stringBuilder.append(userCreateForm.getCertifyFile().getOriginalFilename());
             String filename = StringUtils.cleanPath(String.valueOf(stringBuilder)); // org.springframework.util
             filename = StringUtils.getFilename(filename);
             filename = filename.replace(":", "-");
             filename = filename.replace(" ", "_");
-            logger.info("file name : " + filename);
 
             Path uploadPath = uploadRoot.resolve(filename);
 
-            logger.info("uploadPath : " + uploadPath);
-
-            try (InputStream inputFile = file.getInputStream()) {
+            try (InputStream inputFile = userCreateForm.getCertifyFile().getInputStream()) {
                 Files.copy(inputFile, uploadPath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 throw new IllegalStateException("업로드 실패...", e);
@@ -147,8 +142,8 @@ public class UserController {
     public String passwordFormCreateNull(PasswordForm passwordForm, Model model){
         model.addAttribute("passwordForm", passwordForm);
         model.addAttribute("tab", "mypage");
-        return "account/my_page_pw";
 
+        return "account/my_page_pw";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -156,8 +151,8 @@ public class UserController {
     public String emailFormCreateNull(EmailForm emailForm, Model model){
         model.addAttribute("emailForm", emailForm);
         model.addAttribute("tab", "mypage");
-        return "account/my_page_email";
 
+        return "account/my_page_email";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -165,8 +160,8 @@ public class UserController {
     public String deleteFormCreateNull(PasswordForm passwordForm, Model model){
         model.addAttribute("passwordForm", passwordForm);
         model.addAttribute("tab", "mypage");
-        return "account/member_delete";
 
+        return "account/member_delete";
     }
 
 

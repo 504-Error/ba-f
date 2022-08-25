@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:sec="http://www.w3.org/1999/xhtml"
-        layout:decorate="~{layout}">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰 목록</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
 </head>
 <body>
 <div layout:fragment="content" class="container">
@@ -18,16 +16,20 @@
                     <a href="/review" th:attr="class=${category == 'all' ? 'nav-link-select' : 'nav-link'}">전체</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/review/restaurant/list" th:attr="class=${category == 'restaurant' ? 'nav-link-select' : 'nav-link'}">음식점</a>
+                    <a href="/review/restaurant/list"
+                       th:attr="class=${category == 'restaurant' ? 'nav-link-select' : 'nav-link'}">음식점</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/cafe/list" th:attr="class=${category == 'cafe' ? 'nav-link-select' : 'nav-link'}">카페</a>
+                    <a class="nav-link" href="/review/cafe/list"
+                       th:attr="class=${category == 'cafe' ? 'nav-link-select' : 'nav-link'}">카페</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/perform/list" th:attr="class=${category == 'perform' ? 'nav-link-select' : 'nav-link'}">공연</a>
+                    <a class="nav-link" href="/review/perform/list"
+                       th:attr="class=${category == 'perform' ? 'nav-link-select' : 'nav-link'}">공연</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/review/etc/list" th:attr="class=${category == 'etc' ? 'nav-link-select' : 'nav-link'}">기타</a>
+                    <a class="nav-link" href="/review/etc/list"
+                       th:attr="class=${category == 'etc' ? 'nav-link-select' : 'nav-link'}">기타</a>
                 </li>
             </ul>
         </div>
@@ -38,7 +40,9 @@
             <div id="review-search-input-group">
                 <form th:action="@{|/review/${category}/${type}|}" method="get" id="searchForm">
                     <div class="input-group mb-3 me-sm-3">
-                        <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="review search" aria-describedby="button-addon2">
+                        <input type="text" th:value="${keyword}" name="keyword" id="review-search-input"
+                               class="form-control" placeholder="궁금한 장소 혹은 공연 등을 검색해주세요" aria-label="review search"
+                               aria-describedby="button-addon2">
                         <input type="hidden" id="page" name="page" th:value="${reviewPage.number}">
                         <button class="btn btn-outline-orange" type="button" id="button-review-search">검색</button>
                     </div>
@@ -60,17 +64,21 @@
     <div th:if="${type} eq 'list'" class="card my-3" th:each="review : ${reviewPage}" style="clear: both">
         <a th:href="@{|/review/content/${review.id}|}" style="text-decoration:none; color:inherit">
             <div class="image-box float-start me-3" th:if="${#lists.size(review.reviewImages)} > 0">
-                <img class="image-thumbnail" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}" alt="글 이미지 썸네일">
+                <img class="image-thumbnail" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}"
+                     alt="글 이미지 썸네일">
             </div>
             <div class="card-body">
                 <div class="review-content-area mt-0 mb-3">
-                    <img class="img-profile-content float-start me-1" src="/static/image/anonymous_profile.png" style="width: 30px; height: 30px;" alt="익명의 프로필 이미지">
+                    <img class="img-profile-content float-start me-1" src="/static/image/anonymous_profile.png"
+                         style="width: 30px; height: 30px;" alt="익명의 프로필 이미지">
                     <div style="height: 30px;line-height:30px;" th:if="${review.author != null}">
-                        <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:if="${review.isAnonymous == true}" th:text="익명"></span>
-                        <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></span>
+                        <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:if="${review.isAnonymous == true}"
+                              th:text="익명"></span>
+                        <span class="fw-bolder mb-0 content-nickname ms-1 me-2"
+                              th:unless="${review.isAnonymous == true}" th:text="${review.author.getUsername()}"></span>
                         <span class="fw-normal content-time" th:text="${review.getDate(review.createDate)}"></span>
                     </div>
-                    <div style="height: 30px;line-height:30px;" th:unless="${review.author != null}">
+                    <div class="ms-5" th:unless="${review.author != null}">
                         <span class="fw-bolder mb-0 content-nickname ms-1 me-2" th:if="${review.isAnonymous == true}">(알 수 없음)</span>
                         <span class="fw-normal content-time" th:text="${review.getDate(review.createDate)}"></span>
                     </div>
@@ -97,20 +105,35 @@
                         <tr>
                             <th colspan="2">
                                 <div class="ms-1">
-                                    <span th:if="${#strings.contains(review.amenities,'0')}" class="amenities-img float-start me-2">
-                                        <img id="img_amenities_elevator_select" src="/static/image/amenities_elevator_select.png" height="30" width="30" alt="승강기 있음" />
+                                    <span th:if="${#strings.contains(review.amenities,'0')}"
+                                          class="amenities-img float-start me-2">
+                                        <img id="img_amenities_elevator_select"
+                                             src="/static/image/amenities_elevator_select.png" height="30" width="30"
+                                             alt="승강기 있음"/>
                                     </span>
-                                    <span th:if="${#strings.contains(review.amenities,'1')}" class="amenities-img float-start me-2">
-                                        <img id="img_amenities_incline_select" src="/static/image/amenities_incline_select.png" height="30" width="30" alt="경사로 있음" />
+                                    <span th:if="${#strings.contains(review.amenities,'1')}"
+                                          class="amenities-img float-start me-2">
+                                        <img id="img_amenities_incline_select"
+                                             src="/static/image/amenities_incline_select.png" height="30" width="30"
+                                             alt="경사로 있음"/>
                                     </span>
-                                    <span th:if="${#strings.contains(review.amenities,'2')}" class="amenities-img float-start me-2">
-                                        <img id="img_amenities_parking_select" src="/static/image/amenities_parking_select.png" height="30" width="30" alt="주차장 있음" />
+                                    <span th:if="${#strings.contains(review.amenities,'2')}"
+                                          class="amenities-img float-start me-2">
+                                        <img id="img_amenities_parking_select"
+                                             src="/static/image/amenities_parking_select.png" height="30" width="30"
+                                             alt="주차장 있음"/>
                                     </span>
-                                    <span th:if="${#strings.contains(review.amenities,'3')}" class="amenities-img float-start me-2">
-                                        <img id="img_amenities_table_select" src="/static/image/amenities_table_select.png" height="30" width="30" alt="테이블석 있음" />
+                                    <span th:if="${#strings.contains(review.amenities,'3')}"
+                                          class="amenities-img float-start me-2">
+                                        <img id="img_amenities_table_select"
+                                             src="/static/image/amenities_table_select.png" height="30" width="30"
+                                             alt="테이블석 있음"/>
                                     </span>
-                                    <span th:if="${#strings.contains(review.amenities,'4')}" class="amenities-img float-start me-2">
-                                        <img id="img_amenities_rest-room_select" src="/static/image/amenities_rest-room_select.png" height="30" width="30" alt="화장실 있음" />
+                                    <span th:if="${#strings.contains(review.amenities,'4')}"
+                                          class="amenities-img float-start me-2">
+                                        <img id="img_amenities_rest-room_select"
+                                             src="/static/image/amenities_rest-room_select.png" height="30" width="30"
+                                             alt="화장실 있음"/>
                                     </span>
                                 </div>
                             </th>
@@ -135,8 +158,12 @@
                 <div class="col" th:each="review : ${reviewPage}">
                     <a th:href="@{|/review/content/${review.id}|}">
                         <div class="card review-card">
-                            <img th:if="${#lists.size(review.reviewImages)} > 0" th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}" class="card-img-top" style="height: 266px" alt="글 이미지 썸네일">
-                            <img th:unless="${#lists.size(review.reviewImages)} > 0" src="/static/image/no-image-thumbnail.png" class="card-img-top" style="height: 266px" alt="글 이미지 썸네일">
+                            <img th:if="${#lists.size(review.reviewImages)} > 0"
+                                 th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}"
+                                 class="card-img-top" style="height: 266px" alt="글 이미지 썸네일">
+                            <img th:unless="${#lists.size(review.reviewImages)} > 0"
+                                 src="/static/image/no-image-thumbnail.png" class="card-img-top" style="height: 266px"
+                                 alt="글 이미지 썸네일">
                             <div class="card-body">
                                 <h5 class="card-title" th:text="'[' + ${review.genre} + '] ' + ${review.subject}"></h5>
                                 <div class="card-status">
@@ -179,21 +206,21 @@
 
 <script layout:fragment="script" type='text/javascript'>
     const page_elements = document.getElementsByClassName("page-link");
-    Array.from(page_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
+    Array.from(page_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
             document.getElementById('page').value = this.dataset.page;
             document.getElementById('searchForm').submit();
         });
     });
     const btn_search = document.getElementById("button-review-search");
-    btn_search.addEventListener('click', function() {
+    btn_search.addEventListener('click', function () {
         document.getElementById('page').value = 0;
         document.getElementById('searchForm').submit();
     });
 
 
     const btn_write = document.getElementById("review-btn-write");
-    btn_write.addEventListener('click', function() {
+    btn_write.addEventListener('click', function () {
         sessionStorage.removeItem('form_data');
         sessionStorage.removeItem('selectPlaceData');
         sessionStorage.removeItem('selectPerformData');
@@ -208,7 +235,7 @@
     const category = document.getElementById(categoryStr);
     console.log("category : ", category);
     console.log("category str : ", categoryStr);
-    category.class="nav-item-select";
+    category.class = "nav-item-select";
 
 </script>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>

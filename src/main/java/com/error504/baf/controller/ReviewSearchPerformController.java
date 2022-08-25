@@ -71,7 +71,7 @@ public class ReviewSearchPerformController {
 
                     Element element = (Element) nNode;
 
-                    performInfoTemp.setID(getTagValue("mt20id", element));
+                    performInfoTemp.setId(getTagValue("mt20id", element));
                     performInfoTemp.setTitle(getTagValue("prfnm", element));
                     performInfoTemp.setStartDate(getTagValue("prfpdfrom", element));
                     performInfoTemp.setEndDate(getTagValue("prfpdto", element));
@@ -88,9 +88,6 @@ public class ReviewSearchPerformController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println("리스트 수 : " + performInfo.size());
-        System.out.println("리스트 내용 : " + performInfo);
 
         return performInfo;
     }

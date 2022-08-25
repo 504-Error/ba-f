@@ -12241,3 +12241,12 @@ textarea.form-control-lg {
     color: #4472C4;
     text-decoration: none;
 }
+
+.review-address {
+    color: #808080;
+    font-size: 14px;
+}
+
+.table-align-center {
+    text-align: center;
+}

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{admin_nav_layout}">
+<html lang="ko"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{admin_nav_layout}">
 <head>
     <meta charset="UTF-8">
     <title>ba-f : 관리자 페이지</title>
@@ -14,19 +16,22 @@
     <div>
 
         <form th:action="@{|/management/content/${kindOfContent}|}" method="get" id="searchForm">
-            <select class="form-select float-start me-3" th:value="${sortType}" name="sortType" id="inputSortType" style="width: 13%">
+            <select class="form-select float-start me-3" th:value="${sortType}" name="sortType" id="inputSortType"
+                    style="width: 13%">
                 <option value="0" th:selected="${sortType} == '0'">최신순</option>
                 <option value="1" th:selected="${sortType} == '1'">인기순</option>
                 <option value="2" th:selected="${sortType} == '2'">신고수순</option>
             </select>
 
             <div class="input-group mb-3 me-sm-3 float-end" style="width: 30%">
-                <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control" placeholder="사용자 ID 혹은 글 검색" aria-label="review search" aria-describedby="button-addon2">
+                <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control"
+                       placeholder="사용자 ID 혹은 글 검색" aria-label="review search" aria-describedby="button-addon2">
                 <input type="hidden" id="page" name="page" th:value="${contentPage.number}">
                 <button class="btn btn-outline-orange" type="button" id="button-content-search">검색</button>
             </div>
 
-            <select th:if="${kindOfContent == 0}" class="form-select float-end me-3" th:value="${boardId}" name="boardId" id="inputBoard" style="width: 17%">
+            <select th:if="${kindOfContent == 0}" class="form-select float-end me-3" th:value="${boardId}"
+                    name="boardId" id="inputBoard" style="width: 17%">
                 <option value="0" th:selected="${boardId} == '0'">전체</option>
                 <option th:each="board : ${board}"
                         th:value="${board.id}"
@@ -34,7 +39,8 @@
                         th:text="${board.boardName}"></option>
             </select>
 
-            <select th:if="${kindOfContent == 1}" class="form-select float-end me-3" th:value="${boardId}" name="boardId" id="inputGenre" style="width: 17%">
+            <select th:if="${kindOfContent == 1}" class="form-select float-end me-3" th:value="${boardId}"
+                    name="boardId" id="inputGenre" style="width: 17%">
                 <option value="0" th:selected="${boardId} == '0'">전체</option>
                 <option value="1" th:selected="${boardId} == '1'">음식점</option>
                 <option value="2" th:selected="${boardId} == '2'">카페</option>
@@ -46,13 +52,13 @@
         </form>
     </div>
 
-    <table class="table">
+    <table class="table table-align-center">
         <thead class="table-dark">
         <tr>
             <th>번호</th>
             <th>제목</th>
             <th>작성 날짜</th>
-            <th th:if="${kindOfContent == 0}" >게시판</th>
+            <th th:if="${kindOfContent == 0}">게시판</th>
             <th>사용자 ID</th>
             <th>댓글수</th>
             <th>추천수</th>
@@ -66,21 +72,25 @@
             <td th:if="${kindOfContent == 0}" th:text="${content.subject}"></td>
             <td th:if="${kindOfContent == 1}" th:text="'[' + ${content.genre} + '] ' + ${content.subject}"></td>
             <td th:text="${#temporals.format(content.createDate, 'yyyy/MM/dd HH:mm')}"></td>
-            <td th:if="${kindOfContent == 0}"  th:text="${content.board.getBoardName}"></td>
-            <td th:text="${content.author.getUsername()}"></td>
+            <td th:if="${kindOfContent == 0}" th:text="${content.board.getBoardName}"></td>
+            <td th:if="${content.author}" th:text="${content.author.getUsername()}"></td>
+            <td th:unless="${content.author}">(알 수 없음)</td>
             <td th:if="${kindOfContent == 0}" th:text="${#lists.size(content.answerList)}"></td>
             <td th:if="${kindOfContent == 1}" th:text="${#lists.size(content.reviewCommentsList)}"></td>
             <td th:text="${#lists.size(content.voter)}"></td>
             <td th:text="${#lists.size(content.accuser)}"></td>
 
             <td>
-                <a th:if="${#lists.size(content.accuser) >= 3}" href="javascript:void(0);" th:data-uri="@{|/management/content/${kindOfContent}/delete/${content.id}|}"
+                <a th:if="${#lists.size(content.accuser) >= 3}" href="javascript:void(0);"
+                   th:data-uri="@{|/management/content/${kindOfContent}/delete/${content.id}|}"
                    class="delete btn btn-danger">삭제</a>
 
-                <a th:unless="${#lists.size(content.accuser) >= 3}" href="javascript:void(0);" th:data-uri="@{|/management/content/${kindOfContent}/delete/${content.id}|}"
+                <a th:unless="${#lists.size(content.accuser) >= 3}" href="javascript:void(0);"
+                   th:data-uri="@{|/management/content/${kindOfContent}/delete/${content.id}|}"
                    class="delete btn btn-warning">삭제</a>
 
-                <a th:href="@{|/management/content/${kindOfContent}/detail/${content.id}|}" class="btn btn-secondary">글 보기</a>
+                <a th:href="@{|/management/content/${kindOfContent}/detail/${content.id}|}" class="btn btn-secondary">글
+                    보기</a>
             </td>
         </tr>
         </tbody>
@@ -109,30 +119,31 @@
 </div>
 <script layout:fragment="script" type='text/javascript'>
     const page_elements = document.getElementsByClassName("page-link");
-    Array.from(page_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
+    Array.from(page_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
             document.getElementById('page').value = this.dataset.page;
             document.getElementById('searchForm').submit();
         });
     });
     const btn_search = document.getElementById("button-content-search");
-    btn_search.addEventListener('click', function() {
+    btn_search.addEventListener('click', function () {
         document.getElementById('page').value = 0;
         document.getElementById('searchForm').submit();
     });
     const btn_sortType = document.getElementById("inputSortType");
-    btn_sortType.addEventListener('change', function() {
+    btn_sortType.addEventListener('change', function () {
         console.log("change sort type : ", btn_sortType.value);
         document.getElementById('page').value = 0;
         document.getElementById('searchForm').submit();
     });
 
     const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function(element) {
-        element.addEventListener('change', function() {
-            if(confirm("정말로 삭제하시겠습니까?")) {
+    Array.from(delete_elements).forEach(function (element) {
+        element.addEventListener('change', function () {
+            if (confirm("정말로 삭제하시겠습니까?")) {
                 location.href = this.dataset.uri;
-            };
+            }
+            ;
         });
     });
 </script>

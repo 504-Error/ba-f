@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{admin_nav_layout}">
+<html lang="ko"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{admin_nav_layout}">
 <head>
     <meta charset="UTF-8">
     <title>ba-f : 관리자 페이지</title>
@@ -14,14 +16,15 @@
     <div class="float-end" style="width: 30%">
         <form th:action="@{|/management/account/${getAuth}|}" method="get" id="searchForm">
             <div class="input-group mb-3 me-sm-3">
-                <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control" placeholder="사용자 ID 검색" aria-label="review search" aria-describedby="button-addon2">
+                <input type="text" th:value="${keyword}" name="keyword" id="review-search-input" class="form-control"
+                       placeholder="사용자 ID 검색" aria-label="review search" aria-describedby="button-addon2">
                 <input type="hidden" id="page" name="page" th:value="${userPage.number}">
                 <button class="btn btn-outline-orange" type="button" id="review-button-search">검색</button>
             </div>
         </form>
     </div>
 
-    <table class="table">
+    <table class="table table-align-center">
         <thead class="table-dark">
         <tr>
             <th>번호</th>
@@ -37,8 +40,25 @@
             <td th:text="${userPage.getTotalElements - (userPage.number * userPage.size) - loop.index}"></td>
             <td th:text="${userInfo.username}"></td>
             <td th:text="${userInfo.email}"></td>
-            <td th:text="${userInfo.type}"></td>
-            <td th:text="${userInfo.getWheel}"></td>
+            <td th:if="${userInfo.type eq 0}">선택 안 함</td>
+            <td th:if="${userInfo.type eq 1}">지체 장애</td>
+            <td th:if="${userInfo.type eq 2}">뇌병변</td>
+            <td th:if="${userInfo.type eq 3}">시각 장애</td>
+            <td th:if="${userInfo.type eq 4}">청각 장애</td>
+            <td th:if="${userInfo.type eq 5}">언어 장애</td>
+            <td th:if="${userInfo.type eq 6}">정신 장애</td>
+            <td th:if="${userInfo.type eq 7}">발달 장애</td>
+            <td th:if="${userInfo.type eq 8}">정신 장애</td>
+            <td th:if="${userInfo.type eq 9}">신장 장애</td>
+            <td th:if="${userInfo.type eq 10}">심장 장애</td>
+            <td th:if="${userInfo.type eq 11}">호흡기 장애</td>
+            <td th:if="${userInfo.type eq 12}">간장애</td>
+            <td th:if="${userInfo.type eq 13}">안면장애</td>
+            <td th:if="${userInfo.type eq 14}">장루,요루장애</td>
+            <td th:if="${userInfo.type eq 15}">간질장애</td>
+            <td th:if="${userInfo.getWheel eq 0}">선택 안 함</td>
+            <td th:if="${userInfo.getWheel eq 1}">탑승</td>
+            <td th:if="${userInfo.getWheel eq 2}">미탑승</td>
             <td th:if="${getAuth == 0}">
                 <a href="javascript:void(0);" th:data-uri="@{|/management/account/${getAuth}/accept/${userInfo.id}|}"
                    class="accept btn btn-primary">승인</a>
@@ -46,7 +66,6 @@
                    class="delete btn btn-secondary">거절</a>
             </td>
             <td th:if="${getAuth == 1}">
-<!--                관리자 권한 확인 필요!-->
                 <a href="javascript:void(0);" th:data-uri="@{|/management/account/${getAuth}/standBy/${userInfo.id}|}"
                    class="standBy btn btn-secondary">대기 전환</a>
                 <a href="javascript:void(0);" th:data-uri="@{|/management/account/${getAuth}/delete/${userInfo.id}|}"
@@ -80,42 +99,45 @@
 
 <script layout:fragment="script" type='text/javascript'>
     const page_elements = document.getElementsByClassName("page-link");
-    Array.from(page_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
+    Array.from(page_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
             document.getElementById('page').value = this.dataset.page;
             document.getElementById('searchForm').submit();
         });
     });
     const btn_search = document.getElementById("review-button-search");
-    btn_search.addEventListener('click', function() {
-        document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+    btn_search.addEventListener('click', function () {
+        document.getElementById('page').value = 0;
         document.getElementById('searchForm').submit();
     });
 
     const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function(element) {
+    Array.from(delete_elements).forEach(function (element) {
         element.addEventListener('click', function () {
             if (confirm("정말로 강제 탈퇴하시겠습니까?")) {
                 location.href = this.dataset.uri;
-            };
+            }
+            ;
         });
     });
 
     const accept_elements = document.getElementsByClassName("accept");
-    Array.from(accept_elements).forEach(function(element) {
+    Array.from(accept_elements).forEach(function (element) {
         element.addEventListener('click', function () {
             if (confirm("가입을 승인하시겠습니까?")) {
                 location.href = this.dataset.uri;
-            };
+            }
+            ;
         });
     });
 
     const standBy_elements = document.getElementsByClassName("standBy");
-    Array.from(standBy_elements).forEach(function(element) {
+    Array.from(standBy_elements).forEach(function (element) {
         element.addEventListener('click', function () {
             if (confirm("가입 대기로 전환하시겠습니까?")) {
                 location.href = this.dataset.uri;
-            };
+            }
+            ;
         });
     });
 
