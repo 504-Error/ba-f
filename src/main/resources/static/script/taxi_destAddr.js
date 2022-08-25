@@ -120,11 +120,11 @@ function displayPlaces(places) {
 }
 
 function onclickMarker(place_name, address_name) {
-    let formData = window.localStorage.getItem('messageForm');
+    let formData = window.sessionStorage.getItem('messageForm');
     formData = JSON.parse(formData);
 
     formData.destinationAddress = address_name + "(" + place_name + ")";
-    window.localStorage.setItem('messageForm', JSON.stringify(formData));
+    window.sessionStorage.setItem('messageForm', JSON.stringify(formData));
 
     location.href = "/taxi";
 }
@@ -303,7 +303,7 @@ function displayCenterInfo(result, status) {
 function onClickSetDestination(result){
     // console.log(result.toString());
 
-    let formData = window.localStorage.getItem('messageForm');
+    let formData = window.sessionStorage.getItem('messageForm');
     formData = JSON.parse(formData);
 
     let newSource;
@@ -314,7 +314,7 @@ function onClickSetDestination(result){
     }
 
     formData.destinationAddress = newSource;
-    window.localStorage.setItem('messageForm', JSON.stringify(formData));
+    window.sessionStorage.setItem('messageForm', JSON.stringify(formData));
 
     location.href = "/taxi";
 }

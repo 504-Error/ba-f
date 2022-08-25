@@ -1,10 +1,6 @@
-let test = window.localStorage.getItem('messageForm');
-test = JSON.parse(test);
-console.log(test);
-
 checkStorage();
 function checkStorage(){
-    let storageData = JSON.parse(window.localStorage.getItem('messageForm'));
+    let storageData = JSON.parse(window.sessionStorage.getItem('messageForm'));
 
     if(isNull(storageData)) { // localstroage 비어 있으면 현재 위치 파악해서 출발지 입력 칸 채우기
         currentLocationCoord();
@@ -21,7 +17,7 @@ function checkStorage(){
         let radioBtn = document.getElementById(storageData.wChairRadioBtn);
         radioBtn.checked = true;
 
-        localStorage.clear();
+        sessionStorage.clear();
     }
 }
 
@@ -80,9 +76,9 @@ function onClickSourceBtn(){
         wChairRadioBtn =  $('input[name=wChairRadioBtn]:checked').val();
     let obj = {"passengerName": passengerName, "sourceAddress": sourceAddress, "destinationAddress": destinationAddress, "passengerNum": passengerNum, "wChairRadioBtn": wChairRadioBtn}
     let objStr = JSON.stringify(obj);
-    window.localStorage.setItem('messageForm', objStr);
+    window.sessionStorage.setItem('messageForm', objStr);
 
-    console.log(window.localStorage.getItem('messageForm'));
+    console.log(window.sessionStorage.getItem('messageForm'));
 }
 
 // 도착지 검색 -> 입력 폼 내용 localStroage에 저장
@@ -95,9 +91,9 @@ function onClickDestinationBtn(){
         wChairRadioBtn =  $('input[name=wChairRadioBtn]:checked').val();
     let obj = {"passengerName": passengerName, "sourceAddress": sourceAddress, "destinationAddress": destinationAddress, "passengerNum": passengerNum, "wChairRadioBtn": wChairRadioBtn}
     let objStr = JSON.stringify(obj);
-    window.localStorage.setItem('messageForm', objStr);
+    window.sessionStorage.setItem('messageForm', objStr);
 
-    console.log(window.localStorage.getItem('messageForm'));
+    console.log(window.sessionStorage.getItem('messageForm'));
 }
 
 
