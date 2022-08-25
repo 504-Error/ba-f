@@ -44,7 +44,7 @@ public class AdminController {
                                     @RequestParam(value="page", defaultValue="0") int page,
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
             Page<SiteUser> userPage = this.userService.getList(page, keyword, getAuth);
@@ -105,7 +105,7 @@ public class AdminController {
                                          @RequestParam(value = "boardId", defaultValue = "0") Long boardId,
                                          @RequestParam(value = "sortType", defaultValue = "0") int sortType) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else if (kindOfContent == 0) {
             Page<Question> questionPage = this.questionService.getAllQuestion(page, keyword, boardId, sortType);
@@ -205,7 +205,7 @@ public class AdminController {
     public String adminBoard(Model model, @RequestParam(value="page", defaultValue="0") int page,
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
             Page<Board> boardPage = boardService.getList(page, keyword);
@@ -234,7 +234,7 @@ public class AdminController {
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
             Page<Announcement> announcementPage = announcementService.getList(page, keyword);

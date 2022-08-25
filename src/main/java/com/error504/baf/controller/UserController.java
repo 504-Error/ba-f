@@ -259,7 +259,7 @@ public class UserController {
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         }
         else {

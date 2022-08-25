@@ -71,7 +71,7 @@ public class QuestionController {
     public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page,
                              @RequestParam(value="keyword", defaultValue = "") String keyword){
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
         Page<Question> questionList = questionService.getAllQuestion(page, keyword, 0L, 0);
@@ -264,7 +264,7 @@ public class QuestionController {
     public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value="page", defaultValue="0") int page,
                                    @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
             Page<Question> questionList = questionService.getAllQuestion(page, keyword, id, 0);

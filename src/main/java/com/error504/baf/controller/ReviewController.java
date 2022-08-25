@@ -53,7 +53,7 @@ public class ReviewController {
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         }
         else {
@@ -78,7 +78,7 @@ public class ReviewController {
 
         //보안 4.1.2
 
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
@@ -260,7 +260,7 @@ public class ReviewController {
     public String searchShow(Model model, @RequestParam(value="genre", defaultValue="0") int genre,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
             ArrayList<ReviewPerformInfo> performInfoList = getPerformData(genre, keyword);

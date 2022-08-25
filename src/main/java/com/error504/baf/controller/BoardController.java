@@ -33,7 +33,7 @@ public class BoardController {
     public String bookmarkedList(Model model, @RequestParam(value="page", defaultValue = "0") int page,
                                   @RequestParam(value="keyword", defaultValue="") String keyword){
         //보안 4.1.2
-        if (keyword.matches("\\w*") == false) {
+        if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();
         } else {
         Page<Board> paging = boardService.getList(page, keyword);
