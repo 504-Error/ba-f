@@ -278,7 +278,7 @@ public class ReviewController {
         FileSystemResource resource = new FileSystemResource(filePath);
 
         if (!resource.exists()) {
-            return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         HttpHeaders header = new HttpHeaders();
@@ -289,7 +289,7 @@ public class ReviewController {
             e.printStackTrace();
         }
 
-        return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
+        return new ResponseEntity<>(resource, header, HttpStatus.OK);
     }
 
 

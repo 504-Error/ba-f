@@ -1,7 +1,6 @@
 package com.error504.baf.config;
 
 
-import com.error504.baf.service.UserSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +20,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final UserSecurityService userSecurityService;
 
     private String[] staticResources = {"images/**"};
     @Bean
