@@ -1,7 +1,6 @@
 package com.error504.baf.service;
 
 import com.error504.baf.exception.DataNotFoundException;
-import com.error504.baf.model.Question;
 import com.error504.baf.model.Review;
 import com.error504.baf.model.ReviewImage;
 import com.error504.baf.model.SiteUser;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
@@ -58,7 +55,7 @@ public class ReviewService {
     public Page<Review> getList(int page, String keyword, String category) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         Specification<Review> spec = searchReview(keyword, category);
         return this.reviewRepository.findAll(spec, pageable);
     }
@@ -102,7 +99,7 @@ public class ReviewService {
             default:
                 sorts.add(Sort.Order.desc("createDate"));
         }
-        Pageable pageable = PageRequest.of(page, 4, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         Specification<Review> spec = searchReviewWithUsername(keyword, categoryId);
         return this.reviewRepository.findAll(spec, pageable);
     }
@@ -126,6 +123,7 @@ public class ReviewService {
         this.reviewRepository.flush();
         long id = review.getId();
 
+
         return id;
     }
 
@@ -136,12 +134,6 @@ public class ReviewService {
         reviewImage.setReview(review);
         this.reviewImageRepository.save(reviewImage);
     }
-
-//    public List<ReviewImage> loadImage() {
-//        List<ReviewImage> result = reviewImageRepository.findAll();
-//
-//        return result;
-//    }
 
     public void vote(Review review, SiteUser siteUser){
         review.getVoter().add(siteUser);
@@ -273,16 +265,4 @@ public class ReviewService {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return reviewRepository.findReviewByAuthorId(pageable, id);
     }
-
-
-//    public void uploadReview(Map<String, Object> param, List<MultipartFile> fileList) throws Exception {
-//        boardMapper.insertMypageQna(param);
-//        List<Map<String,Object>> list = fileutils.fileUpload(param, fileList);
-//
-//        if(list!=null){
-//            for(int i = 0; i < list.size(); i++){
-//                boardMapper.insertFile(list.get(i));
-//            }
-//        }
-//    }
 }

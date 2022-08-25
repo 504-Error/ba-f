@@ -1,12 +1,9 @@
 package com.error504.baf.controller;
 
 import com.error504.baf.model.*;
-import com.error504.baf.service.AnnouncementService;
 import com.error504.baf.service.BoardService;
 import com.error504.baf.service.QuestionService;
 import com.error504.baf.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -31,25 +25,22 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class QuestionController {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private QuestionService questionService;
-    private BoardService boardService;
-    private UserService userService;
-    private AnnouncementService announcementService;
+    private final QuestionService questionService;
+    private final BoardService boardService;
+    private final UserService userService;
+
 
     @Autowired
-    public QuestionController(QuestionService questionService, UserService userService, BoardService boardService, AnnouncementService announcementService) {
+    public QuestionController(QuestionService questionService, UserService userService, BoardService boardService) {
         this.questionService = questionService;
         this.userService = userService;
         this.boardService = boardService;
-        this.announcementService = announcementService;
+
     }
 
     @RequestMapping("/community/home")
@@ -66,6 +57,13 @@ public class QuestionController {
 
         return "community/question_list";
     }
+        Page<Question> questionList = questionService.getQuestion(page);
+        model.addAttribute("questionList", questionList);
+        List<Question> weeklyList=questionService.getWeeklyHotList();
+        model.addAttribute("weeklyList", weeklyList);
+        List<Question> hotList=questionService.getHotList();
+        model.addAttribute("hotList", hotList);
+        model.addAttribute("tab", "community");
 
     return "community/community_error";
     }
@@ -74,41 +72,13 @@ public class QuestionController {
     @RequestMapping("/question/search")
     public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page,
                              @RequestParam(value="keyword", defaultValue = "") String keyword){
-        logger.info("keyword : " + keyword);
+
         Page<Question> questionList = questionService.getAllQuestion(page, keyword, 0L, 0);
         model.addAttribute("questionList", questionList);
         model.addAttribute("keyword", keyword);
         model.addAttribute("tab", "community");
         return "community/question_search";
     }
-
-
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping(value = "/question/hotList")
-//    public String viewHotList(Model model, @RequestParam(value="page", defaultValue="0") int page) {
-//        Page<Question> questionList = questionService.getHotQuestion(page);
-//        model.addAttribute("questionList", questionList);
-//        return "community/hot_board";
-//    }
-
-
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/question/hotList")
-//    public String hotList(Model model) {
-//        List<Question> hotList = questionService.getHotList();
-//        model.addAttribute("hotList", hotList);
-//        return "community/hot_board";
-//    }
-
-
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/question/*")
-//    public String communityView(Model model) {
-//        Page<Question> hotList = questionService.getHotQuestion(page);
-//        model.addAttribute("questionList", hotList);
-//        model.addAttribute("tab", "community");
-//        return "community/hot_board";
-//    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/hotList")
@@ -130,8 +100,10 @@ public class QuestionController {
 
     @GetMapping(value = "/question/detail/{id}")
     public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm) {
-        logger.info("Viewing Question detail: " + id);
+
         Question question = questionService.getQuestion(id);
+
+        model.addAttribute("answerForm", answerForm);
         model.addAttribute("question", question);
         model.addAttribute("tab", "community");
 
@@ -142,6 +114,7 @@ public class QuestionController {
     @GetMapping("/question/create/{id}")
     public String questionCreate(QuestionForm questionForm, @PathVariable("id") Long boardId, Model model) {
         List<Board> board = boardService.findAll();
+        model.addAttribute("questionForm", questionForm);
         model.addAttribute("boardId", boardId);
         model.addAttribute("board", board);
         model.addAttribute("tab", "community");
@@ -153,6 +126,7 @@ public class QuestionController {
     @GetMapping("/question/create/")
     public String questionCreateNull(QuestionForm questionForm, Model model) {
         List<Board> board = boardService.findAll();
+        model.addAttribute("questionForm", questionForm);
         model.addAttribute("board", board);
         model.addAttribute("tab", "community");
         return "community/question_form";
@@ -177,10 +151,10 @@ public class QuestionController {
 
 
         SiteUser siteUser = userService.getUser(principal.getName());
-        logger.info(questionForm.getBoardId().toString());
+
         Board board = boardService.getBoard(questionForm.getBoardId());
         Long boardId = questionForm.getBoardId();
-        logger.info(siteUser.toString());
+
         Long id = questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board, questionForm.getIsAnonymous());
 
         Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
@@ -195,11 +169,9 @@ public class QuestionController {
                 filename = StringUtils.getFilename(filename);
                 filename = filename.replace(":", "-");
                 filename = filename.replace(" ", "_");
-                logger.info("file name : " + filename);
 
                 uploadPath = uploadRoot.resolve(filename);
 
-                logger.info("uploadPath : " + uploadPath);
 
                 try (InputStream file = image.getInputStream()) {
                     Files.copy(file, uploadPath, StandardCopyOption.REPLACE_EXISTING);

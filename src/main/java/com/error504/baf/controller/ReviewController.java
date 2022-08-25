@@ -46,7 +46,6 @@ import static com.error504.baf.controller.ReviewSearchPerformController.getPerfo
 @Controller
 public class ReviewController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UserService userService;
     private final ReviewService reviewService;
 
@@ -278,6 +277,7 @@ public class ReviewController {
 
     @GetMapping(value = "/display")
     public ResponseEntity<Resource> display(@Param("filePath") String filePath) {
+        logger.info("filePath : " + filePath);
         FileSystemResource resource = new FileSystemResource(filePath);
 
         if (!resource.exists()) {
@@ -287,7 +287,6 @@ public class ReviewController {
         HttpHeaders header = new HttpHeaders();
         try {
             Path imgPath = Paths.get(filePath);
-
             header.add("Content-Type", Files.probeContentType(imgPath));
         } catch (IOException e) {
             e.printStackTrace();

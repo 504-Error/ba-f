@@ -28,16 +28,6 @@ public class AdminController {
     private final BoardService boardService;
     private final AnnouncementService announcementService;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-//    @Secured("ROLE_ADMIN")
-//    @RequestMapping("")
-//    public String adminMain(Model model) {
-//
-//        model.addAttribute("template", "admin/admin_user_management");
-//
-//        return "admin/admin_main";
-//    }
 
     @Secured("ROLE_ADMIN")
     @RequestMapping("/account/{getAuth}")
@@ -47,7 +37,7 @@ public class AdminController {
         Page<SiteUser> userPage = this.userService.getList(page, keyword, getAuth);
 
         model.addAttribute("tab", "management");
-        model.addAttribute("userPage", userPage);
+        model.addAttribute( "userPage", userPage);
         model.addAttribute("keyword", keyword);
         model.addAttribute("getAuth", getAuth);
 
@@ -58,13 +48,7 @@ public class AdminController {
     @RequestMapping("/account/{getAuth}/accept/{id}")
     public String adminAccountAccept(Principal principal, @PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
         SiteUser siteUser = this.userService.getUser(id);
-        // 관리자인지 확인이 필요함!
-//        if (!siteUser.getAuthor().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-//        }
-
         this.userService.updateMemberAuth(siteUser, 1);
-
         return String.format("redirect:/management/account/%s", getAuth);
     }
 
@@ -72,13 +56,7 @@ public class AdminController {
     @RequestMapping("/account/{getAuth}/standBy/{id}")
     public String adminAccountStandBy(Principal principal, @PathVariable("getAuth") int getAuth, @PathVariable("id") Long id) {
         SiteUser siteUser = this.userService.getUser(id);
-        // 관리자인지 확인이 필요함!
-//        if (!siteUser.getAuthor().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-//        }
-
         this.userService.updateMemberAuth(siteUser, 0);
-
         return String.format("redirect:/management/account/%s", getAuth);
     }
 
@@ -135,10 +113,6 @@ public class AdminController {
     @RequestMapping("/content/{kindOfContent}/delete/{id}")
     public String adminContentDelete(Principal principal, @PathVariable("kindOfContent") int kindOfContent,
                                      @PathVariable("id") Long id) {
-        // 관리자인지 확인이 필요함!
-//        if (!siteUser.getAuthor().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-//        }
 
         if (kindOfContent == 0) {
             Question question = this.questionService.getQuestion(id);

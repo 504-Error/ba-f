@@ -2,7 +2,6 @@
 <html
         xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:sec="http://www.w3.org/1999/xhtml"
         layout:decorate="~{layout}">
 <head>
   <meta charset="UTF-8">
@@ -12,17 +11,59 @@
 <body>
 <div layout:fragment="content" class="container">
 
+  <h5 class="border-bottom py-2" th:unless="${hotList.size==0}">HOT 게시물</h5>
+  <div th:each="question : ${hotList}">
+    <a href="javascript:alert('인증 완료 후 접근해주시길 바랍니다.')" style="text-decoration:none; color:inherit" />
+      <div class="card my-3">
+        <div class="card-body">
+          <div  class="review-content-area mt-0 mb-4">
+            <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
+            <div class="ms-5" style="margin-bottom: 2%">
+              <p class="fw-bolder mb-0 content-nickname">(알 수 없음)</p>
+              <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
+            </div>
+
+            <div class="card-text">
+              <div class="mt-1"  style="padding-top:1%; font-size: 14px">인증이 완료된 회원만 열람할 수 있습니다.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <h5 class="border-bottom py-2" th:unless="${weeklyList.size==0}">주간 인기 게시물</h5>
+  <div th:each="question : ${weeklyList}">
+    <a href="javascript:alert('인증 완료 후 접근해주시길 바랍니다.')" style="text-decoration:none; color:inherit" />
+      <div class="card my-3">
+        <div class="card-body">
+          <div class="review-content-area mt-0 mb-4">
+            <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
+            <div class="ms-5" style="margin-bottom: 2%">
+              <p class="fw-bolder mb-0 content-nickname">(알 수 없음)</p>
+              <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
+            </div>
+            <div class="card-text">
+              <div class="mt-1"  style="padding-top:1%; font-size: 14px">인증이 완료된 회원만 열람할 수 있습니다.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+  </div>
+
   <a style="text-decoration:none; color:inherit" th:href="@{/eventInfo}">
     <h5 class="border-bottom py-2">추천 정보</h5>
   </a>
   <div class="card my-5" style="float:left;width:50%; ">
-    <img src="/static/image/summer.png" height="400">
+    <img alt="전시회 아이스크림 속 인생 포스터" src="/static/image/summer.png" height="400">
     <div class="card-body">
       7월의 전시 추천
     </div>
   </div>
   <div class="card my-5" style="float:left;width:50%; ">
-    <img src="/static/image/art_logo.png" height="400">
+    <img alt="K 현대 미술관 오즈의 미술관 포스터" src="/static/image/art_logo.png" height="400">
     <div class="card-body">
       K 현대 미술관 오즈의 미술관 초대 이벤트
     </div>
@@ -30,7 +71,6 @@
 </div>
 
 
-</div>
 
 </body>
 </html>
