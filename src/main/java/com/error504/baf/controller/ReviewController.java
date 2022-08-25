@@ -4,8 +4,6 @@ import com.error504.baf.model.*;
 import com.error504.baf.service.ReviewService;
 import com.error504.baf.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -277,11 +275,11 @@ public class ReviewController {
 
     @GetMapping(value = "/display")
     public ResponseEntity<Resource> display(@Param("filePath") String filePath) {
-        logger.info("filePath : " + filePath);
+
         FileSystemResource resource = new FileSystemResource(filePath);
 
         if (!resource.exists()) {
-            return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         HttpHeaders header = new HttpHeaders();
@@ -292,7 +290,7 @@ public class ReviewController {
             e.printStackTrace();
         }
 
-        return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
+        return new ResponseEntity<>(resource, header, HttpStatus.OK);
     }
 
 

@@ -20,8 +20,8 @@ import java.security.Principal;
 
 @Controller
 public class BoardController {
-    private BoardService boardService;
-    private UserService userService;
+    private final BoardService boardService;
+    private final UserService userService;
 
     @Autowired
     public BoardController(BoardService boardService,UserService userService){

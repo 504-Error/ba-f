@@ -3,8 +3,6 @@ package com.error504.baf.controller;
 import com.error504.baf.model.*;
 import com.error504.baf.service.*;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
