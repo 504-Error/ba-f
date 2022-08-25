@@ -25,6 +25,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -34,17 +35,23 @@ public class UserController {
     private AnnouncementService announcementService;
     private UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private QuestionService questionService;
+    private AnswerService answerService;
+    private ReviewService reviewService;
+    private ReviewCommentService reviewCommentService;
+
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, AnnouncementService announcementService
-    ) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, AnnouncementService announcementService,
+                          QuestionService questionService, AnswerService answerService, ReviewService reviewService,
+                          ReviewCommentService reviewCommentService) {
         this.announcementService = announcementService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
-//        this.questionService =questionService;
-//        this.answerService = answerService;
-//        this.reviewCommentService = reviewCommentService;
-//        this.reviewService = reviewService;
+        this.questionService =questionService;
+        this.answerService = answerService;
+        this.reviewCommentService = reviewCommentService;
+        this.reviewService = reviewService;
     }
 
 
@@ -213,22 +220,21 @@ public class UserController {
     public String memberDelete( @Valid PasswordForm passwordForm, BindingResult bindingResult, Principal principal){
 
         SiteUser siteUser = userService.getUser(principal.getName());
-//        Long id = siteUser.getId();
+        Long id = siteUser.getId();
         if(passwordEncoder.matches(passwordForm.getNewPassword(), siteUser.getPassword())){
 
-//            List<Question> questionList = this.questionService.getQuestionByAuthor(id);
-//            this.questionService.deleteByAuthor(questionList);
-//
-//            List<Answer> answerList = this.answerService.getAnswerByAuthor(id);
-//            this.answerService.deleteByAuthor(answerList);
-//
-//            List<Review> reviewList = this.reviewService.getListByAuthor(id);
-//            this.reviewService.deleteUser(reviewList);
-//
-//            List<ReviewComment> reviewCommentList = this.reviewCommentService.getReviewCommentByAuthor(id);
-//            this.reviewCommentService.deleteByAuthor(reviewCommentList);
-//
-//
+            List<Question> questionList = this.questionService.getQuestionByAuthor(id);
+            this.questionService.deleteByAuthor(questionList);
+
+            List<Answer> answerList = this.answerService.getAnswerByAuthor(id);
+            this.answerService.deleteByAuthor(answerList);
+
+            List<Review> reviewList = this.reviewService.getListByAuthor(id);
+            this.reviewService.deleteUser(reviewList);
+
+            List<ReviewComment> reviewCommentList = this.reviewCommentService.getReviewCommentByAuthor(id);
+            this.reviewCommentService.deleteByAuthor(reviewCommentList);
+
             userService.deleteMember(siteUser);
         }else{
             return "account/member_delete";
