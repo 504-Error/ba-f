@@ -93,8 +93,8 @@
                 </a>
                 <p th:if="${review.placeAddress != ''}" class="review-address mt-1">([[${review.placeAddress}]])</p>
                 <p th:unless="${review.placeAddress != ''}" class="review-address mt-1">(알 수 없음)</p>
-                <div th:if="${review.placeAddress != ''}" id="map" style="width:300px;height:200px;"
-                     th:value="${review.placeAddress}"></div>
+                <div th:if="${review.placeAddress != ''}" id="map" style="width:300px;height:200px;"></div>
+                <input type="hidden" id="reviewPlace" th:value="${review.placeAddress}">
             </td>
         </tr>
         <tr>
@@ -323,11 +323,7 @@
         console.log("map script");
 
         var mapContainer = document.getElementById('map'); // 지도를 표시할 div
-        var valueElement = document.getElementById("reviewPlace").outerHTML;
-        var place = valueElement.split('"');
-        console.log("1", valueElement);
-        console.log("2", place);
-        console.log("mapcontatiner : ", $('#map').val());
+        var place = document.getElementById('reviewPlace').value;
 
         var mapOption = {
             center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -342,9 +338,9 @@
         var geocoder = new kakao.maps.services.Geocoder();
 
         // 주소로 좌표를 검색합니다
-        geocoder.addressSearch(place[3], function (result, status) {
+        geocoder.addressSearch(place, function (result, status) {
 
-            console.log("map value - address : ", place[3]);
+            console.log("map value - address : ", place);
 
             // 정상적으로 검색이 완료됐으면
             if (status === kakao.maps.services.Status.OK) {
