@@ -31,9 +31,16 @@
     <div class="card-body">
         <div class="card-text" style="white-space: pre-line; margin-bottom: 5%" th:text="${question.content}"></div>
 
-        <div th:if="${#lists.size(question.questionImages)} > 0" class="review-content-area col-12">
-            <div class="board-preview-add-img col-12" th:each="imgPath : ${question.questionImages}">
-                <img class="btn preview-img float-start" th:src="@{|/display?filePath=${imgPath.getImage()}|}">
+        <div th:if="${#lists.size(question.questionImages)} > 0" class="review-content-area">
+            <label class="review-content-label mb-3">이미지</label>
+            <div class="col-12">
+                <div class="board-preview-add-img" th:each="imgPath : ${question.questionImages}">
+                    <img class="btn preview-img float-start" th:src="@{|/display?filePath=${imgPath.getImage()}|}">
+                </div>
+            </div>
+            <div class="expand-image">
+                <span class="expand-close">&times;</span>
+                <img class="expand-image-content" id="expand-image-img">
             </div>
         </div>
 
@@ -65,7 +72,7 @@
                            value=false aria-label="Checkbox for following text input">
                     <label class="form-check-label" id="check-anonym-text" for="check-anonym">익명</label>
                 </div>
-                <button class="btn btn-outline-orange" type="submit">등록</button>
+                <button class="btn btn-outline-orange" style="z-index: 0" type="submit">등록</button>
             </div>
         </form>
 
@@ -104,51 +111,72 @@
     </div>
 
     <a th:href="@{|/board/question_list/${question.board.id}|}" class="btn btn-primary mb-4" style="float:right;">글목록</a>
-</div>
 
 
-<script layout:fragment="script" type='text/javascript'>
-
-    function hideDiv (){
-        document.getElementById("hide").style.display="none";
-    }
-    self.setTimeout("hideDiv()",3000); // 초 지정
-
-    const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 삭제하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-            ;
-        });
-    });
-    const recommend_elements = document.getElementsByClassName("recommendPopup");
-    Array.from(recommend_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 추천하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-            ;
-        });
-    });
-    const accuse_elements = document.getElementsByClassName("accuse");
-    Array.from(accuse_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 신고하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-            ;
-        });
-    });
-
-    $("#check-anonym").change(function () {
-        if (this.checked) {
-            $(this).attr('value', true);
-        } else {
-            $(this).attr('value', false);
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script layout:fragment="script" type="text/javascript">
+        function hideDiv (){
+            document.getElementById("hide").style.display="none";
         }
-    });
+        self.setTimeout("hideDiv()",3000); // 초 지정
 
-</script>
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                }
+                ;
+            });
+        });
+        const recommend_elements = document.getElementsByClassName("recommendPopup");
+        Array.from(recommend_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (confirm("정말로 추천하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                }
+                ;
+            });
+        });
+        const accuse_elements = document.getElementsByClassName("accuse");
+        Array.from(accuse_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (confirm("정말로 신고하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                }
+                ;
+            });
+        });
+
+        $("#check-anonym").change(function () {
+            if (this.checked) {
+                $(this).attr('value', true);
+            } else {
+                $(this).attr('value', false);
+            }
+        });
+
+        const expandImage = document.querySelector(".expand-image");
+        const expandImgContent = document.querySelector(".expand-image-content");
+        const span = document.querySelector(".expand-close");
+
+        $(".preview-img").each(function () {
+            this.addEventListener('click', function () {
+                expandDisplay("block");
+                expandImgContent.src = this.src;
+            });
+        });
+
+        span.addEventListener('click', ()=>{
+            expandDisplay("none");
+        });
+        expandImage.addEventListener('click', ()=>{
+            expandDisplay("none");
+        });
+        function expandDisplay(text){
+            expandImage.style.display = text;
+        }
+
+    </script>
+</div>
 </html>
