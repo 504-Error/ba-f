@@ -134,7 +134,7 @@ public class AdminController {
         // header를 통해서 다운로드 되는 파일의 정보를 설정한다.
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(ContentDisposition.builder("attachment")
-                .filename("test")
+                .filename(filePath, StandardCharsets.UTF_8)
                 .build());
 //                .filename(dto.getFileName(), StandardCharsets.UTF_8)
 

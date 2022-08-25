@@ -200,13 +200,11 @@ function storeInfo(place) {
             jqXHR.setRequestHeader(header, token);
         },
         success    : function (result) {
-            if (result == "error") {
-                alert("오류가 발생하였습니다.")
-                return;
-            }
+            let arrStr = JSON.stringify(result[0]);
+            let arrJson = JSON.parse(arrStr);
 
-            reviewData = result;
-            console.log("reviewdata - inner : ", reviewData);
+            reviewData = arrJson;
+            console.log("reviewdata - inner : ", arrJson);
 
         },
         error      : function () {
