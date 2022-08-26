@@ -31,8 +31,12 @@ public class SearchController {
     public ArrayList searchPlaceReview(@RequestBody String address) {
         Page<Review> page = this.reviewService.getReviewByAddress(address);
 
+
         ArrayList<Page<Review>> reviewPage = new ArrayList<>();
         reviewPage.add(page);
+
+
+
         return reviewPage;
     }
 }

@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static com.error504.baf.SecureFiltering.XssCheck;
+import static com.error504.baf.SecureFiltering.intOverflowCheck;
 
 @RequestMapping("/management")
 @RequiredArgsConstructor
@@ -45,6 +46,22 @@ public class AdminController {
     public String adminRegistration(Model model, @PathVariable("getAuth") int getAuth,
                                     @RequestParam(value="page", defaultValue="0") int page,
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+
+        try {
+            //보안 4.1.2
+            if (keyword.matches("[\\w]*") == false) {
+                throw new IllegalArgumentException();
+            }
+
+            //보안 4.1.14
+            if (intOverflowCheck(page)) {
+
+            }
+        } catch (IllegalArgumentException e) {
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         //보안 4.1.2
         if (keyword.matches("[\\w]*") == false) {
             throw new IllegalArgumentException();

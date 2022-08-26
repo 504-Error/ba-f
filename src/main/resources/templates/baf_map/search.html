@@ -3,7 +3,6 @@
         xmlns="http://www.w3.org/1999/html"
         xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:sec="http://www.w3.org/1999/xhtml"
         layout:decorate="~{layout}">
 <head>
     <meta charset="utf-8">
@@ -206,49 +205,6 @@
             <div id="pagination"></div>
         </div>
     </div>
-        <!--장소 정보를 보여주는 div 창입니다.-->
-        <!--        <div id="menu_info_wrap" class="bg_white" style="display: none;">-->
-        <!--            <div class="wrap">-->
-        <!--                <iframe class="frame" src="#" id="place_iframe"></iframe>-->
-        <!--            </div>-->
-
-        <!--            <ul class="list_evaluation">-->
-        <!--                <li>-->
-        <!--                    <div class="unit_info">-->
-        <!--                        <em class="screen_out">작성자 : </em>-->
-        <!--                        <a href="#none" class="link_user">어쩌구</a>-->
-        <!--                        <span class="bg_bar"></span>-->
-        <!--                        <span class="screen_out">글 작성일 : </span>-->
-        <!--                        <span class="time_write">2022.01.01</span>-->
-        <!--                    </div>-->
-
-        <!--                    <div class="star_info">-->
-        <!--                        <div class="grade_star size_s">-->
-        <!--                            <span class="ico_star star_rate">-->
-        <!--                                <span class="ico_star inner_star" style="width:100%;"></span>-->
-        <!--                            </span>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
-
-        <!--                    <div class="comment_info">-->
-        <!--                        <p class="txt_comment">-->
-        <!--                            <span>리뷰 텍스트</span>-->
-        <!--                            <button type="button" class="btn_fold">더보기</button>-->
-        <!--                        </p>-->
-        <!--                    </div>-->
-
-        <!--                    <div class="group_photo">-->
-        <!--                        <strong class="screen_out">편의사항 이미지</strong>-->
-        <!--                        <ul class="list_photo">-->
-        <!--                            <li>-->
-
-        <!--                            </li>-->
-        <!--                        </ul>-->
-        <!--                    </div>-->
-        <!--                </li>-->
-        <!--            </ul>-->
-        <!--        </div>-->
-        <!--    </div>-->
 
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <meta name="_csrf" th:content="${_csrf.token}">
