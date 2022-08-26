@@ -140,5 +140,5 @@ function onClickSendBtn(){
     let msgStr = document.getElementById("msgTextarea").value;
     let qrUrl = "https://api.scanova.io/v2/qrcode/SMS?phone_no=15884388&apikey=hqaaicyzmwmvfatxgjlgtmimsvrzgfpenpknlagf&size=s&message=" + msgStr;
     $("#QRImage").attr("src", qrUrl);
-    // $("#QRImage").attr("style", "width: 250px; height: 250px;");
+    $("#QRImage").attr("style", "width: 250px; height: 250px;");
 }

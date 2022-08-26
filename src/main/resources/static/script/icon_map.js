@@ -104,7 +104,6 @@ function displayPlaces(places) {
         var s_srs = new Proj4js.Proj("EPSG:5186");
         var t_srs = new Proj4js.Proj("EPSG:4326");
 
-        console.log("신호등");
         fetch(url)
             .then((res) => res.json())
             .then((myJson) => {
@@ -145,14 +144,33 @@ function displayPlaces(places) {
 
 // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 function addMarker(position, order) {
+    switch (order){
+        case 0:
+            break
+        case 1:
+            break
+        case 2:
+            break
+        case 3:
+            break
+        case 4:
+            break
+        case 5:
+            break
+        case 6:
+            break
+        case 7:
+    }
+
+
     var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
         imageSize = new kakao.maps.Size(27, 28),  // 마커 이미지의 크기
         imgOptions =  {
-            spriteSize : new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
+            spriteSize : new kakao.maps.Size(27, 28), // 스프라이트 이미지의 크기
             spriteOrigin : new kakao.maps.Point(46, (order*36)), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
             offset: new kakao.maps.Point(11, 28) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
         },
-        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+        markerImage = new kakao.maps.MarkerImage("/static/image/map/icon/subway.png", imageSize, imgOptions),
         marker = new kakao.maps.Marker({
             position: position, // 마커의 위치
             image: markerImage
