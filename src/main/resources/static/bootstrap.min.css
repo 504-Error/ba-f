@@ -5,6 +5,11 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
 :root {
     --bs-blue: #0d6efd;
     --bs-indigo: #6610f2;
@@ -12240,6 +12245,18 @@ textarea.form-control-lg {
 .list-type-select {
     color: #4472C4;
     text-decoration: none;
+}
+
+.btn-orange {
+    color            : #fff;
+    background-color : #FA9622;
+    border-color     : #FA9622
+}
+
+.btn-orange:hover {
+    color            : #fff;
+    background-color : #FA9622;
+    border-color     : #FA9622
 }
 
 .review-address {

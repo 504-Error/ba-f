@@ -14,7 +14,7 @@
 #category li .cafe {background-position: -10px -144px;}
 #category li .store {background-position: -10px -180px;}
 #category li.on .category_bg {background-position-x:-46px;}
-.placeinfo_wrap {position:absolute;bottom:28px;left:-150px;width:300px;}
+.placeinfo_wrap {position:absolute;bottom:28px;left:-150px;width:450px;}
 .placeinfo {position:relative;width:100%;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;padding-bottom: 10px;background: #fff;}
 .placeinfo:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
 .placeinfo_wrap .after {content:'';position:relative;margin-left:-12px;left:50%;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
@@ -28,7 +28,7 @@
 
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
 .map_wrap {position:relative;width:100%;height:auto;}
-#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
+#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:450px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
 .bg_white {background:#fff;}
 #menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
 #menu_wrap .option{text-align: center;}
@@ -66,7 +66,7 @@
 /*이게 정보 창 css*/
 .map_info_wrap a, .map_info_wrap a:hover, .map_info_wrap a:active{color:#000;text-decoration: none;}
 .map_info_wrap {position:relative;width:100%;height:auto;}
-#menu_info_wrap {position:absolute;top:0;left:260px;bottom:0;width:500px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
+#menu_info_wrap {position:absolute;top:0;left:460px;bottom:0;width:500px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
 .bg_white {background:#fff;}
 .wrap {
     width: 500px;
@@ -75,6 +75,7 @@
     overflow: hidden;
 }
 .frame {
+    margin-top: -70px;
     margin-left: -120px;
     margin-bottom:0;
     width: 1000px;
@@ -97,3 +98,4 @@
 #menu_info_wrap .option p {margin:10px 0;}
 #menu_info_wrap .option button {margin-left:5px;}
 
+[_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]:after, [_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]:hover:after{background-image:url(https://ssl.pstatic.net/static/maps/v5/pc/20220531112111/search.png);background-size:194px 190px}.retina   [_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]:after, .retina   [_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]:hover:after{background-image:url(https://ssl.pstatic.net/static/maps/v5/pc/20220531112111/search@2x.png)}.-top_space[_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]{top:75px}[_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]{position:absolute;right:-43px;top:24px;width:43px;height:44px;background:#fff;border:1px solid rgba(0,0,0,.2);border-left:0;border-radius:0 4px 4px 0;font-size:1px;line-height:1px;box-shadow:0 3px 7px 0 rgba(0,0,0,.2);cursor:pointer}[_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]:before{position:absolute;top:0;left:0;bottom:0;width:1px;background:hsla(0,0%,87.8%,.3);content:""}[_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]:after{overflow:hidden;display:inline-block;width:14px;height:14px;font-size:0;color:transparent;vertical-align:top;background-position:-40px -158px;content:""}[_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]:hover{background:#f7fbff;border-color:#0475f4}[_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]:hover:after{overflow:hidden;display:inline-block;width:14px;height:14px;font-size:0;color:transparent;vertical-align:top;background-position:-160px -138px}.sub.-covered[_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157], .sub.-covered   [_nghost-slh-c157]   .btn_entry_close[_ngcontent-slh-c157]{top:-1px}

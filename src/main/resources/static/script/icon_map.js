@@ -94,7 +94,7 @@ function displayPlaces(places) {
                     var test = point.split(/[(|)| ]/);//value에서 좌표만 추출
                     // console.log(test[1],test[2]);
                     // 마커를 생성하고 지도에 표시합니다
-                    addMarker(new kakao.maps.LatLng(test[2], test[1]), 3);
+                    addMarker(new kakao.maps.LatLng(test[2], test[1]), 6);
                 }
             });
     }
@@ -121,7 +121,7 @@ function displayPlaces(places) {
 
                     // 마커를 생성하고 지도에 표시합니다
                     // addMarker(new kakao.maps.LatLng(test[2], test[1]), 3);
-                    addMarker(new kakao.maps.LatLng(result.y,result.x), 4);
+                    addMarker(new kakao.maps.LatLng(result.y,result.x), 7);
                 }
             });
     }
@@ -144,33 +144,25 @@ function displayPlaces(places) {
 
 // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 function addMarker(position, order) {
-    switch (order){
-        case 0:
-            break
-        case 1:
-            break
-        case 2:
-            break
-        case 3:
-            break
-        case 4:
-            break
-        case 5:
-            break
-        case 6:
-            break
-        case 7:
+    let str = '/static/image/map/icon/here_blue.png';
+    if (order == "0"){str = '/static/image/map/icon/subway.png';}
+    else if (order == '1'){str = '/static/image/map/icon/hospital.png';}
+    else if (order == '2'){str = '/static/image/map/icon/medic.png';}
+    else if (order == '3'){str = '/static/image/map/icon/oil.png';}
+    else if (order == '4'){str = '/static/image/map/icon/parking.png';}
+    else if (order == '5'){str = '/static/image/map/icon/store.png';}
+    else if (order == '6'){str = '/static/image/map/icon/elevator.png';}
+    else if (order == '7'){str = '/static/image/map/icon/traffic.png';}
+    else{
+        str = '/static/image/map/icon/here_blue.png';
     }
 
-
-    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-        imageSize = new kakao.maps.Size(27, 28),  // 마커 이미지의 크기
+    var imageSrc = str, // 마커 이미지 url, 스프라이트 이미지를 씁니다
+        imageSize = new kakao.maps.Size(27, 38),  // 마커 이미지의 크기
         imgOptions =  {
-            spriteSize : new kakao.maps.Size(27, 28), // 스프라이트 이미지의 크기
-            spriteOrigin : new kakao.maps.Point(46, (order*36)), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-            offset: new kakao.maps.Point(11, 28) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+            offset: new kakao.maps.Point(13.5, 28) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
         },
-        markerImage = new kakao.maps.MarkerImage("/static/image/map/icon/subway.png", imageSize, imgOptions),
+        markerImage = new kakao.maps.MarkerImage(str, imageSize, imgOptions),
         marker = new kakao.maps.Marker({
             position: position, // 마커의 위치
             image: markerImage
