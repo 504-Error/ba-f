@@ -24,7 +24,7 @@
                     <a class="nav-link-select" th:href="@{/community/home}">HOME</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/board/board_list}">즐겨찾는 게시판</a>
+                    <a class="nav-link" th:href="@{/board/board_list}">게시판</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/eventInfo}">추천 정보</a>
@@ -39,7 +39,8 @@
                 <div id="review-search-input-group">
                     <form th:action="@{|/question/search|}" method="get" id="searchForm">
                         <div class="input-group mb-3 me-sm-3">
-                            <input type="text" th:value="${keyword}" name="keyword" id="search-input" class="form-control"
+                            <input type="text" th:value="${keyword}" name="keyword" id="search-input"
+                                   class="form-control"
                                    placeholder="글 제목, 내용 등을 검색해주세요" aria-label="review search"
                                    aria-describedby="button-addon2">
                             <button class="btn btn-outline-orange" type="button" id="button-search">검색</button>
@@ -51,37 +52,44 @@
         </div>
     </div>
 
-    <h5 class="border-bottom py-2" th:unless="${questionList.size==0}">검색 결과</h5>
 
-    <div th:each="question : ${questionList}">
-        <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
-            <div class="card my-3">
-                <div class="card-body">
-                    <small th:text="${question.board.boardName}"></small>
-                    <div style="padding-top: 1%" class="review-content-area mt-0 mb-4">
-                        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
-                        <div class="ms-5">
-                            <p class="fw-bolder mb-0 content-nickname" th:if="${question.isAnonymous == true}" th:text="익명"></p>
-                            <p class="fw-bolder mb-0 content-nickname" th:unless="${question.isAnonymous == true}" th:text="${question.author.username}"></p>
-                            <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
-                        </div>
+    <div class="content-container">
+        <h5 class="border-bottom py-2" th:unless="${questionList.size==0}">검색 결과</h5>
 
-                        <div class="card-text">
-                            <div class="strong mt-2" th:text="${question.subject}"></div>
-                            <div class="mt-1"  style="font-size: 14px" th:text="${question.content}"> </div>
-                        </div>
+        <div th:each="question : ${questionList}">
+            <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
+                <div class="card my-3">
+                    <div class="card-body">
+                        <small th:text="${question.board.boardName}"></small>
+                        <div style="padding-top: 1%" class="review-content-area mt-0 mb-4">
+                            <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png"
+                                 alt="익명의 프로필 이미지">
+                            <div class="ms-5">
+                                <p class="fw-bolder mb-0 content-nickname" th:if="${question.isAnonymous == true}"
+                                   th:text="익명"></p>
+                                <p class="fw-bolder mb-0 content-nickname" th:unless="${question.isAnonymous == true}"
+                                   th:text="${question.author.username}"></p>
+                                <time class="fw-normal content-time"
+                                      th:text="${question.getDate(question.createDate)}"></time>
+                            </div>
+
+                            <div class="card-text">
+                                <div class="strong mt-2" th:text="${question.subject}"></div>
+                                <div class="mt-1" style="font-size: 14px" th:text="${question.content}"></div>
+                            </div>
 
 
-                        <div class="mb-4">
-                            <ul class="content-info">
-                                <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
-                                <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
-                            </ul>
+                            <div class="mb-4">
+                                <ul class="content-info">
+                                    <li class="recommend" th:text="${#lists.size(question.voter)}"></li>
+                                    <li class="comment" th:text="${#lists.size(question.answerList)}"></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        </div>
     </div>
 </div>
 

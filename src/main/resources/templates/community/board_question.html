@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap.min.css}">
 </head>
 <body>
-<div  layout:fragment="content" class="container">
+<div layout:fragment="content" class="container">
     <nav class="sub-navbar navbar-expand-lg">
         <div class="container-fluid">
             <ul class="nav justify-content-center" style="padding-bottom: 20px;">
@@ -18,13 +18,13 @@
                     <a class="nav-link" th:href="@{/question/hotList}">HOT 게시물</a>
                 </li>
                 <li class="nav-item">
-                      <a class="nav-link"  th:href="@{/question/weeklyHotList}">주간 인기글</a>
+                    <a class="nav-link" th:href="@{/question/weeklyHotList}">주간 인기글</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/community/home}">HOME</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link-select" th:href="@{/board/board_list}">즐겨찾는 게시판</a>
+                    <a class="nav-link-select" th:href="@{/board/board_list}">게시판</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/eventInfo}">추천 정보</a>
@@ -52,70 +52,76 @@
         </div>
     </div>
 
-    <h5 class="border-bottom py-2" th:text="${board.boardName}"></h5>
+    <div class="content-container">
+        <h5 class="border-bottom py-2" th:text="${board.boardName}"></h5>
 
-    <div th:each="question : ${questionList}">
-        <a style="text-decoration:none; color:inherit"th:href="@{/question/detail/} + ${question.id} + @{/}">
-            <div class="card my-3">
-                <div class="card-body">
-                    <div class="review-content-area mt-0 mb-4">
-                        <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png" alt="익명의 프로필 이미지">
-                        <div class="ms-5">
-                            <p class="fw-bolder mb-0 content-nickname" th:if="${question.isAnonymous == true}" th:text="익명"></p>
-                            <p class="fw-bolder mb-0 content-nickname" th:unless="${question.isAnonymous == true}" th:text="${question.author.username}"></p>
-                            <time class="fw-normal content-time" th:text="${question.getDate(question.createDate)}"></time>
-                        </div>
+        <div th:each="question : ${questionList}">
+            <a style="text-decoration:none; color:inherit" th:href="@{/question/detail/} + ${question.id} + @{/}">
+                <div class="card my-3">
+                    <div class="card-body">
+                        <div class="review-content-area mt-0 mb-4">
+                            <img class="img-profile-content float-start me-3" src="/static/image/anonymous_profile.png"
+                                 alt="익명의 프로필 이미지">
+                            <div class="ms-5">
+                                <p class="fw-bolder mb-0 content-nickname" th:if="${question.isAnonymous == true}"
+                                   th:text="익명"></p>
+                                <p class="fw-bolder mb-0 content-nickname" th:unless="${question.isAnonymous == true}"
+                                   th:text="${question.author.username}"></p>
+                                <time class="fw-normal content-time"
+                                      th:text="${question.getDate(question.createDate)}"></time>
+                            </div>
 
-                        <div class="card-text">
-                            <div class="strong mt-2" th:text="${question.subject}"></div>
-                            <div class="mt-1"  style="font-size: 14px" th:text="${question.content}"> </div>
-                        </div>
+                            <div class="card-text">
+                                <div class="strong mt-2" th:text="${question.subject}"></div>
+                                <div class="mt-1" style="font-size: 14px" th:text="${question.content}"></div>
+                            </div>
 
 
-                        <div class="mb-4"  style="padding-bottom: -2%">
-                            <ul class="content-info">
-                                <li class="recommend" th:text="${#lists.size(question.voter)}" ></li>
-                                <li class="comment" th:text="${#lists.size(question.answerList)}" ></li>
-                            </ul>
+                            <div class="mb-4" style="padding-bottom: -2%">
+                                <ul class="content-info">
+                                    <li class="recommend" th:text="${#lists.size(question.voter)}"></li>
+                                    <li class="comment" th:text="${#lists.size(question.answerList)}"></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
-    <div th:if="${!questionList.isEmpty()}">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!questionList.hasPrevious} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{|?page=${questionList.number-1}|}">
-                    <span>이전</span>
-                </a>
-            </li>
-            <li th:each="page: ${#numbers.sequence(0, questionList.totalPages-1)}"
-                th:if="${page >= questionList.number-5 and page <= questionList.number+5}"
-                th:classappend="${page == questionList.number} ? 'active'"
-                class="page-item">
-                <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
-            </li>
-            <li class="page-item" th:classappend="${!questionList.hasNext} ? 'disabled'">
-                <a class="page-link" th:href="@{|?page=${questionList.number+1}|}">
-                    <span>다음</span>
-                </a>
-            </li>
-        </ul>
+            </a>
+        </div>
+        <div th:if="${!questionList.isEmpty()}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!questionList.hasPrevious} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{|?page=${questionList.number-1}|}">
+                        <span>이전</span>
+                    </a>
+                </li>
+                <li th:each="page: ${#numbers.sequence(0, questionList.totalPages-1)}"
+                    th:if="${page >= questionList.number-5 and page <= questionList.number+5}"
+                    th:classappend="${page == questionList.number} ? 'active'"
+                    class="page-item">
+                    <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                </li>
+                <li class="page-item" th:classappend="${!questionList.hasNext} ? 'disabled'">
+                    <a class="page-link" th:href="@{|?page=${questionList.number+1}|}">
+                        <span>다음</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 
 <script layout:fragment="script" type='text/javascript'>
     const page_elements = document.getElementsByClassName("page-link");
-    Array.from(page_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
+    Array.from(page_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
             document.getElementById('page').value = this.dataset.page;
             document.getElementById('searchForm').submit();
         });
     });
     const btn_search = document.getElementById("button-search");
-    btn_search.addEventListener('click', function() {
+    btn_search.addEventListener('click', function () {
         document.getElementById('page').value = 0;
         document.getElementById('searchForm').submit();
     });
