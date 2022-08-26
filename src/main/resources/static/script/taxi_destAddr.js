@@ -14,7 +14,7 @@ var geocoder = new kakao.maps.services.Geocoder();
 // 클릭한 위치를 표시할 마커입니다
 var marker = new kakao.maps.Marker();
 
-let sourceResult;
+let destinationResult;
 
 // 키워드 검색을 요청하는 함수입니다
 function searchPlaces() {
@@ -123,7 +123,7 @@ function onclickMarker(place_name, address_name) {
     let formData = window.sessionStorage.getItem('messageForm');
     formData = JSON.parse(formData);
 
-    formData.sourceAddress = address_name + "(" + place_name + ")";
+    formData.destinationAddress = address_name + "(" + place_name + ")";
     window.sessionStorage.setItem('messageForm', JSON.stringify(formData));
 
     location.href = "/taxi";
@@ -247,11 +247,11 @@ function panToM(place_y, place_x) {
 kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
         if (status === kakao.maps.services.Status.OK) {
-            sourceResult = result[0];
+            destinationResult = result[0];
 
             var detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
             detailAddr += '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
-            detailAddr += '<div style="float: right"><button type="button" class="btn btn-secondary" onclick="onClickSetSource(sourceResult)">출발지 설정</button></div>'
+            detailAddr += '<div style="float: right"><button type="button" class="btn btn-secondary" onclick="onClickSetDestination(destinationResult)">도착지 설정</button></div>'
 
             var content = '<div class="bAddr">' +
                 '<span class="title">법정동 주소정보</span>' +
@@ -300,7 +300,7 @@ function displayCenterInfo(result, status) {
 }
 
 // 도착지 설정 버튼 클릭 -> 도착지 설정
-function onClickSetSource(result){
+function onClickSetDestination(result){
     // console.log(result.toString());
 
     let formData = window.sessionStorage.getItem('messageForm');
@@ -313,7 +313,7 @@ function onClickSetSource(result){
         newSource = result.address.address_name;
     }
 
-    formData.sourceAddress = newSource;
+    formData.destinationAddress = newSource;
     window.sessionStorage.setItem('messageForm', JSON.stringify(formData));
 
     location.href = "/taxi";
