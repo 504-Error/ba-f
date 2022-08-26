@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="/static/style.css">
     <link rel="stylesheet" href="/static/css/map/icon/icon-page.css">
     <title>Ba-f : 아이콘 정보</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
 <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
@@ -71,7 +72,35 @@
                 음향신호
             </li>
         </ul>
-    </div>
+        <button onclick=bodyShot()>bodyShot</button>
+        <canvas id="canvas" width="900" height="600" style="border:1px solid #d3d3d3;"></canvas>
+    </div>    <script>
+    function bodyShot() {
+        html2canvas(document.body)
+            .then(
+                function (canvas) {
+                    drawImg(canvas.toDataURL('image/png'));
+                    document.body.appendChild(canvas);
+                    save(canvas)
+                }).catch(function (err) {
+            console.log(err);
+        })
+        ;}
+
+    // 캡쳐한 이미지 저장
+    function save(canvas) {
+        if (navigator.msSaveBlob) {
+            var blob = canvas.msToBlob();
+            return navigator.msSaveBlob(blob, '파일명.jpg');
+        } else {
+            var el = document.getElementById("target");
+            el.href = canvas.toDataURL("image/jpeg");
+            el.download = '파일명.jpg';
+            el.click();
+        }
+    }
+</script>
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <meta name="_csrf" th:content="${_csrf.token}">
