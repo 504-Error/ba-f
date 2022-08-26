@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.error504.baf.SecureFiltering.XssCheck;
 import static com.error504.baf.controller.ReviewSearchPerformController.getPerformData;
@@ -173,24 +174,18 @@ public class ReviewController {
         }
 
         Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
-        Path uploadPath;
 
         if (imageList != null) {
             for (MultipartFile image : imageList) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
-                stringBuilder.append(image.getOriginalFilename());
-                String filename = StringUtils.cleanPath(String.valueOf(stringBuilder)); // org.springframework.util
-                filename = StringUtils.getFilename(filename);
-                filename = filename.replace(":", "-");
-                filename = filename.replace(" ", "_");
-
-                uploadPath = uploadRoot.resolve(filename);
+                UUID uuid = UUID.randomUUID();
+                Path uploadPath = uploadRoot.resolve(uuid.toString());
 
                 try {
                     image.transferTo(uploadPath);
+                }  catch (IllegalStateException e) {
+                    e.printStackTrace();
                 } catch (IOException e) {
-                    throw new IllegalStateException("업로드 실패...", e);
+                    e.printStackTrace();
                 }
 
                 Review review = this.reviewService.getReview(id);

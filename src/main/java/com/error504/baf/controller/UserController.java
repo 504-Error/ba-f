@@ -27,6 +27,7 @@ import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static com.error504.baf.SecureFiltering.XssCheck;
 
@@ -103,20 +104,15 @@ public class UserController {
         if (userCreateForm.getCertifyFile() != null) {
             Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
 
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
-            stringBuilder.append(userCreateForm.getCertifyFile().getOriginalFilename());
-            String filename = StringUtils.cleanPath(String.valueOf(stringBuilder)); // org.springframework.util
-            filename = StringUtils.getFilename(filename);
-            filename = filename.replace(":", "-");
-            filename = filename.replace(" ", "_");
+            UUID uuid = UUID.randomUUID();
+            Path uploadPath = uploadRoot.resolve(uuid.toString());
 
-            Path uploadPath = uploadRoot.resolve(filename);
-
-            try (InputStream inputFile = userCreateForm.getCertifyFile().getInputStream()) {
-                Files.copy(inputFile, uploadPath, StandardCopyOption.REPLACE_EXISTING);
+            try {
+                userCreateForm.getCertifyFile().transferTo(uploadPath);
+            }  catch (IllegalStateException e) {
+                e.printStackTrace();
             } catch (IOException e) {
-                throw new IllegalStateException("업로드 실패...", e);
+                e.printStackTrace();
             }
 
             SiteUser siteUser = this.userService.getUser(adduser.getId());
@@ -131,9 +127,6 @@ public class UserController {
 
         return "redirect:/user/login";
     }
-
-
-
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")

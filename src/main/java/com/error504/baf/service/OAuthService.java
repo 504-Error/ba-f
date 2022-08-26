@@ -73,7 +73,7 @@ public class OAuthService{
         return access_Token;
     }
 
-    public boolean isSendMessage(String accessToken) {
+    public boolean isSendMessage(String access_Token) {
         String reqUrl = "https://kapi.kakao.com/v2/api/talk/memo/default/send";
 
         try {
@@ -82,7 +82,8 @@ public class OAuthService{
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
@@ -94,6 +95,7 @@ public class OAuthService{
             JsonObject link = new JsonObject();
             link.addProperty("web_url", "http://localhost:8080");
 //            link.addProperty("mobile_web_url", "http://localhost:8080/management/content/0?sortType=2&keyword=&page=0&boardId=0");
+            link.addProperty("mobile_web_url", "http://localhost:8080");
 
             json.add("link", link.getAsJsonObject());
 
