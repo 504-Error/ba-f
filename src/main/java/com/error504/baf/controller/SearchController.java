@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class SearchController {
@@ -28,15 +29,12 @@ public class SearchController {
 
     @PostMapping("/search/loadReview")
     @ResponseBody
-    public ArrayList searchPlaceReview(@RequestBody String address) {
-        Page<Review> page = this.reviewService.getReviewByAddress(address);
+    public List<Review> searchPlaceReview(@RequestBody String address) {
+        List<Review> reviewList = this.reviewService.getReviewByAddress(address);
 
+//        System.out.println("reviewList size : " + reviewList.size());
+//        System.out.println("reviewList size : " + reviewList);
 
-        ArrayList<Page<Review>> reviewPage = new ArrayList<>();
-        reviewPage.add(page);
-
-
-
-        return reviewPage;
+        return reviewList;
     }
 }

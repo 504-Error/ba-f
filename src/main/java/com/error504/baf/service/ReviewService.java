@@ -44,13 +44,9 @@ public class ReviewService {
         }
     }
 
-    public Page<Review> getReviewByAddress(String address) {
-        System.out.println("address : " + address);
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(0, 4, Sort.by(sorts));
-        Specification<Review> spec = searchReviewByAddress(address);
-        return this.reviewRepository.findAll(spec, pageable);
+    public List<Review> getReviewByAddress(String address) {
+        List<Review> reviewList = reviewRepository.findByPlaceAddress(address, Sort.by(Sort.Direction.ASC, "createDate"));
+        return reviewList;
     }
 
     public Page<Review> getList(int page, String keyword, String category) {

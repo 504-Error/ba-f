@@ -200,10 +200,11 @@ function storeInfo(place) {
             jqXHR.setRequestHeader(header, token);
         },
         success    : function (result) {
-            let reviewArray = JSON.stringify(result[0]);
+            let reviewArray = JSON.stringify(result);
             let reviewData = JSON.parse(reviewArray);
 
             console.log("reviewdata - inner : ", reviewData);
+            console.log("reviewdata - size : ", reviewData.length);
 
             let elWrap = document.getElementById('map_wrapper'),
                 info = document.createElement('div'),
@@ -219,39 +220,39 @@ function storeInfo(place) {
                 '<ul class="list_evaluation">\n';
 
             let str2 = ""
-            if (reviewData.content.length > 0) {
+            if (reviewData.length > 0) {
                 str2 += '        <h5>Ba-f 리뷰</h5>\n' +
-                    '        <a class="review" href="/review/all/list?keyword=' + reviewData.content[0].placeAddress + '">\n' +
+                    '        <a class="review" href="/review/all/list?keyword=' + reviewData[0].placeAddress + '">\n' +
                     '           <span class="float-end">더보기</span>\n' +
                     '        </a>\n';
             }
 
-            for (let i = 0; i < reviewData.content.length; i++) {
-                let date = getFormatDate(new Date(reviewData.content[0].createDate));
+            for (let i = 0; i < reviewData.length; i++) {
+                let date = getFormatDate(new Date(reviewData[i].createDate));
 
                 str2 += '        <li class="map-review">\n' +
-                    '        <a class="review" href="/review/content' + reviewData.content[0].id + '">\n' +
+                    '        <a class="review" href="/review/content/' + reviewData[i].id + '">\n' +
                     '            <div class="unit_info">\n' +
-                    '                <span class="link_user">' + reviewData.content[0].author.username + '</span>\n' +
+                    '                <span class="link_user">' + reviewData[i].author.username + '</span>\n' +
                     '                <span class="bg_bar"></span>\n' +
                     '                <span class="time_write">' + date +'</span>\n' +
                     '            </div>\n' +
                     '            <div class="star">\n' +
                     '                <span class="star">\n' +
-                    '                <span class="star-on" style="width: ' + reviewData.content[0].grade * 20 + '%">\n' +
-                    '                       <span class="blind">' + reviewData.content[0].grade.toString() + '</span>\n' +
+                    '                <span class="star-on" style="width: ' + reviewData[i].grade * 20 + '%">\n' +
+                    '                       <span class="blind">' + reviewData[i].grade.toString() + '</span>\n' +
                     '                   </span>\n' +
                     '                </span>\n' +
                     '            </div>\n' +
                     '            <div class="comment_info">\n' +
-                    '                <p class="txt_comment"><span>' + reviewData.content[0].placeReview + '</span>\n' +
+                    '                <p class="txt_comment"><span>' + reviewData[i].placeReview + '</span>\n' +
                     '            </div>\n';
 
-                if (reviewData.content[0].amenities !== '') {
+                if (reviewData[i].amenities !== '') {
                     str2 += '            <div class="group_photo">\n' +
                         '                <ul class="list_photo">\n';
 
-                    if (reviewData.content[0].amenities.includes("0")) {
+                    if (reviewData[i].amenities.includes("0")) {
                         str2 += '                    <li>\n' +
                             '                        <span class="amenities-img float-start me-2">\n' +
                             '                            <img id="img_amenities_elevator_select"\n' +
@@ -261,7 +262,7 @@ function storeInfo(place) {
                             '                    </li>\n';
                     }
 
-                    if (reviewData.content[0].amenities.includes("1")) {
+                    if (reviewData[i].amenities.includes("1")) {
                         str2 += '                    <li>\n' +
                             '                        <span class="amenities-img float-start me-2">\n' +
                             '                            <img id="img_amenities_incline_select"\n' +
@@ -271,7 +272,7 @@ function storeInfo(place) {
                             '                    </li>\n';
                     }
 
-                    if (reviewData.content[0].amenities.includes("2")) {
+                    if (reviewData[i].amenities.includes("2")) {
                         str2 += '                    <li>\n' +
                             '                        <span class="amenities-img float-start me-2">\n' +
                             '                            <img id="img_amenities_parking_select"\n' +
@@ -281,7 +282,7 @@ function storeInfo(place) {
                             '                    </li>\n';
                     }
 
-                    if (reviewData.content[0].amenities.includes("3")) {
+                    if (reviewData[i].amenities.includes("3")) {
                         str2 += '                    <li>\n' +
                             '                        <span class="amenities-img float-start me-2">\n' +
                             '                            <img id="img_amenities_table_select"\n' +
@@ -291,7 +292,7 @@ function storeInfo(place) {
                             '                    </li>\n';
                     }
 
-                    if (reviewData.content[0].amenities.includes("4")) {
+                    if (reviewData[i].amenities.includes("4")) {
                         str2 += '                    <li>\n' +
                             '                        <span class="amenities-img float-start me-2">\n' +
                             '                            <img id="img_amenities_rest-room_select"\n' +
@@ -320,8 +321,8 @@ function storeInfo(place) {
 
             elWrap.appendChild(info);
         },
-        error      : function () {
-            alert("정보가 없습니다.");
+        error      : function (error) {
+            alert("정보가 없습니다." + error);
             return;
         }
     });
