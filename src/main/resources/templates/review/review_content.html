@@ -7,6 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ba-f : 방문 리뷰 내용</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
 <link rel="stylesheet" type="text/css" th:href="@{/static/kakaomap.css}">
@@ -42,6 +43,7 @@
         <p th:text="${message}">message fail</p>
     </div>
     <div class="review-content-area mt-0 mb-4">
+        <button onclick=bodyShot()>bodyShot</button>
         <a href="javascript:void(0);" th:data-uri="@{|/review/delete/${review.id}|}"
            class="delete btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"
            th:if="${review.author != null and #authentication.getPrincipal().getUsername() == review.author.username}"
@@ -365,6 +367,33 @@
         });
     </script>
     <script layout:fragment="script" type="text/javascript">
+
+
+        function bodyShot() {
+            html2canvas(document.body)
+                .then(
+                    function (canvas) {
+                        drawImg(canvas.toDataURL('image/png'));
+                        document.body.appendChild(canvas);
+                        save(canvas)
+                    }).catch(function (err) {
+                console.log(err);
+            })
+            ;}
+
+        // 캡쳐한 이미지 저장
+        function save(canvas) {
+            if (navigator.msSaveBlob) {
+                var blob = canvas.msToBlob();
+                return navigator.msSaveBlob(blob, '파일명.jpg');
+            } else {
+                var el = document.getElementById("target");
+                el.href = canvas.toDataURL("image/jpeg");
+                el.download = '파일명.jpg';
+                el.click();
+            }
+        }
+
         function hideDiv (){
             document.getElementById("hide").style.display="none";
         }

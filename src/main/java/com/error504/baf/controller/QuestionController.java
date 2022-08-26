@@ -25,6 +25,7 @@ import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static com.error504.baf.SecureFiltering.XssCheck;
 
@@ -162,25 +163,18 @@ public class QuestionController {
         Long id = questionService.create(XssCheck(questionForm.getSubject()), XssCheck(questionForm.getContent()), siteUser, board, questionForm.getIsAnonymous());
 
         Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
-        Path uploadPath;
 
         if (imageList != null) {
             for (MultipartFile image : imageList) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
-                stringBuilder.append(image.getOriginalFilename());
-                String filename = StringUtils.cleanPath(String.valueOf(stringBuilder)); // org.springframework.util
-                filename = StringUtils.getFilename(filename);
-                filename = filename.replace(":", "-");
-                filename = filename.replace(" ", "_");
+                UUID uuid = UUID.randomUUID();
+                Path uploadPath = uploadRoot.resolve(uuid.toString());
 
-                uploadPath = uploadRoot.resolve(filename);
-
-
-                try (InputStream file = image.getInputStream()) {
-                    Files.copy(file, uploadPath, StandardCopyOption.REPLACE_EXISTING);
+                try {
+                    image.transferTo(uploadPath);
+                }  catch (IllegalStateException e) {
+                    e.printStackTrace();
                 } catch (IOException e) {
-                    throw new IllegalStateException("업로드 실패...", e);
+                    e.printStackTrace();
                 }
 
                 Question question = this.questionService.getQuestion(id);
