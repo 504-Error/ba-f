@@ -35,10 +35,13 @@ public class BusController {
         ArrayList<String> lowBusNumList =  new ArrayList<>();
 
         for (Object stationData : result) {
-            String[] arr = stationData.toString().split(",");
-            arr = arr[7].split("=");
 
-            ArrayList stationInfo = busService.getLowStationByUid(arr[1]);
+            String[] arr = stationData.toString().split(",");
+            String[] arr2 = arr[7].split("=");
+
+
+            ArrayList stationInfo = busService.getLowStationByUid(arr2[1]);
+            // if(stationInfo != null ) { System.out.println(stationInfo.toString()); }
             String lowBusExisting = "true";
             if(stationInfo == null){
                 lowBusExisting = "false";
@@ -47,11 +50,11 @@ public class BusController {
             lowBusNumList.add(lowBusExisting);
         }
 
-        ArrayList<ArrayList<String>> test = new ArrayList<>();
-        test.add(result);
-        test.add(lowBusNumList);
+        ArrayList<ArrayList<String>> resultArray = new ArrayList<>();
+        resultArray.add(result);
+        resultArray.add(lowBusNumList);
 
-        return test;
+        return resultArray;
     }
 
     @PostMapping("/bus/station-info")

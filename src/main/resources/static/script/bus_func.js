@@ -150,33 +150,27 @@ function addMarker(position, idx, title) {
 
 // 버스 정류장 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 function addBSMarker(position, lowBusExisting) {
-    var imageSize = new kakao.maps.Size(50, 50),  // 마커 이미지의 크기
+    var imageSrc,
+        imageSize = new kakao.maps.Size(27, 37),  // 마커 이미지의 크기
+        imgOptions;
+
+    if(lowBusExisting == "true") {
+        imageSrc = "/static/image/map/icon/bus_green.png";
         imgOptions =  {
-            spriteSize : new kakao.maps.Size(145, 200), // 스프라이트 이미지의 크기
+            offset: new kakao.maps.Point(13.5, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
         };
+    } else {
+        imageSrc = "/static/image/map/icon/bus_blue.png";
+        imgOptions =  {
+            offset: new kakao.maps.Point(13.5, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        };
+    }
 
-    var markerImage = new kakao.maps.MarkerImage("/static/image/map/icon/bus_blue.png", imageSize, imgOptions);
-
-
-    // if(lowBusExisting == "true") {
-    //     imgOptions =  {
-    //         spriteSize : new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
-    //         spriteOrigin : new kakao.maps.Point(46, (1*36)), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-    //         offset: new kakao.maps.Point(11, 28) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-    //     };
-    // } else {
-    //     imgOptions =  {
-    //         spriteSize : new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
-    //         spriteOrigin : new kakao.maps.Point(46, (5*36)), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-    //         offset: new kakao.maps.Point(11, 28) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-    //     };
-    // }
-
-    // markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
-    marker = new kakao.maps.Marker({
-        position: position, // 마커의 위치
-        image: markerImage
-    });
+    markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+        marker = new kakao.maps.Marker({
+            position: position, // 마커의 위치
+            image: markerImage
+        });
 
     marker.setMap(map); // 지도 위에 마커를 표출합니다
     BSmarkers.push(marker);  // 배열에 생성된 마커를 추가합니다
@@ -438,21 +432,21 @@ function busSearchCB(result){
 
     // 버스 번호, 기점, 종점, 배차간격, 저상첫차시간, 저상막차시간
     let contentStr = '<div style="text-align : center;margin-top: 30px">' +
-        '   <div><label style="font-size:17px;margin: 3px;">서울 저상 버스</label></div>' +
-        '   <div><img src="/static/image/map/bus_blue.png" style="width: 35px;"><label style="font-size:22px;font-weight: bold;margin: 3px;">'+ result[0][0].busRouteNm +'</label></div>' + // 버스 번호
-        '   <div><label style="font-size:17px;margin: 3px;">'+ result[0][0].stStationNm + ' ~ ' + result[0][0].edStationNm + '</label></div>' +
-        '   <div><label style="font-size:17px;margin: 3px;">배차 간격 | ' + result[0][0].term + '분</label></div>' +
-        '   <div><label style="font-size:17px;margin: 3px;">저상버스 첫차시간 | ' + firstTM.substring(0,2) + ':' + firstTM.substring(2,4) +'</label></div> ' +
-        '   <div><label style="font-size:17px;margin: 3px;">   저상버스 막차시간 | ' + lastTM.substring(0,2) + ':' + lastTM.substring(2,4) +'</label></div>' +
+        '   <div><label style="font-size:12px;margin: 3px;">서울 저상 버스</label></div>' +
+        '   <div><img src="/static/image/map/bus_blue.png" style="height: 30px;"><label style="font-size:16px;font-weight: bold;margin: 3px;">'+ result[0][0].busRouteNm +'</label></div>' + // 버스 번호
+        '   <div><label style="font-size:12px;margin: 3px;">'+ result[0][0].stStationNm + ' ~ ' + result[0][0].edStationNm + '</label></div>' +
+        '   <div><label>배차 간격 | ' + result[0][0].term + '분</label></div>' +
+        '   <div><label style="font-size:12px;margin: 3px;">저상버스 첫차시간 | ' + firstTM.substring(0,2) + ':' + firstTM.substring(2,4) +'</label> ' +
+        '                                           <label>   저상버스 막차시간 | ' + lastTM.substring(0,2) + ':' + lastTM.substring(2,4) +'</label></div>' +
         '</div><div style="margin: 20px 20px 20px 20px;"><table>';
 
-
     for(let i=0; i<result[1].length; i++){
-        contentStr += '<tr>';
-        contentStr += '<td><img src="/static/image/map/bus_bar.png" style="height: 100px;"></td><td valign="top"><div style="margin: 10px;"><label style="font-size:16px;">' + result[1][i].stationNm + '</label></td></div>';
-        contentStr += '</tr>';
+        contentStr += '<tr>' +
+            '<td><img src="/static/image/map/bus_bar.png" style="height: 80px;"></td>' +
+            '<td style="vertical-align: top;"><div style="margin: 3px;"><label>' + result[1][i].stationNm + '</label></div></td>' +
+            '</tr>';
     }
-    contentStr += '</div></table>';
+    contentStr += '</table></div>';
 
     expEl.setAttribute("id", "menu_exp_wrap");
     expEl.innerHTML = contentStr;
