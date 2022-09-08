@@ -42,7 +42,8 @@
                 <label for="passengerName" class="col-form-label fs-5 fw-bold">이름</label>
             </div>
             <div class="col">
-                <input type="text" class="form-control form-control-lg" style="width: 30%" value="회원이름" id="passengerName">
+                <input type="text" class="form-control form-control-lg" style="width: 30%" th:value="${siteUser != null? siteUser.username : ''}" id="passengerName">
+<!--                <input type="text" class="form-control form-control-lg" style="width: 30%" value="회원이름" id="passengerName">-->
             </div>
         </div>
 
@@ -88,11 +89,13 @@
             </div>
             <div class="col">
                 <div class="form-check form-check-inline" style="padding-top: 0.5rem">
-                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairYes" value="wChairYes">
+                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairYes" value="wChairYes" th:checked="${(siteUser != null) and (siteUser.getWheel eq 1)}">
+<!--                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairYes" value="wChairYes">-->
                     <label class="form-check-label fs-5" for="wChairYes">탑승</label>
                 </div>
                 <div class="form-check form-check-inline" style="padding-top: 0.5rem">
-                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo" checked="checked">
+                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo" th:checked="${(siteUser != null) and (siteUser.getWheel eq 2)}">
+<!--                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo" checked="checked">-->
                     <label class="form-check-label fs-5" for="wChairNo">미탑승</label>
                 </div>
             </div>
