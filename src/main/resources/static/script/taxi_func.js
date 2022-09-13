@@ -98,9 +98,8 @@ function onClickDestinationBtn(){
 
 
 // 입력폼에 작성한 내용을 기반으로 문자 작성
-document.getElementById("writeBtn").addEventListener('click',onClickWriteBtn);
+// document.getElementById("writeBtn").addEventListener('click',onClickWriteBtn);
 function onClickWriteBtn(){
-
     // 입력값 확인 -> 문자 작성
     let passengerName = document.getElementById("passengerName").value,
         sourceAddress = document.getElementById("sourceAddress").value,
