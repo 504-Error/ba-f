@@ -47,35 +47,15 @@ public class AdminController {
                                     @RequestParam(value="page", defaultValue="0") int page,
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
-        try {
-//            //보안 4.1.2
-//            if (keyword.matches("[\\w]*") == false) {
-//                throw new IllegalArgumentException();
-//            }
+        Page<SiteUser> userPage = this.userService.getList(page, keyword, getAuth);
 
-            //보안 4.1.14
-            if (intOverflowCheck(page)) {
+        model.addAttribute("tab", "management");
+        model.addAttribute("userPage", userPage);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("getAuth", getAuth);
 
-            }
-        } catch (IllegalArgumentException e) {
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        //보안 4.1.2
-//        if (keyword.matches("[\\w]*") == false) {
-//            throw new IllegalArgumentException();
-//        } else {
-            Page<SiteUser> userPage = this.userService.getList(page, keyword, getAuth);
-
-            model.addAttribute("tab", "management");
-            model.addAttribute("userPage", userPage);
-            model.addAttribute("keyword", keyword);
-            model.addAttribute("getAuth", getAuth);
-
-            return "admin/admin_user_management";
-        }
-//    }
+        return "admin/admin_user_management";
+    }
 
     @Secured("ROLE_ADMIN")
     @RequestMapping("/account/{getAuth}/accept/{id}")
@@ -123,11 +103,8 @@ public class AdminController {
                                          @RequestParam(value = "keyword", defaultValue = "") String keyword,
                                          @RequestParam(value = "boardId", defaultValue = "0") Long boardId,
                                          @RequestParam(value = "sortType", defaultValue = "0") int sortType) {
-        //보안 4.1.2
-//        if (keyword.matches("[\\w]*") == false) {
-//            throw new IllegalArgumentException();
-//        } else
-            if (kindOfContent == 0) {
+
+        if (kindOfContent == 0) {
             Page<Question> questionPage = this.questionService.getAllQuestion(page, keyword, boardId, sortType);
             List<Board> board = boardService.findAll();
             model.addAttribute("contentPage", questionPage);
@@ -224,19 +201,15 @@ public class AdminController {
     @RequestMapping("/board")
     public String adminBoard(Model model, @RequestParam(value="page", defaultValue="0") int page,
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
-        //보안 4.1.2
-//        if (keyword.matches("[\\w]*") == false) {
-//            throw new IllegalArgumentException();
-//        } else {
-            Page<Board> boardPage = boardService.getList(page, keyword);
 
-            model.addAttribute("tab", "management");
-            model.addAttribute("boardPage", boardPage);
-            model.addAttribute("keyword", keyword);
+        Page<Board> boardPage = boardService.getList(page, keyword);
 
-            return "admin/admin_board_management";
-        }
-//    }
+        model.addAttribute("tab", "management");
+        model.addAttribute("boardPage", boardPage);
+        model.addAttribute("keyword", keyword);
+
+        return "admin/admin_board_management";
+    }
 
     @Secured("ROLE_ADMIN")
     @RequestMapping("/board/delete/{id}")
@@ -253,19 +226,14 @@ public class AdminController {
     public String adminAnnounce(Model model, @RequestParam(value="page", defaultValue="0") int page,
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
-        //보안 4.1.2
-//        if (keyword.matches("[\\w]*") == false) {
-//            throw new IllegalArgumentException();
-//        } else {
-            Page<Announcement> announcementPage = announcementService.getList(page, keyword);
+        Page<Announcement> announcementPage = announcementService.getList(page, keyword);
 
-            model.addAttribute("tab", "management");
-            model.addAttribute("announcementPage", announcementPage);
-            model.addAttribute("keyword", keyword);
+        model.addAttribute("tab", "management");
+        model.addAttribute("announcementPage", announcementPage);
+        model.addAttribute("keyword", keyword);
 
-            return "admin/admin_announcement_management";
-        }
-//    }
+        return "admin/admin_announcement_management";
+    }
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/announce/create")

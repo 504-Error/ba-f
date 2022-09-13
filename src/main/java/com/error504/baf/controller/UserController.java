@@ -104,8 +104,15 @@ public class UserController {
         if (userCreateForm.getCertifyFile() != null) {
             Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
 
-            UUID uuid = UUID.randomUUID();
-            Path uploadPath = uploadRoot.resolve(uuid.toString());
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(Timestamp.valueOf(LocalDateTime.now()));
+            stringBuilder.append(userCreateForm.getCertifyFile().getOriginalFilename());
+            String filename = StringUtils.cleanPath(String.valueOf(stringBuilder));
+            filename = StringUtils.getFilename(filename);
+            filename = filename.replace(":", "-");
+            filename = filename.replace(" ", "_");
+
+            Path uploadPath = uploadRoot.resolve(filename);
 
             try {
                 userCreateForm.getCertifyFile().transferTo(uploadPath);
@@ -119,7 +126,6 @@ public class UserController {
             this.userService.uploadCertifyFile(siteUser, uploadPath.toString());
 
         } else {
-            // required나 이거 둘 중 하나로 하기
             bindingResult.rejectValue("certifyFile", "certifyFileEmpty",
                     "인증 파일을 첨부해주시길 바랍니다.");
             return "account/signup_form";

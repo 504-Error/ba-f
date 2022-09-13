@@ -78,11 +78,6 @@ public class ReviewController {
                              @PathVariable("type") String type,
                              HttpServletResponse response) throws IOException {
 
-        //보안 4.1.2
-
-//        if (keyword.matches("[\\w]*") == false) {
-//            throw new IllegalArgumentException();
-//        } else {
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
 
         if (reviewPage.getSize() == 0) {
@@ -99,8 +94,7 @@ public class ReviewController {
         model.addAttribute("type", type);
         return "review/review_list";
 
-        }
-//    }
+    }
 
     @RequestMapping(value = "/content/{id}")
     public String detail(Model model, @PathVariable("id") Long id, ReviewCommentForm reviewCommentForm) {
@@ -135,7 +129,6 @@ public class ReviewController {
         return "review/review_form";
     }
 
-    // 뭔가 예외처리가 필요할 것 같음
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/upload")
     @ResponseBody
@@ -166,8 +159,6 @@ public class ReviewController {
             dateToString = transFormat.format(reviewForm.getDate());
         }
 
-//        Long id = reviewService.create(XssCheck(reviewForm.getGenre()), XssCheck(reviewForm.getSubject()), dateToString, XssCheck(reviewForm.getPlace()),
-//                XssCheck(reviewForm.getPlaceAddress()), reviewForm.getGrade(), amenitiesList, XssCheck(reviewForm.getPlaceReview()), XssCheck(reviewForm.getAdditionalReview()), reviewForm.getIsAnonymous(), siteUser);
         Long id = reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(),
                 reviewForm.getPlaceAddress(), reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
 
@@ -234,7 +225,7 @@ public class ReviewController {
     public String reviewDelete(Principal principal, @PathVariable("id") Long id) {
         Review review = this.reviewService.getReview(id);
         if (!review.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
         }
         this.reviewService.delete(review);
         return "redirect:/review";
@@ -257,18 +248,14 @@ public class ReviewController {
     @GetMapping("/create/search/perform")
     public String searchShow(Model model, @RequestParam(value="genre", defaultValue="0") int genre,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
-        //보안 4.1.2
-//        if (keyword.matches("[\\w]*") == false) {
-//            throw new IllegalArgumentException();
-//        } else {
-            ArrayList<ReviewPerformInfo> performInfoList = getPerformData(genre, keyword);
 
-            model.addAttribute("performInfoList", performInfoList);
-            model.addAttribute("keyword", keyword);
-            model.addAttribute("genre", genre);
+        ArrayList<ReviewPerformInfo> performInfoList = getPerformData(genre, keyword);
 
-            return "review/review_search_perform";
-//        }
+        model.addAttribute("performInfoList", performInfoList);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("genre", genre);
+
+        return "review/review_search_perform";
     }
 
     @PreAuthorize("isAuthenticated()")
