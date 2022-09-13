@@ -29,6 +29,8 @@ public class TaxiController {
             model.addAttribute("siteUser", siteUser);
         }
 
+        model.addAttribute("tab", "map");
+
         return "/baf_map/taxi";
     }
 
