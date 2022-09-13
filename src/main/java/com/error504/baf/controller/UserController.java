@@ -257,10 +257,10 @@ public class UserController {
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
         //보안 4.1.2
-        if (keyword.matches("[\\w]*") == false) {
-            throw new IllegalArgumentException();
-        }
-        else {
+//        if (keyword.matches("[\\w]*") == false) {
+//            throw new IllegalArgumentException();
+//        }
+//        else {
             Page<Announcement> announcementPage = announcementService.getList(page, keyword);
 
             model.addAttribute("announcementPage", announcementPage);
@@ -268,7 +268,7 @@ public class UserController {
             model.addAttribute("tab", "mypage");
 
             return "announcement_board";
-        }
+//        }
     }
 
     @PreAuthorize("isAuthenticated()")

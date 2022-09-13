@@ -74,16 +74,16 @@ public class QuestionController {
     public String searchList(Model model, @RequestParam(value="page", defaultValue = "0") int page,
                              @RequestParam(value="keyword", defaultValue = "") String keyword){
         //보안 4.1.2
-        if (keyword.matches("[\\w]*") == false) {
-            throw new IllegalArgumentException();
-        } else {
+//        if (keyword.matches("[\\w]*") == false) {
+//            throw new IllegalArgumentException();
+//        } else {
         Page<Question> questionList = questionService.getAllQuestion(page, keyword, 0L, 0);
         model.addAttribute("questionList", questionList);
         model.addAttribute("keyword", keyword);
         model.addAttribute("tab", "community");
         return "community/question_search";
     }
-    }
+//    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/hotList")
@@ -160,7 +160,8 @@ public class QuestionController {
         Board board = boardService.getBoard(questionForm.getBoardId());
         Long boardId = questionForm.getBoardId();
 
-        Long id = questionService.create(XssCheck(questionForm.getSubject()), XssCheck(questionForm.getContent()), siteUser, board, questionForm.getIsAnonymous());
+//        Long id = questionService.create(XssCheck(questionForm.getSubject()), XssCheck(questionForm.getContent()), siteUser, board, questionForm.getIsAnonymous());
+        Long id = questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, board, questionForm.getIsAnonymous());
 
         Path uploadRoot = Paths.get(System.getProperty("user.home")).resolve("baf_storage");
 
@@ -260,9 +261,9 @@ public class QuestionController {
     public String viewQuestionList(@PathVariable Long id, Model model, @RequestParam(value="page", defaultValue="0") int page,
                                    @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("[\\w]*") == false) {
-            throw new IllegalArgumentException();
-        } else {
+//        if (keyword.matches("[\\w]*") == false) {
+//            throw new IllegalArgumentException();
+//        } else {
             Page<Question> questionList = questionService.getAllQuestion(page, keyword, id, 0);
             Board board = boardService.getBoard(id);
             model.addAttribute("questionList", questionList);
@@ -274,7 +275,7 @@ public class QuestionController {
             return "community/board_question";
 
         }
-    }
+//    }
 
 
     @PreAuthorize("isAuthenticated()")

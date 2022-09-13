@@ -43,7 +43,7 @@
         <p th:text="${message}">message fail</p>
     </div>
     <div class="review-content-area mt-0 mb-4">
-        <button onclick=bodyShot()>bodyShot</button>
+<!--        <button onclick=bodyShot()>bodyShot</button>-->
         <a href="javascript:void(0);" th:data-uri="@{|/review/delete/${review.id}|}"
            class="delete btn btn-light float-end" style="color:#7F7F7F" sec:authorize="isAuthenticated()"
            th:if="${review.author != null and #authentication.getPrincipal().getUsername() == review.author.username}"

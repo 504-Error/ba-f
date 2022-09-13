@@ -55,10 +55,10 @@ public class ReviewController {
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("[\\w]*") == false) {
-            throw new IllegalArgumentException();
-        }
-        else {
+//        if (keyword.matches("[\\w]*") == false) {
+//            throw new IllegalArgumentException();
+//        }
+//        else {
             Page<Review> reviewPage = this.reviewService.getList(page, keyword, "");
             List<Review> reviewList = this.reviewService.getReviewList();
 
@@ -68,7 +68,7 @@ public class ReviewController {
             model.addAttribute("category", "all");
             model.addAttribute("keyword", keyword);
             return "review/review_main";
-        }
+//        }
     }
 
     @RequestMapping("/{category}/{type}")
@@ -80,9 +80,9 @@ public class ReviewController {
 
         //보안 4.1.2
 
-        if (keyword.matches("[\\w]*") == false) {
-            throw new IllegalArgumentException();
-        } else {
+//        if (keyword.matches("[\\w]*") == false) {
+//            throw new IllegalArgumentException();
+//        } else {
         Page<Review> reviewPage = this.reviewService.getList(page, keyword, category);
 
         if (reviewPage.getSize() == 0) {
@@ -100,7 +100,7 @@ public class ReviewController {
         return "review/review_list";
 
         }
-    }
+//    }
 
     @RequestMapping(value = "/content/{id}")
     public String detail(Model model, @PathVariable("id") Long id, ReviewCommentForm reviewCommentForm) {
@@ -166,8 +166,10 @@ public class ReviewController {
             dateToString = transFormat.format(reviewForm.getDate());
         }
 
-        Long id = reviewService.create(XssCheck(reviewForm.getGenre()), XssCheck(reviewForm.getSubject()), dateToString, XssCheck(reviewForm.getPlace()),
-                XssCheck(reviewForm.getPlaceAddress()), reviewForm.getGrade(), amenitiesList, XssCheck(reviewForm.getPlaceReview()), XssCheck(reviewForm.getAdditionalReview()), reviewForm.getIsAnonymous(), siteUser);
+//        Long id = reviewService.create(XssCheck(reviewForm.getGenre()), XssCheck(reviewForm.getSubject()), dateToString, XssCheck(reviewForm.getPlace()),
+//                XssCheck(reviewForm.getPlaceAddress()), reviewForm.getGrade(), amenitiesList, XssCheck(reviewForm.getPlaceReview()), XssCheck(reviewForm.getAdditionalReview()), reviewForm.getIsAnonymous(), siteUser);
+        Long id = reviewService.create(reviewForm.getGenre(), reviewForm.getSubject(), dateToString, reviewForm.getPlace(),
+                reviewForm.getPlaceAddress(), reviewForm.getGrade(), amenitiesList, reviewForm.getPlaceReview(), reviewForm.getAdditionalReview(), reviewForm.getIsAnonymous(), siteUser);
 
         if (id == -1) {
             return "errorImage";
@@ -256,9 +258,9 @@ public class ReviewController {
     public String searchShow(Model model, @RequestParam(value="genre", defaultValue="0") int genre,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         //보안 4.1.2
-        if (keyword.matches("[\\w]*") == false) {
-            throw new IllegalArgumentException();
-        } else {
+//        if (keyword.matches("[\\w]*") == false) {
+//            throw new IllegalArgumentException();
+//        } else {
             ArrayList<ReviewPerformInfo> performInfoList = getPerformData(genre, keyword);
 
             model.addAttribute("performInfoList", performInfoList);
@@ -266,7 +268,7 @@ public class ReviewController {
             model.addAttribute("genre", genre);
 
             return "review/review_search_perform";
-        }
+//        }
     }
 
     @PreAuthorize("isAuthenticated()")
