@@ -54,21 +54,16 @@ public class ReviewController {
     @RequestMapping("")
     public String reviewMain(Model model, @RequestParam(value="page", defaultValue="0") int page,
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
-        //보안 4.1.2
-//        if (keyword.matches("[\\w]*") == false) {
-//            throw new IllegalArgumentException();
-//        }
-//        else {
-            Page<Review> reviewPage = this.reviewService.getList(page, keyword, "");
-            List<Review> reviewList = this.reviewService.getReviewList();
 
-            model.addAttribute("tab", "review");
-            model.addAttribute("reviewList", reviewList);
-            model.addAttribute("reviewPage", reviewPage);
-            model.addAttribute("category", "all");
-            model.addAttribute("keyword", keyword);
-            return "review/review_main";
-//        }
+        Page<Review> reviewPage = this.reviewService.getList(page, keyword, "");
+        List<Review> reviewList = this.reviewService.getReviewList();
+
+        model.addAttribute("tab", "review");
+        model.addAttribute("reviewList", reviewList);
+        model.addAttribute("reviewPage", reviewPage);
+        model.addAttribute("category", "all");
+        model.addAttribute("keyword", keyword);
+        return "review/review_main";
     }
 
     @RequestMapping("/{category}/{type}")
