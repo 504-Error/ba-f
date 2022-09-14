@@ -3,7 +3,7 @@ package com.error504.baf;
 import java.util.Calendar;
 
 public class SecureFiltering {
-    public static String XssCheck(String str) { //보안 4.1.4
+    public static String XssCheck(String str) {
         str = str.replaceAll("&", "&amp;")
                 .replaceAll("#", "&#35;")
                 .replaceAll(";", "&#59;")
@@ -39,15 +39,7 @@ public class SecureFiltering {
         return str;
     }
 
-    //보안 규칙 4.1.10 LDAP삽입
-    public static String LDAPCheck(String keyword) {
-        if (!keyword.matches("[\\w\\s]*")) {
-            throw new IllegalArgumentException("Invalid input");
-        }
-        return keyword;
-    }
 
-    //보안 규칙 4.1.14 정수 오버플로우
     public static boolean intOverflowCheck(int value) throws Exception {
 
         if (value < 0) {
@@ -56,12 +48,4 @@ public class SecureFiltering {
         return true;
     }
 
-    //보안 규칙 4.1.14 long 오버플로우
-    public static boolean longOverflowCheck(Long value) throws Exception {
-
-        if (value < 0) {
-            return false;
-        }
-        return true;
-    }
 }

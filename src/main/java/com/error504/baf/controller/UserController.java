@@ -90,7 +90,7 @@ public class UserController {
 
         try {
             adduser = userService.create(XssCheck(userCreateForm.getUsername()), XssCheck(userCreateForm.getName()), userCreateForm.getGender(), userCreateForm.getBirthday(),
-                    XssCheck(userCreateForm.getEmail()), userCreateForm.getPassword1(), userCreateForm.getType(), userCreateForm.getGetWheel());
+                    userCreateForm.getEmail(), userCreateForm.getPassword1(), userCreateForm.getType(), userCreateForm.getGetWheel());
         } catch (DataIntegrityViolationException e){
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
@@ -262,11 +262,7 @@ public class UserController {
     public String userAnnounce(Model model, @RequestParam(value="page", defaultValue="0") int page,
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
-        //보안 4.1.2
-//        if (keyword.matches("[\\w]*") == false) {
-//            throw new IllegalArgumentException();
-//        }
-//        else {
+
             Page<Announcement> announcementPage = announcementService.getList(page, keyword);
 
             model.addAttribute("announcementPage", announcementPage);
@@ -274,7 +270,7 @@ public class UserController {
             model.addAttribute("tab", "mypage");
 
             return "announcement_board";
-//        }
+
     }
 
     @PreAuthorize("isAuthenticated()")
