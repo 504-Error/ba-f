@@ -6,7 +6,7 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 
 // 지도를 생성합니다
 var map = new kakao.maps.Map(mapContainer, mapOption);
-var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png'
+var imageSrc = "/static/image/map/locationPin.png"
 
 function currentLocation() {
     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
@@ -38,7 +38,7 @@ function currentLocation() {
 }
 
 function displayMarker(locPosition, message) {
-    var imageSize = new kakao.maps.Size(24, 35);
+    var imageSize = new kakao.maps.Size(25, 25);
     var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
     // 마커를 생성합니다

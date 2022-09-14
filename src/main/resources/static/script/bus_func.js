@@ -436,14 +436,14 @@ function busSearchCB(result){
         '   <div><img src="/static/image/map/bus_blue.png" style="height: 30px;"><label style="font-size:16px;font-weight: bold;margin: 3px;">'+ result[0][0].busRouteNm +'</label></div>' + // 버스 번호
         '   <div><label style="font-size:12px;margin: 3px;">'+ result[0][0].stStationNm + ' ~ ' + result[0][0].edStationNm + '</label></div>' +
         '   <div><label>배차 간격 | ' + result[0][0].term + '분</label></div>' +
-        '   <div><label style="font-size:12px;margin: 3px;">저상버스 첫차시간 | ' + firstTM.substring(0,2) + ':' + firstTM.substring(2,4) +'</label> ' +
-        '                                           <label>   저상버스 막차시간 | ' + lastTM.substring(0,2) + ':' + lastTM.substring(2,4) +'</label></div>' +
+        '   <div><label style="font-size:12px;margin: 3px;">저상버스 첫차시간 | ' + firstTM.substring(0,2) + ':' + firstTM.substring(2,4) +'</label></div>' +
+        '   <div><label>   저상버스 막차시간 | ' + lastTM.substring(0,2) + ':' + lastTM.substring(2,4) +'</label></div>' +
         '</div><div style="margin: 20px 20px 20px 20px;"><table>';
 
     for(let i=0; i<result[1].length; i++){
         contentStr += '<tr>' +
-            '<td><img src="/static/image/map/bus_bar.png" style="height: 80px;"></td>' +
-            '<td style="vertical-align: top;"><div style="margin: 3px;"><label>' + result[1][i].stationNm + '</label></div></td>' +
+            '<td style="padding-left: 30px;"><img src="/static/image/map/bus_bar.png" style="height: 80px;"></td>' +
+            '<td style="vertical-align: top;"><div style="margin: 3px;padding-left: 15px;"><label>' + result[1][i].stationNm + '</label></div></td>' +
             '</tr>';
     }
     contentStr += '</table></div>';
