@@ -137,7 +137,7 @@ function isNull(v) {
 // '문자 전송' 버튼 클릭 -> QR 코드 생성
 function onClickSendBtn(){
     let msgStr = document.getElementById("msgTextarea").value;
-    let qrUrl = "https://api.scanova.io/v2/qrcode/SMS?phone_no=15884388&apikey=hqaaicyzmwmvfatxgjlgtmimsvrzgfpenpknlagf&size=s&message=" + msgStr;
+    let qrUrl = "https://api.scanova.io/v2/qrcode/SMS?phone_no=15884388&apikey=dajucztaprhlugmnpnglgmghgixrnxrzeddsxnxo&size=s&message=" + msgStr;
     $("#QRImage").attr("src", qrUrl);
     $("#QRImage").attr("style", "width: 250px; height: 250px;");
 }
