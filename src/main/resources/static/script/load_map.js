@@ -38,7 +38,7 @@ function currentLocation() {
 }
 
 function displayMarker(locPosition, message) {
-    var imageSize = new kakao.maps.Size(25, 25);
+    var imageSize = new kakao.maps.Size(35, 35);
     var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
     // 마커를 생성합니다
