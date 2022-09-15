@@ -33,7 +33,7 @@
             <h4>회원가입</h4>
         </div>
     </div>
-
+//
     <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data">
         <div style="width:40%">
             <div th:replace="form_errors :: formErrorsFragment"></div>
