@@ -47,7 +47,13 @@
                         </div>
                     </form>
                 </div>
-                <a th:href="@{|/question/create/${board.id}|}" class="btn btn-primary float-end">질문 등록하기</a>
+
+                <div sec:authorize="hasAnyAuthority('USER_AUTH')">
+                <a th:unless="${boardId == 4}" th:href="@{|/question/create/${board.id}|}" class="btn btn-primary float-end">질문 등록하기</a>
+                </div>
+                <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                    <a th:href="@{|/question/create/${board.id}|}" class="btn btn-primary float-end">질문 등록하기</a>
+                </div>
             </div>
         </div>
     </div>

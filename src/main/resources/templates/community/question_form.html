@@ -21,6 +21,7 @@
                 <select class="form-select" id="inputBoard" th:if="${boardId == null}" th:field="*{boardId}">
                     <option selected value=0>게시판 선택</option>
                     <option th:each="board : ${board}"
+                            th:unless="${board.id==4}"
                             th:value="${board.id}"
                             th:text="${board.boardName}"></option>
                 </select>
