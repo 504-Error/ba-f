@@ -19,7 +19,7 @@ function currentLocation() {
                 lon = position.coords.longitude; // 경도
 
             var locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-            var message = '<div style="padding:5px;">현위치</div>'; // 인포윈도우에 표시될 내용입니다
+            var message = '<div style="padding:5px;text-align: center">현위치</div>'; // 인포윈도우에 표시될 내용입니다
 
             // 마커와 인포윈도우를 표시합니다
             displayMarker(locPosition, message);

@@ -55,8 +55,7 @@ function displayPlaces(places) {
     var listEl = document.getElementById('placesList'),
         menuEl = document.getElementById('menu_wrap'),
         fragment = document.createDocumentFragment(),
-        bounds = new kakao.maps.LatLngBounds(),
-        listStr = '';
+        bounds = new kakao.maps.LatLngBounds();
 
     // 검색 결과 목록에 추가된 항목들을 제거합니다
     removeAllChildNods(listEl);
@@ -347,7 +346,6 @@ function displayLowBus(stationNm, arsId, lowBus){
 
     // 지도에 표시되고 있는 마커를 제거합니다
     removeMarker()
-    removeBSMarker();
     infowindow.close();
 
 
@@ -381,9 +379,9 @@ function displayLowBus(stationNm, arsId, lowBus){
 function getBusListItem(index, lowBus) {
 
     var el = document.createElement('li'),
-        itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
-            '<div class="info">' +
-            '   <label style="font-size:18px;font-weight: bold;margin: 3px;">' + lowBus.rtNm + '</label>' + // 버스 번호
+        itemStr =
+            '<div class="info" style="padding-left: 30px">' +
+            '   <img src="/static/image/map/bus_blue.png" style="height: 30px;"><label style="font-size:18px;font-weight: bold;margin: 3px;">' + lowBus.rtNm + '</label>' + // 버스 번호
             '   <div><label style="font-size:15px;padding-left: 10px;margin: 3px;">서울 | ' + lowBus.sectNm + '</label></div>' + // 버스 노선 구간
             '   <div><label style="font-size:15px;padding-left: 10px;margin: 3px;">' + lowBus.arrmsg1 + '</label>' + // 버스 남은 시간 1
             '   <label style="font-size:15px;padding-left: 10px;margin: 3px;">' + lowBus.arrmsg2 + '</label></div>' + // 버스 남은 시간 2
@@ -432,18 +430,18 @@ function busSearchCB(result){
 
     // 버스 번호, 기점, 종점, 배차간격, 저상첫차시간, 저상막차시간
     let contentStr = '<div style="text-align : center;margin-top: 30px">' +
-        '   <div><label style="font-size:12px;margin: 3px;">서울 저상 버스</label></div>' +
+        '   <div><label style="font-size:13px;margin: 3px;">서울 저상 버스</label></div>' +
         '   <div><img src="/static/image/map/bus_blue.png" style="height: 30px;"><label style="font-size:16px;font-weight: bold;margin: 3px;">'+ result[0][0].busRouteNm +'</label></div>' + // 버스 번호
-        '   <div><label style="font-size:12px;margin: 3px;">'+ result[0][0].stStationNm + ' ~ ' + result[0][0].edStationNm + '</label></div>' +
-        '   <div><label>배차 간격 | ' + result[0][0].term + '분</label></div>' +
-        '   <div><label style="font-size:12px;margin: 3px;">저상버스 첫차시간 | ' + firstTM.substring(0,2) + ':' + firstTM.substring(2,4) +'</label></div>' +
-        '   <div><label>   저상버스 막차시간 | ' + lastTM.substring(0,2) + ':' + lastTM.substring(2,4) +'</label></div>' +
+        '   <div><label style="font-size:13px;margin: 3px;">'+ result[0][0].stStationNm + ' ~ ' + result[0][0].edStationNm + '</label></div>' +
+        '   <div><label style="font-size:13px;">배차 간격 | ' + result[0][0].term + '분</label></div>' +
+        '   <div><label style="font-size:13px;margin: 3px;">저상버스 첫차시간 | ' + firstTM.substring(0,2) + ':' + firstTM.substring(2,4) +'</label></div>' +
+        '   <div><label style="font-size:13px;">   저상버스 막차시간 | ' + lastTM.substring(0,2) + ':' + lastTM.substring(2,4) +'</label></div>' +
         '</div><div style="margin: 20px 20px 20px 20px;"><table>';
 
     for(let i=0; i<result[1].length; i++){
         contentStr += '<tr>' +
             '<td style="padding-left: 30px;"><img src="/static/image/map/bus_bar.png" style="height: 80px;"></td>' +
-            '<td style="vertical-align: top;"><div style="margin: 3px;padding-left: 15px;"><label>' + result[1][i].stationNm + '</label></div></td>' +
+            '<td style="vertical-align: top;"><div style="margin: 3px;padding-left: 15px;"><label style="font-size:15px;">' + result[1][i].stationNm + '</label></div></td>' +
             '</tr>';
     }
     contentStr += '</table></div>';
