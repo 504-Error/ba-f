@@ -24,8 +24,8 @@
             <div class="option">
                 <div>
                     <form onsubmit="searchPlaces(); return false;">
-                        <input type="text" class="fs-4" style="width:70%;" placeholder="검색어를 입력하세요" id="keyword">
-                        <button type="submit" class="btn" style="background-color: #FA9622;width:20%;">검색하기</button>
+                        <input style="font-size: 16px" placeholder="검색어를 넣어주세요." type="text" th:value="${keyword}" name="kw" id="keyword" aria-label="review search" aria-describedby="button-addon2" size="30" tabindex="0">
+                        <button type="submit" class="btn-orange" tabindex="0" style="font-size: 16px;background-color:#FA9622;width: 20% ">검색</button>
                     </form>
                 </div>
             </div>

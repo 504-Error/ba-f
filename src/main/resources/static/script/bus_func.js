@@ -337,9 +337,7 @@ function displayLowBus(stationNm, arsId, lowBus){
 
     var listEl = document.getElementById('placesList'),
         menuEl = document.getElementById('menu_wrap'),
-        fragment = document.createDocumentFragment(),
-        bounds = new kakao.maps.LatLngBounds(),
-        listStr = '';
+        fragment = document.createDocumentFragment();
 
     // 목록에 추가된 항목들을 제거합니다
     removeAllChildNods(listEl);
