@@ -35,39 +35,54 @@
 
     <form class="row justify-content-center">
         <div class="row" style="width: 50%; margin: 0.7rem;">
-            <div class="col-md-2" style="text-align: left">
+            <div class="col-md-3" style="text-align: left">
                 <label for="passengerName" class="col-form-label fs-5 fw-bold">이름</label>
+                <small style="color: red">
+                    <span class="blind">필수</span>
+                    *
+                </small>
             </div>
             <div class="col">
-                <input type="text" class="form-control form-control-lg" style="width: 30%" th:value="${siteUser != null? siteUser.username : ''}" id="passengerName">
-<!--                <input type="text" class="form-control form-control-lg" style="width: 30%" value="회원이름" id="passengerName">-->
+                <input type="text" class="form-control form-control-lg" th:value="${siteUser != null? siteUser.username : ''}" id="passengerName">
             </div>
         </div>
 
         <div class="row" style="width: 50%; margin: 0.7rem;">
-            <div class="col-md-2" style="text-align: left">
+            <div class="col-md-3" style="text-align: left">
                 <label for="sourceAddress" class="col-form-label fs-5 fw-bold">출발지</label>
+                <small style="color: red">
+                    <span class="blind">필수</span>
+                    *
+                </small>
             </div>
             <div class="col">
-                <input type="text" class="form-control form-control-lg" placeholder="출발지를 입력하세요." id="sourceAddress">
-                <button type="button" class="btn btn-secondary" id="currentBtn" onclick="currentLocationCoord();">현재 위치</button>
-                <button type="button" class="btn btn-secondary" id="sourceBtn" onclick="location.href='/taxi/searchSource';onClickSourceBtn();">검색하기</button>
+                <input type="text" class="form-control form-control-lg mb-2" placeholder="출발지를 입력하세요." id="sourceAddress">
+                <button type="button" class="btn btn-secondary float-end" id="sourceBtn" onclick="location.href='/taxi/searchSource';onClickSourceBtn();">검색하기</button>
+                <button type="button" class="btn btn-secondary float-end me-2" id="currentBtn" onclick="currentLocationCoord();">현재 위치</button>
             </div>
         </div>
 
         <div class="row" style="width: 50%; margin: 0.7rem;">
-            <div class="col-md-2" style="text-align: left">
+            <div class="col-md-3" style="text-align: left">
                 <label for="destinationAddress" class="col-form-label fs-5 fw-bold">도착지</label>
+                <small style="color: red">
+                    <span class="blind">필수</span>
+                    *
+                </small>
             </div>
             <div class="col">
-                <input type="text" class="form-control form-control-lg" placeholder="도착지를 입력하세요." id="destinationAddress">
-                <button type="button" class="btn btn-secondary" id="desBtn" onclick="location.href='/taxi/searchDes';onClickDestinationBtn();">검색하기</button>
+                <input type="text" class="form-control form-control-lg mb-2" placeholder="도착지를 입력하세요." id="destinationAddress">
+                <button type="button" class="btn btn-secondary float-end" id="desBtn" onclick="location.href='/taxi/searchDes';onClickDestinationBtn();">검색하기</button>
             </div>
         </div>
 
         <div class="row" style="width: 50%; margin: 0.7rem;">
-            <div class="col-md-2" style="text-align: left">
+            <div class="col-md-3" style="text-align: left">
                 <label for="passengerNum" class="col-form-label fs-5 fw-bold">탑승 인원</label>
+                <small style="color: red">
+                    <span class="blind">필수</span>
+                    *
+                </small>
             </div>
             <div class="col">
                 <select class="form-select form-select-lg mb-3" aria-label="Default select example" name="passenger_num" id="passengerNum">
@@ -81,18 +96,20 @@
         </div>
 
         <div class="row" style="width: 50%; margin: 0.7rem;">
-            <div class="col-md-2" style="text-align: left">
+            <div class="col-md-3" style="text-align: left">
                 <label class="col-form-label fs-5 fw-bold">휠체어 사용 여부 </label>
+                <small style="color: red">
+                    <span class="blind">필수</span>
+                    *
+                </small>
             </div>
             <div class="col">
-                <div class="form-check form-check-inline" style="padding-top: 0.5rem">
-                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairYes" value="wChairYes" th:checked="${(siteUser != null) and (siteUser.getWheel eq 1)}">
-<!--                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairYes" value="wChairYes">-->
+                <div class="form-check form-check-inline" style="padding-top: 0.5rem; padding-left: 0rem">
+                    <input class="form-check-input me-1 mt-2" type="radio" name="wChairRadioBtn" id="wChairYes" style="padding-left: 0rem; margin-left: 0rem" value="wChairYes" th:checked="${(siteUser != null) and (siteUser.getWheel eq 1)}">
                     <label class="form-check-label fs-5" for="wChairYes">탑승</label>
                 </div>
                 <div class="form-check form-check-inline" style="padding-top: 0.5rem">
-                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo" th:checked="${(siteUser != null) and (siteUser.getWheel eq 2)}">
-<!--                    <input class="form-check-input" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo" checked="checked">-->
+                    <input class="form-check-input me-1 mt-2" type="radio" name="wChairRadioBtn" id="wChairNo" value="wChairNo" th:checked="${(siteUser != null) and (siteUser.getWheel eq 2)}">
                     <label class="form-check-label fs-5" for="wChairNo">미탑승</label>
                 </div>
             </div>
@@ -110,10 +127,6 @@
         <div class="row justify-content-end" style="width: 50%; margin: 0.7rem;">
             <button type="button" class="col-2 btn text-light fs-5 fw-bold" id="sendBtn" onclick="onClickSendBtn();" style="background-color: #FA9622;" >문자 전송</button>
         </div>
-
-<!--        <div class="row justify-content-end">-->
-<!--            <img id="QRImage" src="">-->
-<!--        </div>-->
 
         <div style="text-align : center;">
             <img id="QRImage" src="">

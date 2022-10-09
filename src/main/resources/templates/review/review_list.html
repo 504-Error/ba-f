@@ -161,7 +161,7 @@
                             <div class="card review-card">
                                 <img th:if="${#lists.size(review.reviewImages)} > 0"
                                      th:src="@{|/display?filePath=${review.reviewImages.get(0).getImage()}|}"
-                                     class="card-img-top" style="height: 266px" alt="글 이미지 썸네일">
+                                     class="card-img-top" style="height: 201px" alt="글 이미지 썸네일">
                                 <img th:unless="${#lists.size(review.reviewImages)} > 0"
                                      src="/static/image/no-image-thumbnail.png" class="card-img-top" style="height: 201px"
                                      alt="글 이미지 썸네일">

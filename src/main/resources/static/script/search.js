@@ -197,166 +197,24 @@ function addMarker(position, idx, title) {
 
 //목록을 선택하면 상세정보 창을 보여주는 함수입니다.
 function storeInfo(place) {
-    console.log("place url1 : ", place.place_url);
-    console.log("place road_address_name : ", place.road_address_name);
-    console.log("place address_name : ", place.address_name);
 
-    let searchPlace = "";
-    if (place.road_address_name) {
-        searchPlace = place.road_address_name;
-    } else {
-        searchPlace = place.address_name;
+    let elWrap = document.getElementById('map_wrapper'),
+        info = document.createElement('div'),
+        expBefore = document.getElementById('menu_info_wrap');
+
+    if (expBefore != null) {
+        expBefore.remove();
     }
 
-    console.log("searchplace : ", searchPlace);
-    let data = {};
-    data["address"] = searchPlace;
+    let str = '<div class="wrap">' +
+        '<iframe class="frame" src="' + place.place_url + '" id = "chat_iframe"></iframe>' +
+        '</div>'
 
-    let reviewData = new Array();
+        info.setAttribute("id", "menu_info_wrap");
+        info.className = 'bg_white';
+        info.innerHTML = str;
 
-    $.ajax({
-        url        : "/search/loadReview",
-        type       : "POST",
-        data       : searchPlace, // 요청 시 포함되어질 데이터
-        contentType: 'application/json', //요청 컨텐트 타입
-        dataType   : "json", // 응답 데이터 형식
-        beforeSend : function (jqXHR, settings) {
-            var header = $("meta[name='_csrf_header']").attr("content");
-            var token = $("meta[name='_csrf']").attr("content");
-            jqXHR.setRequestHeader(header, token);
-        },
-        success    : function (result) {
-            let reviewArray = JSON.stringify(result);
-            let reviewData = JSON.parse(reviewArray);
-
-            console.log("reviewdata - inner : ", reviewData);
-            console.log("reviewdata - size : ", reviewData.length);
-
-            let elWrap = document.getElementById('map_wrapper'),
-                info = document.createElement('div'),
-                expBefore = document.getElementById('menu_info_wrap');
-
-            if (expBefore != null) {
-                expBefore.remove();
-            }
-
-            let str = '<div class="wrap">' +
-                '<iframe class="frame" src="' + place.place_url + '" id = "chat_iframe"></iframe>' +
-                '</div>' +
-                '<ul class="list_evaluation">\n';
-
-            let str2 = ""
-            if (reviewData.length > 0) {
-                str2 += '        <h5>Ba-f 리뷰</h5>\n' +
-                    '        <a class="review" href="/review/all/list?keyword=' + reviewData[0].placeAddress + '">\n' +
-                    '           <span class="float-end">더보기</span>\n' +
-                    '        </a>\n';
-            }
-
-            for (let i = 0; i < reviewData.length; i++) {
-                let date = getFormatDate(new Date(reviewData[i].createDate));
-
-                str2 += '        <li class="map-review">\n' +
-                    '        <a class="review" href="/review/content/' + reviewData[i].id + '">\n' +
-                    '            <div class="unit_info">\n' +
-                    '                <span class="link_user">' + reviewData[i].author.username + '</span>\n' +
-                    '                <span class="bg_bar"></span>\n' +
-                    '                <span class="time_write">' + date +'</span>\n' +
-                    '            </div>\n' +
-                    '            <div class="star">\n' +
-                    '                <span class="star">\n' +
-                    '                <span class="star-on" style="width: ' + reviewData[i].grade * 20 + '%">\n' +
-                    '                       <span class="blind">' + reviewData[i].grade.toString() + '</span>\n' +
-                    '                   </span>\n' +
-                    '                </span>\n' +
-                    '            </div>\n' +
-                    '            <div class="comment_info">\n' +
-                    '                <p class="txt_comment"><span>' + reviewData[i].placeReview + '</span>\n' +
-                    '            </div>\n';
-
-                if (reviewData[i].amenities !== '') {
-                    str2 += '            <div class="group_photo">\n' +
-                        '                <ul class="list_photo">\n';
-
-                    if (reviewData[i].amenities.includes("0")) {
-                        str2 += '                    <li>\n' +
-                            '                        <span class="amenities-img float-start me-2">\n' +
-                            '                            <img id="img_amenities_elevator_select"\n' +
-                            '                                 src="/static/image/amenities_elevator_select.png" height="30" width="30"\n' +
-                            '                                 alt="승강기 있음"/>\n' +
-                            '                        </span>\n' +
-                            '                    </li>\n';
-                    }
-
-                    if (reviewData[i].amenities.includes("1")) {
-                        str2 += '                    <li>\n' +
-                            '                        <span class="amenities-img float-start me-2">\n' +
-                            '                            <img id="img_amenities_incline_select"\n' +
-                            '                                 src="/static/image/amenities_incline_select.png" height="30" width="30"\n' +
-                            '                                 alt="경사로 있음"/>' +
-                            '                        </span>\n' +
-                            '                    </li>\n';
-                    }
-
-                    if (reviewData[i].amenities.includes("2")) {
-                        str2 += '                    <li>\n' +
-                            '                        <span class="amenities-img float-start me-2">\n' +
-                            '                            <img id="img_amenities_parking_select"\n' +
-                            '                                 src="/static/image/amenities_parking_select.png" height="30" width="30"\n' +
-                            '                                 alt="주차장 있음"/>' +
-                            '                        </span>\n' +
-                            '                    </li>\n';
-                    }
-
-                    if (reviewData[i].amenities.includes("3")) {
-                        str2 += '                    <li>\n' +
-                            '                        <span class="amenities-img float-start me-2">\n' +
-                            '                            <img id="img_amenities_table_select"\n' +
-                            '                                 src="/static/image/amenities_table_select.png" height="30" width="30"\n' +
-                            '                                 alt="테이블석 있음"/>' +
-                            '                        </span>\n' +
-                            '                    </li>\n';
-                    }
-
-                    if (reviewData[i].amenities.includes("4")) {
-                        str2 += '                    <li>\n' +
-                            '                        <span class="amenities-img float-start me-2">\n' +
-                            '                            <img id="img_amenities_rest-room_select"\n' +
-                            '                                 src="/static/image/amenities_rest-room_select.png" height="30" width="30"\n' +
-                            '                                 alt="화장실 있음"/>' +
-                            '                        </span>\n' +
-                            '                    </li>\n';
-                    }
-
-                    str2 += '                </ul>\n' +
-                        '            </div>\n' +
-                        '            </a>\n' +
-                        '        </li>\n';
-                }
-
-                str += str2;
-            }
-
-            str +=  '    </ul>';
-
-            info.setAttribute("id", "menu_info_wrap");
-            info.className = 'bg_white';
-            info.innerHTML = str;
-
-            console.log(info);
-
-            elWrap.appendChild(info);
-        },
-        error      : function (error) {
-            alert("정보가 없습니다." + error);
-            return;
-        }
-    });
-
-
-    console.log("reviewdata : ", reviewData);
-
-
+        elWrap.appendChild(info);
 }
 
 // 지도 위에 표시되고 있는 마커를 모두 제거합니다
