@@ -33,7 +33,6 @@
             <h4>회원가입</h4>
         </div>
     </div>
-//
     <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data">
         <div style="width:40%">
             <div th:replace="form_errors :: formErrorsFragment"></div>
@@ -112,6 +111,7 @@
 
             <div class="mb-3">
                 <label for="certifyFile" class="col-form-label">장애인등록증 인증</label><small style="color: red"> *</small>
+                <span style="font-size: x-small"> (장애인 증명서도 가능합니다)</span>
                 <span></span>
                 <input type="file" accept="image/*, .pdf" id="certifyFile" class="form-control border" th:field="*{certifyFile}" required>
             </div>
