@@ -18,7 +18,7 @@
 <div layout:fragment="content">
     <nav class="sub-navbar navbar-expand-lg">
         <div class="container-fluid">
-            <ul class="nav justify-content-center" style="padding-bottom: 20px;">
+            <ul class="nav justify-content-center">
                 <li class="nav-item">
                     <a class="nav-link-select" href="#">아이콘</a>
                 </li>
@@ -35,38 +35,37 @@
         </div>
     </nav>
 
-    <div class="map_wrap">
-        <div id="map" style="width:100%;height:100vh;position:relative;overflow:hidden;"></div>
-        <ul id="category">
+    <div id="map_wrapper" class="map_wrap">
+        <div id="map" style="width:100%;height:100vh;position:relative;overflow:hidden;">        <ul id="category">
             <li id="SW8" src="/static/image/map/icon/subway.png" data-order="0">
                 <span><img src="/static/image/map/icon/subway.png" style="width: 30px"></span>
                 지하철역
             </li>
-            <li id="HP8" data-order="1">
+            <li tabindex="0" id="HP8" data-order="1">
                 <span><img src="/static/image/map/icon/hospital.png" style="width: 30px"></span>
                 병원
             </li>
-            <li id="PM9" data-order="2">
+            <li tabindex="0" id="PM9" data-order="2">
                 <span><img src="/static/image/map/icon/medic.png" style="width: 30px"></span>
                 약국
             </li>
-            <li id="OL7" data-order="3">
+            <li tabindex="0" id="OL7" data-order="3">
                 <span><img src="/static/image/map/icon/oil.png" style="width: 30px"></span>
                 주유소
             </li>
-            <li id="PK6" data-order="4">
+            <li tabindex="0" id="PK6" data-order="4">
                 <span><img src="/static/image/map/icon/parking.png" style="width: 30px"></span>
                 주차장
             </li>
-            <li id="CS2" data-order="5">
+            <li tabindex="0" id="CS2" data-order="5">
                 <span><img src="/static/image/map/icon/store.png" style="width: 30px"></span>
                 편의점
             </li>
-            <li id="BK9" data-order="6">
+            <li tabindex="0" id="BK9" data-order="6">
                 <span><img src="/static/image/map/icon/elevator.png" style="width: 30px"></span>
                 승강기
             </li>
-            <li id="PS3" data-order="7">
+            <li tabindex="0" id="PS3" data-order="7">
                 <span><img src="/static/image/map/icon/traffic.png" style="width: 30px"></span>
                 음향신호
             </li>
